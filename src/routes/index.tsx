@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+// Implemente controle de acesso para que apenas usuários com compra ativa possam visualizar e baixar os PDFs.
 // Implemente o download do PDF do curso automaticamente após a confirmação do checkout e login do usuário.
 // Integre um carrinho e checkout para que as pessoas possam comprar os cursos em PDF com pagamento online.
 // Adicione uma área “Meus cursos” para listar minhas compras e disponibilizar o download do PDF após a confirmação do checkout.
