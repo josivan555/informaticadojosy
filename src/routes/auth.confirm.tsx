@@ -4,9 +4,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2, XCircle, Mail, Loader2, Zap } from "lucide-react";
+import { z } from "zod";
+
+const searchSchema = z.object({
+  error: z.string().optional(),
+  error_description: z.string().optional(),
+});
 
 export const Route = createFileRoute("/auth/confirm")({
   component: ConfirmEmailPage,
+  validateSearch: (search) => searchSchema.parse(search),
 });
 
 function ConfirmEmailPage() {
