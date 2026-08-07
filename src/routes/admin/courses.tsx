@@ -286,6 +286,10 @@ function AdminCourses() {
               </div>
             </div>
             <div className="space-y-2">
+              <Label htmlFor="image_url">URL da Capa (Capa do Curso)</Label>
+              <Input id="image_url" value={formData.image_url} onChange={(e) => setFormData({...formData, image_url: e.target.value})} placeholder="https://exemplo.com/imagem.png" />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="file">Arquivo PDF (Opcional se já existir)</Label>
               <Input id="file" type="file" accept=".pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} />
             </div>
