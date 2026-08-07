@@ -64,7 +64,16 @@ function SoftwaresPage() {
     return matchesSearch && matchesTab && matchesCategory;
   });
 
-  const handleDownload = (sw: any) => {
+  const handleDownload = async (sw: any) => {
+    // Record download history if user is logged in
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      await supabase.from("download_history").insert({
+        user_id: session.user.id,
+        software_id: sw.id
+      });
+    }
+
     if (sw.price > 0) {
       if (!sw.paddle_price_id && !sw.mercadopago_link) {
         toast.error("Método de pagamento não configurado para este software");

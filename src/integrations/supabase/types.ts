@@ -113,6 +113,35 @@ export type Database = {
         }
         Relationships: []
       }
+      download_history: {
+        Row: {
+          downloaded_at: string | null
+          id: string
+          software_id: string
+          user_id: string
+        }
+        Insert: {
+          downloaded_at?: string | null
+          id?: string
+          software_id: string
+          user_id: string
+        }
+        Update: {
+          downloaded_at?: string | null
+          id?: string
+          software_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "download_history_software_id_fkey"
+            columns: ["software_id"]
+            isOneToOne: false
+            referencedRelation: "softwares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       software_categories: {
         Row: {
           created_at: string | null

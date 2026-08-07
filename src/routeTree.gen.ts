@@ -14,6 +14,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SoftwaresRouteImport } from './routes/softwares'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
+import { Route as AdminDownloadsRouteImport } from './routes/admin/downloads'
 import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
 import { Route as AdminSoftwareCategoriesRouteImport } from './routes/admin/software-categories'
 import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
@@ -43,6 +44,11 @@ const AdminIndexRoute = AdminIndexRouteImport.update({
 const AdminCoursesRoute = AdminCoursesRouteImport.update({
   id: '/admin/courses',
   path: '/admin/courses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminDownloadsRoute = AdminDownloadsRouteImport.update({
+  id: '/admin/downloads',
+  path: '/admin/downloads',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLayoutRoute = AdminLayoutRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/downloads': typeof AdminDownloadsRoute
   '/admin/layout': typeof AdminLayoutRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/downloads': typeof AdminDownloadsRoute
   '/admin/layout': typeof AdminLayoutRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
+  '/admin/downloads': typeof AdminDownloadsRoute
   '/admin/layout': typeof AdminLayoutRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/softwares'
     | '/admin/courses'
+    | '/admin/downloads'
     | '/admin/layout'
     | '/admin/software-categories'
     | '/admin/softwares'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/softwares'
     | '/admin/courses'
+    | '/admin/downloads'
     | '/admin/layout'
     | '/admin/software-categories'
     | '/admin/softwares'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/softwares'
     | '/admin/courses'
+    | '/admin/downloads'
     | '/admin/layout'
     | '/admin/software-categories'
     | '/admin/softwares'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   SoftwaresRoute: typeof SoftwaresRoute
   AdminCoursesRoute: typeof AdminCoursesRoute
+  AdminDownloadsRoute: typeof AdminDownloadsRoute
   AdminLayoutRoute: typeof AdminLayoutRoute
   AdminSoftwareCategoriesRoute: typeof AdminSoftwareCategoriesRoute
   AdminSoftwaresRoute: typeof AdminSoftwaresRoute
@@ -198,6 +211,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCoursesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/downloads': {
+      id: '/admin/downloads'
+      path: '/admin/downloads'
+      fullPath: '/admin/downloads'
+      preLoaderRoute: typeof AdminDownloadsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/layout': {
       id: '/admin/layout'
       path: '/admin/layout'
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   SoftwaresRoute: SoftwaresRoute,
   AdminCoursesRoute: AdminCoursesRoute,
+  AdminDownloadsRoute: AdminDownloadsRoute,
   AdminLayoutRoute: AdminLayoutRoute,
   AdminSoftwareCategoriesRoute: AdminSoftwareCategoriesRoute,
   AdminSoftwaresRoute: AdminSoftwaresRoute,

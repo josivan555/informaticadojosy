@@ -245,7 +245,16 @@ function Index() {
                   <CardFooter className="flex flex-col gap-2">
                     <Button 
                       className="w-full group-hover:bg-primary transition-colors"
-                      onClick={() => {
+                      onClick={async () => {
+                        // Record download history if user is logged in
+                        const { data: { session: authSession } } = await supabase.auth.getSession();
+                        if (authSession) {
+                          await supabase.from("download_history").insert({
+                            user_id: authSession.user.id,
+                            software_id: sw.id
+                          });
+                        }
+
                         if (sw.price > 0) {
                           navigate({ to: "/softwares" }); // Redirect to software list for purchase flow
                         } else if (sw.file_url) {
