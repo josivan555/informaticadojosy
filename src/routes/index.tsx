@@ -242,14 +242,26 @@ function Index() {
                       <span>{sw.downloads} downloads</span>
                     </div>
                   </CardContent>
-                  <CardFooter>
+                  <CardFooter className="flex flex-col gap-2">
                     <Button 
                       className="w-full group-hover:bg-primary transition-colors"
-                      onClick={() => sw.file_url && window.open(sw.file_url, '_blank')}
-                      disabled={!sw.file_url}
+                      onClick={() => {
+                        if (sw.price > 0) {
+                          navigate({ to: "/softwares" }); // Redirect to software list for purchase flow
+                        } else if (sw.file_url) {
+                          window.open(sw.file_url, '_blank');
+                        }
+                      }}
+                      disabled={!sw.file_url && sw.price === 0}
                     >
-                      <Download className="mr-2 h-4 w-4" /> {sw.file_url ? 'Baixar Agora' : 'Em breve'}
+                      <Download className="mr-2 h-4 w-4" /> 
+                      {sw.price > 0 ? `Comprar (R$ ${sw.price.toFixed(2)})` : sw.file_url ? 'Baixar Grátis' : 'Em breve'}
                     </Button>
+                    {sw.price > 0 && (
+                      <p className="text-[10px] text-center text-muted-foreground">
+                        *Requer login para processar o pagamento
+                      </p>
+                    )}
                   </CardFooter>
                 </Card>
               ))}
