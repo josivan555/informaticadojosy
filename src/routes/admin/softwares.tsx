@@ -7,7 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, Edit, Save, Loader2 } from "lucide-react";
+import { Plus, Trash2, Edit, Save, Loader2, Sparkles, Image as ImageIcon } from "lucide-react";
+import { generateSoftwareDescription } from "@/lib/ai.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/softwares")({
@@ -29,7 +30,8 @@ function AdminSoftwares() {
     price: 0,
     paddle_product_id: "",
     paddle_price_id: "",
-    mercadopago_link: ""
+    mercadopago_link: "",
+    image_url: ""
   });
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -75,7 +77,8 @@ function AdminSoftwares() {
         price: sw.price || 0,
         paddle_product_id: sw.paddle_product_id || "",
         paddle_price_id: sw.paddle_price_id || "",
-        mercadopago_link: sw.mercadopago_link || ""
+        mercadopago_link: sw.mercadopago_link || "",
+        image_url: sw.image_url || ""
       });
     } else {
       setEditingSoftware(null);
@@ -89,11 +92,32 @@ function AdminSoftwares() {
         price: 0,
         paddle_product_id: "",
         paddle_price_id: "",
-        mercadopago_link: ""
+        mercadopago_link: "",
+        image_url: ""
       });
     }
     setFile(null);
     setIsDialogOpen(true);
+  };
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [generatingAI, setGeneratingAI] = useState(false);
+
+  const handleGenerateAI = async () => {
+    if (!formData.name) {
+      toast.error("Digite o nome do programa primeiro");
+      return;
+    }
+    setGeneratingAI(true);
+    try {
+      const result = await generateSoftwareDescription({ data: { name: formData.name } });
+      setFormData({ ...formData, description: result.description });
+      toast.success("Descrição gerada pela IA!");
+    } catch (err) {
+      toast.error("Erro ao gerar descrição");
+    } finally {
+      setGeneratingAI(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,42 +126,41 @@ function AdminSoftwares() {
 
     try {
       let fileUrl = editingSoftware?.file_url || "";
+      let imageUrl = formData.image_url || "";
 
       if (file) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Math.random()}.${fileExt}`;
         const filePath = `softwares/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('files')
-          .upload(filePath, file);
-
+        const { error: uploadError } = await supabase.storage.from('files').upload(filePath, file);
         if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('files')
-          .getPublicUrl(filePath);
-        
+        const { data: { publicUrl } } = supabase.storage.from('files').getPublicUrl(filePath);
         fileUrl = publicUrl;
+      }
+
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `covers/${fileName}`;
+        const { error: uploadError } = await supabase.storage.from('files').upload(filePath, imageFile);
+        if (uploadError) throw uploadError;
+        const { data: { publicUrl } } = supabase.storage.from('files').getPublicUrl(filePath);
+        imageUrl = publicUrl;
       }
 
       const swData = {
         ...formData,
         file_url: fileUrl,
+        image_url: imageUrl,
         updated_at: new Date().toISOString()
       };
 
       if (editingSoftware) {
-        const { error } = await supabase
-          .from("softwares")
-          .update(swData)
-          .eq("id", editingSoftware.id);
+        const { error } = await supabase.from("softwares").update(swData).eq("id", editingSoftware.id);
         if (error) throw error;
         toast.success("Software atualizado com sucesso");
       } else {
-        const { error } = await supabase
-          .from("softwares")
-          .insert([swData]);
+        const { error } = await supabase.from("softwares").insert([swData]);
         if (error) throw error;
         toast.success("Software criado com sucesso");
       }
@@ -230,7 +253,7 @@ function AdminSoftwares() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingSoftware ? "Editar Software" : "Adicionar Novo Software"}</DialogTitle>
           </DialogHeader>
@@ -240,8 +263,21 @@ function AdminSoftwares() {
               <Input id="name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Descrição</Label>
-              <Textarea id="description" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} />
+              <div className="flex items-center justify-between">
+                <Label htmlFor="description">Descrição</Label>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-7 text-xs"
+                  onClick={handleGenerateAI}
+                  disabled={generatingAI}
+                >
+                  {generatingAI ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Sparkles className="mr-1 h-3 w-3" />}
+                  Gerar com IA
+                </Button>
+              </div>
+              <Textarea id="description" className="min-h-[100px]" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -286,9 +322,22 @@ function AdminSoftwares() {
                 <Input id="paddle_price_id" className="h-8 text-xs" value={formData.paddle_price_id} onChange={(e) => setFormData({...formData, paddle_price_id: e.target.value})} />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="file">Arquivo do Programa (Opcional se já existir)</Label>
-              <Input id="file" type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="image">Capa do Software</Label>
+                <div className="flex items-center gap-2">
+                  <Input id="image" type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+                  {formData.image_url && !imageFile && (
+                    <div className="h-10 w-10 rounded border overflow-hidden flex-shrink-0">
+                      <img src={formData.image_url} alt="Capa atual" className="h-full w-full object-cover" />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="file">Arquivo (.zip, .exe)</Label>
+                <Input id="file" type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
+              </div>
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
