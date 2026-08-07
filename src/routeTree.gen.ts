@@ -10,33 +10,80 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
+import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
+import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
+import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCoursesRoute = AdminCoursesRouteImport.update({
+  id: '/admin/courses',
+  path: '/admin/courses',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLayoutRoute = AdminLayoutRouteImport.update({
+  id: '/admin/layout',
+  path: '/admin/layout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminSoftwaresRoute = AdminSoftwaresRouteImport.update({
+  id: '/admin/softwares',
+  path: '/admin/softwares',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin/courses': typeof AdminCoursesRoute
+  '/admin/layout': typeof AdminLayoutRoute
+  '/admin/softwares': typeof AdminSoftwaresRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin/courses': typeof AdminCoursesRoute
+  '/admin/layout': typeof AdminLayoutRoute
+  '/admin/softwares': typeof AdminSoftwaresRoute
+  '/admin': typeof AdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin/courses': typeof AdminCoursesRoute
+  '/admin/layout': typeof AdminLayoutRoute
+  '/admin/softwares': typeof AdminSoftwaresRoute
+  '/admin/': typeof AdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/admin/courses' | '/admin/layout' | '/admin/softwares' | '/admin/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/admin/courses' | '/admin/layout' | '/admin/softwares' | '/admin'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin/courses'
+    | '/admin/layout'
+    | '/admin/softwares'
+    | '/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminCoursesRoute: typeof AdminCoursesRoute
+  AdminLayoutRoute: typeof AdminLayoutRoute
+  AdminSoftwaresRoute: typeof AdminSoftwaresRoute
+  AdminIndexRoute: typeof AdminIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +95,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/': {
+      id: '/admin/'
+      path: '/admin'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/courses': {
+      id: '/admin/courses'
+      path: '/admin/courses'
+      fullPath: '/admin/courses'
+      preLoaderRoute: typeof AdminCoursesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/layout': {
+      id: '/admin/layout'
+      path: '/admin/layout'
+      fullPath: '/admin/layout'
+      preLoaderRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/softwares': {
+      id: '/admin/softwares'
+      path: '/admin/softwares'
+      fullPath: '/admin/softwares'
+      preLoaderRoute: typeof AdminSoftwaresRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminCoursesRoute: AdminCoursesRoute,
+  AdminLayoutRoute: AdminLayoutRoute,
+  AdminSoftwaresRoute: AdminSoftwaresRoute,
+  AdminIndexRoute: AdminIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
