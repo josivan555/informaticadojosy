@@ -290,7 +290,7 @@ function Index() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t py-12 bg-muted/20">
+        <footer className="border-t border-slate-800 py-12 bg-[#0a192f]">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div className="col-span-1 md:col-span-2 space-y-4">
