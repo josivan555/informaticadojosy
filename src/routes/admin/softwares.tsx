@@ -60,7 +60,11 @@ function AdminSoftwares() {
         description: sw.description,
         version: sw.version,
         category: sw.category,
-        status: sw.status
+        status: sw.status,
+        price: sw.price || 0,
+        paddle_product_id: sw.paddle_product_id || "",
+        paddle_price_id: sw.paddle_price_id || "",
+        mercadopago_link: sw.mercadopago_link || ""
       });
     } else {
       setEditingSoftware(null);
