@@ -84,7 +84,8 @@ function AdminCourses() {
         status: "published",
         paddle_product_id: "",
         paddle_price_id: "",
-        mercadopago_link: ""
+        mercadopago_link: "",
+        image_url: ""
       });
 
     }
