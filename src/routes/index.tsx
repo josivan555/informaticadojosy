@@ -54,8 +54,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { data: softwares } = useSuspenseQuery(softwaresQueryOptions);
-  const { data: courses } = useSuspenseQuery(coursesQueryOptions);
+  const { data: softwares } = useQuery(softwaresQueryOptions);
+  const { data: courses } = useQuery(coursesQueryOptions);
   const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
   const navigate = useNavigate();
   
