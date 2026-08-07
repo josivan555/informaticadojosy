@@ -7,6 +7,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import heroBannerAsset from "@/assets/main-hero-banner.png.asset.json";
+
 
 const softwaresQueryOptions = {
   queryKey: ["softwares"],
@@ -37,10 +39,10 @@ const coursesQueryOptions = {
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
-    title: "SoftCourse - Download de Programas e Cursos em PDF",
+    title: "INFORMÁTICA do Josy - Download de Programas e Cursos em PDF",
     meta: [
       { name: "description", content: "O melhor portal para baixar softwares utilitários e adquirir cursos especializados em PDF." },
-      { property: "og:title", content: "SoftCourse - Downloads & Cursos" },
+      { property: "og:title", content: "INFORMÁTICA do Josy - Downloads & Cursos" },
       { property: "og:description", content: "Encontre os melhores softwares e cursos digitais em um só lugar." },
     ],
   }),
@@ -104,13 +106,14 @@ function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-[#0a192f] text-slate-200">
       {/* Header/Nav */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-[#0a192f]/90 backdrop-blur supports-[backdrop-filter]:bg-[#0a192f]/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter">
+          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter text-white">
             <Zap className="h-6 w-6 text-primary" fill="currentColor" />
-            <span>SoftCourse</span>
+            <span className="hidden sm:inline">INFORMÁTICA <span className="text-primary">do Josy</span></span>
+            <span className="sm:hidden text-primary">IJ</span>
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium">
             <a href="#softwares" className="hover:text-primary transition-colors">Softwares</a>
@@ -127,45 +130,46 @@ function Index() {
       </header>
 
       <main>
-        {/* Hero Section */}
-        <section className="relative py-20 lg:py-32 overflow-hidden border-b">
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-[800px] space-y-6">
-              <Badge variant="secondary" className="px-3 py-1 text-sm font-medium">
+        {/* Hero Section with Banner */}
+        <section className="relative overflow-hidden border-b bg-[#0a192f]">
+          <div className="container mx-auto px-4 relative z-10 pt-12 pb-20">
+            <div className="rounded-3xl overflow-hidden shadow-2xl border border-primary/20 bg-black/40 backdrop-blur-sm">
+              <img 
+                src={heroBannerAsset.url} 
+                alt="Informática do Josy - Tecnologia, Conhecimento, Soluções" 
+                className="w-full h-auto object-cover"
+              />
+            </div>
+            <div className="mt-12 text-center space-y-6 max-w-[800px] mx-auto">
+              <Badge variant="secondary" className="px-3 py-1 text-sm font-medium bg-primary/20 text-primary border-primary/30">
                 Plataforma All-in-One de Software & Educação
               </Badge>
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+              <h1 className="text-4xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-white">
                 Turbine seu computador e sua <span className="text-primary">carreira</span>.
               </h1>
-              <p className="text-xl text-muted-foreground max-w-[600px]">
+              <p className="text-xl text-muted-foreground">
                 Baixe ferramentas exclusivas para produtividade e adquira conhecimentos práticos com nossos cursos em PDF de alta qualidade.
               </p>
-              <div className="flex flex-wrap gap-4 pt-4">
-                <Button size="lg" className="h-12 px-8" asChild>
+              <div className="flex flex-wrap gap-4 pt-4 justify-center">
+                <Button size="lg" className="h-12 px-8 shadow-lg shadow-primary/20" asChild>
                   <a href="#softwares">
                     Explorar Softwares <ChevronRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-                <Button size="lg" variant="outline" className="h-12 px-8" asChild>
+                <Button size="lg" variant="outline" className="h-12 px-8 border-primary/50 text-primary hover:bg-primary/10" asChild>
                   <a href="#cursos">Ver Cursos</a>
                 </Button>
               </div>
-              <div className="flex items-center gap-8 pt-8 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-green-500" /> Downloads Seguros
-                </div>
-                <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-yellow-500" /> Conteúdo Premium
-                </div>
-              </div>
             </div>
           </div>
-          {/* Decorative background element */}
-          <div className="absolute top-1/2 right-0 -translate-y-1/2 w-1/3 h-2/3 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+          {/* Decorative background glow to match image */}
+          <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 blur-[150px] rounded-full pointer-events-none opacity-50" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none opacity-30" />
         </section>
 
+
         {/* Software Section */}
-        <section id="softwares" className="py-20 bg-muted/30">
+        <section id="softwares" className="py-20 bg-[#0f2244]/30">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div className="space-y-2">
@@ -179,7 +183,7 @@ function Index() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {softwares.map((sw: any) => (
-                <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300">
+                <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
                       <div className="p-2 bg-primary/10 rounded-lg">
@@ -232,7 +236,7 @@ function Index() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {courses.map((course: any) => (
-                <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border bg-card hover:border-primary/50 transition-colors">
+                <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border border-slate-800 bg-[#112240] hover:border-primary/50 transition-colors">
                   <div className="flex-shrink-0 w-full lg:w-48 h-64 bg-muted rounded-xl flex items-center justify-center relative overflow-hidden group">
                     <BookOpen className="h-12 w-12 text-muted-foreground" />
                     <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -287,13 +291,13 @@ function Index() {
         </section>
 
         {/* Footer */}
-        <footer className="border-t py-12 bg-muted/20">
+        <footer className="border-t border-slate-800 py-12 bg-[#0a192f]">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div className="col-span-1 md:col-span-2 space-y-4">
-                <div className="flex items-center gap-2 font-bold text-xl tracking-tighter">
+                <div className="flex items-center gap-2 font-bold text-xl tracking-tighter text-white">
                   <Zap className="h-5 w-5 text-primary" fill="currentColor" />
-                  <span>SoftCourse</span>
+                  <span>INFORMÁTICA <span className="text-primary">do Josy</span></span>
                 </div>
                 <p className="text-sm text-muted-foreground max-w-xs">
                   A melhor fonte de ferramentas digitais e conhecimento técnico desde 2026.
@@ -316,7 +320,7 @@ function Index() {
               </div>
             </div>
             <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-              © 2026 SoftCourse. Todos os direitos reservados.
+              © 2026 INFORMÁTICA do Josy. Todos os direitos reservados.
               <p className="mt-4 text-xs opacity-50">Após a confirmação do pagamento no Mercado Pago, você receberá automaticamente um e-mail com o link de download e o comprovante da sua compra.</p>
             </div>
           </div>
