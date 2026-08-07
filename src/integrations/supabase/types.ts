@@ -113,9 +113,37 @@ export type Database = {
         }
         Relationships: []
       }
+      software_categories: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          name: string
+          slug: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name: string
+          slug: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          name?: string
+          slug?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       softwares: {
         Row: {
           category: string | null
+          category_id: string | null
           created_at: string | null
           description: string | null
           downloads: number | null
@@ -133,6 +161,7 @@ export type Database = {
         }
         Insert: {
           category?: string | null
+          category_id?: string | null
           created_at?: string | null
           description?: string | null
           downloads?: number | null
@@ -150,6 +179,7 @@ export type Database = {
         }
         Update: {
           category?: string | null
+          category_id?: string | null
           created_at?: string | null
           description?: string | null
           downloads?: number | null
@@ -165,7 +195,15 @@ export type Database = {
           updated_at?: string | null
           version?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "softwares_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "software_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_roles: {
         Row: {
