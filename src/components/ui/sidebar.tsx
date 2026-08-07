@@ -50,3 +50,7 @@ export const SidebarMenuButton = ({ asChild, children, onClick }: { asChild?: bo
     </Comp>
   )
 }
+
+export const SidebarHeader = ({ className, children }: { className?: string; children: React.ReactNode }) => (
+  <div className={cn("flex flex-col", className)}>{children}</div>
+)
