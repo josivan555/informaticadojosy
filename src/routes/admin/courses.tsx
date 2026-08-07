@@ -25,11 +25,13 @@ function AdminCourses() {
     price: "",
     pages: "",
     level: "",
+    category: "",
     status: "published",
     paddle_product_id: "",
     paddle_price_id: "",
     mercadopago_link: ""
   });
+
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -61,11 +63,13 @@ function AdminCourses() {
         price: course.price.toString(),
         pages: course.pages?.toString() || "",
         level: course.level || "",
+        category: course.category || "",
         status: course.status,
         paddle_product_id: course.paddle_product_id || "",
         paddle_price_id: course.paddle_price_id || "",
         mercadopago_link: course.mercadopago_link || ""
       });
+
     } else {
       setEditingCourse(null);
       setFormData({
@@ -74,11 +78,13 @@ function AdminCourses() {
         price: "",
         pages: "",
         level: "",
+        category: "",
         status: "published",
         paddle_product_id: "",
         paddle_price_id: "",
         mercadopago_link: ""
       });
+
     }
     setFile(null);
     setIsDialogOpen(true);
@@ -115,6 +121,7 @@ function AdminCourses() {
         price: parseFloat(formData.price),
         pages: formData.pages ? parseInt(formData.pages) : null,
         level: formData.level,
+        category: formData.category,
         status: formData.status,
         file_url: fileUrl,
         paddle_product_id: formData.paddle_product_id || null,
@@ -122,6 +129,7 @@ function AdminCourses() {
         mercadopago_link: formData.mercadopago_link || null,
         updated_at: new Date().toISOString()
       };
+
 
       if (editingCourse) {
         const { error } = await supabase
@@ -253,6 +261,11 @@ function AdminCourses() {
               <Label htmlFor="level">Nível</Label>
               <Input id="level" value={formData.level} onChange={(e) => setFormData({...formData, level: e.target.value})} placeholder="ex: Iniciante" />
             </div>
+            <div className="space-y-2">
+              <Label htmlFor="category">Categoria</Label>
+              <Input id="category" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="ex: Windows, Office, Segurança" />
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="mercadopago_link">Link de Pagamento Mercado Pago</Label>
               <Input id="mercadopago_link" value={formData.mercadopago_link} onChange={(e) => setFormData({...formData, mercadopago_link: e.target.value})} placeholder="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=..." />
