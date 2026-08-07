@@ -25,7 +25,9 @@ function AdminCourses() {
     price: "",
     pages: "",
     level: "",
-    status: "published"
+    status: "published",
+    paddle_product_id: "",
+    paddle_price_id: ""
   });
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -58,7 +60,9 @@ function AdminCourses() {
         price: course.price.toString(),
         pages: course.pages?.toString() || "",
         level: course.level || "",
-        status: course.status
+        status: course.status,
+        paddle_product_id: course.paddle_product_id || "",
+        paddle_price_id: course.paddle_price_id || ""
       });
     } else {
       setEditingCourse(null);
@@ -68,7 +72,9 @@ function AdminCourses() {
         price: "",
         pages: "",
         level: "",
-        status: "published"
+        status: "published",
+        paddle_product_id: "",
+        paddle_price_id: ""
       });
     }
     setFile(null);
@@ -108,6 +114,8 @@ function AdminCourses() {
         level: formData.level,
         status: formData.status,
         file_url: fileUrl,
+        paddle_product_id: formData.paddle_product_id || null,
+        paddle_price_id: formData.paddle_price_id || null,
         updated_at: new Date().toISOString()
       };
 
@@ -240,6 +248,16 @@ function AdminCourses() {
             <div className="space-y-2">
               <Label htmlFor="level">Nível</Label>
               <Input id="level" value={formData.level} onChange={(e) => setFormData({...formData, level: e.target.value})} placeholder="ex: Iniciante" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="paddle_product_id">Paddle Product ID</Label>
+                <Input id="paddle_product_id" value={formData.paddle_product_id} onChange={(e) => setFormData({...formData, paddle_product_id: e.target.value})} placeholder="pro_..." />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="paddle_price_id">Paddle Price ID</Label>
+                <Input id="paddle_price_id" value={formData.paddle_price_id} onChange={(e) => setFormData({...formData, paddle_price_id: e.target.value})} placeholder="pri_..." />
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="file">Arquivo PDF (Opcional se já existir)</Label>
