@@ -54,8 +54,8 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
-  const { data: softwares } = useSuspenseQuery(softwaresQueryOptions);
-  const { data: courses } = useSuspenseQuery(coursesQueryOptions);
+  const { data: softwares } = useQuery(softwaresQueryOptions);
+  const { data: courses } = useQuery(coursesQueryOptions);
   const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
   const navigate = useNavigate();
   
@@ -221,7 +221,7 @@ function Index() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {softwares.map((sw: any) => (
+              {softwares?.map((sw: any) => (
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
@@ -274,7 +274,7 @@ function Index() {
                   </CardFooter>
                 </Card>
               ))}
-              {softwares.length === 0 && (
+              {(!softwares || softwares.length === 0) && (
                 <div className="col-span-full text-center py-12 text-muted-foreground">
                   Nenhum software disponível no momento.
                 </div>
@@ -295,7 +295,7 @@ function Index() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {courses.map((course: any) => (
+              {courses?.map((course: any) => (
                 <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border border-slate-800 bg-[#112240] hover:border-primary/50 transition-colors">
                   <div className="flex-shrink-0 w-full lg:w-48 h-64 bg-muted rounded-xl flex items-center justify-center relative overflow-hidden group">
                     <BookOpen className="h-12 w-12 text-muted-foreground" />
@@ -341,7 +341,7 @@ function Index() {
                   </div>
                 </div>
               ))}
-              {courses.length === 0 && (
+              {(!courses || courses.length === 0) && (
                 <div className="col-span-full text-center py-12 text-muted-foreground">
                   Nenhum curso disponível no momento.
                 </div>
