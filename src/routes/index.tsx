@@ -129,42 +129,43 @@ function Index() {
       </header>
 
       <main>
-        {/* Hero Section */}
-        <section className="relative py-20 lg:py-32 overflow-hidden border-b">
-          <div className="container mx-auto px-4 relative z-10">
-            <div className="max-w-[800px] space-y-6">
-              <Badge variant="secondary" className="px-3 py-1 text-sm font-medium">
+        {/* Hero Section with Banner */}
+        <section className="relative overflow-hidden border-b bg-[#0a192f]">
+          <div className="container mx-auto px-4 relative z-10 pt-12 pb-20">
+            <div className="rounded-3xl overflow-hidden shadow-2xl border border-primary/20 bg-black/40 backdrop-blur-sm">
+              <img 
+                src={heroBannerAsset.url} 
+                alt="Informática do Josy - Tecnologia, Conhecimento, Soluções" 
+                className="w-full h-auto object-cover"
+              />
+            </div>
+            <div className="mt-12 text-center space-y-6 max-w-[800px] mx-auto">
+              <Badge variant="secondary" className="px-3 py-1 text-sm font-medium bg-primary/20 text-primary border-primary/30">
                 Plataforma All-in-One de Software & Educação
               </Badge>
-              <h1 className="text-5xl lg:text-7xl font-bold tracking-tight leading-[1.1]">
+              <h1 className="text-4xl lg:text-6xl font-bold tracking-tight leading-[1.1] text-white">
                 Turbine seu computador e sua <span className="text-primary">carreira</span>.
               </h1>
-              <p className="text-xl text-muted-foreground max-w-[600px]">
+              <p className="text-xl text-muted-foreground">
                 Baixe ferramentas exclusivas para produtividade e adquira conhecimentos práticos com nossos cursos em PDF de alta qualidade.
               </p>
-              <div className="flex flex-wrap gap-4 pt-4">
-                <Button size="lg" className="h-12 px-8" asChild>
+              <div className="flex flex-wrap gap-4 pt-4 justify-center">
+                <Button size="lg" className="h-12 px-8 shadow-lg shadow-primary/20" asChild>
                   <a href="#softwares">
                     Explorar Softwares <ChevronRight className="ml-2 h-4 w-4" />
                   </a>
                 </Button>
-                <Button size="lg" variant="outline" className="h-12 px-8" asChild>
+                <Button size="lg" variant="outline" className="h-12 px-8 border-primary/50 text-primary hover:bg-primary/10" asChild>
                   <a href="#cursos">Ver Cursos</a>
                 </Button>
               </div>
-              <div className="flex items-center gap-8 pt-8 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-green-500" /> Downloads Seguros
-                </div>
-                <div className="flex items-center gap-2">
-                  <Star className="h-4 w-4 text-yellow-500" /> Conteúdo Premium
-                </div>
-              </div>
             </div>
           </div>
-          {/* Decorative background element */}
-          <div className="absolute top-1/2 right-0 -translate-y-1/2 w-1/3 h-2/3 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
+          {/* Decorative background glow to match image */}
+          <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-primary/20 blur-[150px] rounded-full pointer-events-none opacity-50" />
+          <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none opacity-30" />
         </section>
+
 
         {/* Software Section */}
         <section id="softwares" className="py-20 bg-muted/30">
