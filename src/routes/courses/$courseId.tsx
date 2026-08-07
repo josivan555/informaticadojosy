@@ -197,8 +197,16 @@ function CourseDetails() {
               </p>
             </div>
 
-            <div className="aspect-video bg-[#112240] rounded-3xl flex items-center justify-center border-2 border-dashed border-slate-700">
-              <BookOpen className="h-24 w-24 text-muted-foreground/50" />
+            <div className="aspect-video bg-[#112240] rounded-3xl flex items-center justify-center border-2 border-slate-700 overflow-hidden relative">
+              {course.image_url ? (
+                <img 
+                  src={course.image_url} 
+                  alt={course.title} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <BookOpen className="h-24 w-24 text-muted-foreground/50" />
+              )}
             </div>
 
             <div className="space-y-6">
