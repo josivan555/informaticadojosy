@@ -29,7 +29,8 @@ function AdminCourses() {
     status: "published",
     paddle_product_id: "",
     paddle_price_id: "",
-    mercadopago_link: ""
+    mercadopago_link: "",
+    image_url: ""
   });
 
   const [file, setFile] = useState<File | null>(null);
@@ -67,7 +68,8 @@ function AdminCourses() {
         status: course.status,
         paddle_product_id: course.paddle_product_id || "",
         paddle_price_id: course.paddle_price_id || "",
-        mercadopago_link: course.mercadopago_link || ""
+        mercadopago_link: course.mercadopago_link || "",
+        image_url: course.image_url || ""
       });
 
     } else {
@@ -82,7 +84,8 @@ function AdminCourses() {
         status: "published",
         paddle_product_id: "",
         paddle_price_id: "",
-        mercadopago_link: ""
+        mercadopago_link: "",
+        image_url: ""
       });
 
     }
@@ -124,6 +127,7 @@ function AdminCourses() {
         category: formData.category,
         status: formData.status,
         file_url: fileUrl,
+        image_url: formData.image_url || null,
         paddle_product_id: formData.paddle_product_id || null,
         paddle_price_id: formData.paddle_price_id || null,
         mercadopago_link: formData.mercadopago_link || null,
@@ -280,6 +284,10 @@ function AdminCourses() {
                 <Label htmlFor="paddle_price_id">Paddle Price ID</Label>
                 <Input id="paddle_price_id" value={formData.paddle_price_id} onChange={(e) => setFormData({...formData, paddle_price_id: e.target.value})} placeholder="pri_..." />
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="image_url">URL da Capa (Capa do Curso)</Label>
+              <Input id="image_url" value={formData.image_url} onChange={(e) => setFormData({...formData, image_url: e.target.value})} placeholder="https://exemplo.com/imagem.png" />
             </div>
             <div className="space-y-2">
               <Label htmlFor="file">Arquivo PDF (Opcional se já existir)</Label>

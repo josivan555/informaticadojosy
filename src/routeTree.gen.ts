@@ -19,6 +19,7 @@ import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
 import { Route as AdminSoftwareCategoriesRouteImport } from './routes/admin/software-categories'
 import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
+import { Route as CoursesIndexRouteImport } from './routes/courses/index'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses/$courseId'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago-webhook'
 
@@ -72,6 +73,11 @@ const AuthConfirmRoute = AuthConfirmRouteImport.update({
   path: '/confirm',
   getParentRoute: () => AuthRoute,
 } as any)
+const CoursesIndexRoute = CoursesIndexRouteImport.update({
+  id: '/courses/',
+  path: '/courses/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
   id: '/courses/$courseId',
   path: '/courses/$courseId',
@@ -96,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/auth/confirm': typeof AuthConfirmRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/courses/': typeof CoursesIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -110,6 +117,7 @@ export interface FileRoutesByTo {
   '/auth/confirm': typeof AuthConfirmRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/admin': typeof AdminIndexRoute
+  '/courses': typeof CoursesIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesById {
@@ -125,6 +133,7 @@ export interface FileRoutesById {
   '/auth/confirm': typeof AuthConfirmRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/admin/': typeof AdminIndexRoute
+  '/courses/': typeof CoursesIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRouteTypes {
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/auth/confirm'
     | '/courses/$courseId'
     | '/admin/'
+    | '/courses/'
     | '/api/public/mercadopago-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -155,6 +165,7 @@ export interface FileRouteTypes {
     | '/auth/confirm'
     | '/courses/$courseId'
     | '/admin'
+    | '/courses'
     | '/api/public/mercadopago-webhook'
   id:
     | '__root__'
@@ -169,6 +180,7 @@ export interface FileRouteTypes {
     | '/auth/confirm'
     | '/courses/$courseId'
     | '/admin/'
+    | '/courses/'
     | '/api/public/mercadopago-webhook'
   fileRoutesById: FileRoutesById
 }
@@ -183,6 +195,7 @@ export interface RootRouteChildren {
   AdminSoftwaresRoute: typeof AdminSoftwaresRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
+  CoursesIndexRoute: typeof CoursesIndexRoute
   ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
 
@@ -258,6 +271,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthConfirmRouteImport
       parentRoute: typeof AuthRoute
     }
+    '/courses/': {
+      id: '/courses/'
+      path: '/courses'
+      fullPath: '/courses/'
+      preLoaderRoute: typeof CoursesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/courses/$courseId': {
       id: '/courses/$courseId'
       path: '/courses/$courseId'
@@ -296,6 +316,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminSoftwaresRoute: AdminSoftwaresRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   AdminIndexRoute: AdminIndexRoute,
+  CoursesIndexRoute: CoursesIndexRoute,
   ApiPublicMercadopagoWebhookRoute: ApiPublicMercadopagoWebhookRoute,
 }
 export const routeTree = rootRouteImport

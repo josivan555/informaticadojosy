@@ -291,14 +291,24 @@ function Index() {
                 <h2 className="text-3xl font-bold tracking-tight">Cursos em PDF (Pix e Cartão)</h2>
                 <p className="text-muted-foreground">Aprenda novas habilidades com material didático focado, pague com Pix ou Cartão via Mercado Pago.</p>
               </div>
-              <Button variant="link" className="p-0">Ver todos cursos</Button>
+              <Button variant="link" className="p-0" asChild>
+                <Link to="/courses">Ver todos cursos</Link>
+              </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {courses?.map((course: any) => (
                 <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border border-slate-800 bg-[#112240] hover:border-primary/50 transition-colors">
                   <div className="flex-shrink-0 w-full lg:w-48 h-64 bg-muted rounded-xl flex items-center justify-center relative overflow-hidden group">
-                    <BookOpen className="h-12 w-12 text-muted-foreground" />
+                    {course.image_url ? (
+                      <img 
+                        src={course.image_url} 
+                        alt={course.title} 
+                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                      />
+                    ) : (
+                      <BookOpen className="h-12 w-12 text-muted-foreground" />
+                    )}
                     <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                       <Badge className="scale-110">PDF Premium</Badge>
                     </div>
