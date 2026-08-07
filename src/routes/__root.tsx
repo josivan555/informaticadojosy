@@ -45,7 +45,7 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          Analyze the attached image.
+          Ocorreu um erro ao carregar a página
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
         </p>
