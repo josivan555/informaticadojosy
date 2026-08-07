@@ -74,7 +74,7 @@ function AdminDownloads() {
                       <TableCell>
                         <div className="flex items-center gap-2 text-muted-foreground text-sm">
                           <Calendar className="h-4 w-4" />
-                          {format(new Date(row.downloaded_at), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR })}
+                          {row.downloaded_at ? format(new Date(row.downloaded_at), "dd 'de' MMMM 'às' HH:mm", { locale: ptBR }) : "N/A"}
                         </div>
                       </TableCell>
                     </TableRow>
