@@ -1,8 +1,11 @@
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { Laptop, BookOpen, LayoutDashboard, LogOut, Home } from "lucide-react";
+import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
+import { Laptop, BookOpen, LayoutDashboard, LogOut, Home, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useQuery } from "@tanstack/react-query";
+import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 
 export const Route = createFileRoute("/admin/layout")({
   beforeLoad: async ({ location }) => {
@@ -39,6 +42,9 @@ function AdminLayout() {
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
         <Sidebar>
+          <SidebarHeader className="p-4 border-b">
+            <AdminProfile />
+          </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupLabel>Administração</SidebarGroupLabel>
@@ -96,5 +102,36 @@ function AdminLayout() {
         </main>
       </div>
     </SidebarProvider>
+  );
+}
+
+function AdminProfile() {
+  const { data: session } = useQuery({
+    queryKey: ["admin-session"],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      return session;
+    },
+  });
+
+  const userEmail = session?.user?.email;
+  const isAdmin = userEmail === "informaticadojosy@gmail.com";
+  const profileUrl = isAdmin ? profileAdminAsset.url : undefined;
+
+  return (
+    <div className="flex items-center gap-3">
+      <Avatar className="h-9 w-9 border">
+        <AvatarImage src={profileUrl} alt="Admin" className="object-cover" />
+        <AvatarFallback>
+          <User className="h-5 w-5" />
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex flex-col overflow-hidden text-sm">
+        <span className="font-semibold truncate">
+          {isAdmin ? "Josy Informática" : "Administrador"}
+        </span>
+        <span className="text-xs text-muted-foreground truncate">{userEmail}</span>
+      </div>
+    </div>
   );
 }
