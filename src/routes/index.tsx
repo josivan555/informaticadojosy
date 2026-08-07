@@ -235,7 +235,7 @@ function Index() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {courses.map((course: any) => (
-                <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border bg-card hover:border-primary/50 transition-colors">
+                <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border border-slate-800 bg-[#112240] hover:border-primary/50 transition-colors">
                   <div className="flex-shrink-0 w-full lg:w-48 h-64 bg-muted rounded-xl flex items-center justify-center relative overflow-hidden group">
                     <BookOpen className="h-12 w-12 text-muted-foreground" />
                     <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
