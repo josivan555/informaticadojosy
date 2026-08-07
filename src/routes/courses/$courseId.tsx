@@ -28,7 +28,7 @@ export const Route = createFileRoute("/courses/$courseId")({
   head: (data) => {
     const course = data.loaderData as any;
     return {
-      title: `${course?.title || "Curso"} - SoftCourse`,
+      title: `${course?.title || "Curso"} - INFORMÁTICA do Josy`,
       meta: [
         { name: "description", content: course?.description || "Detalhes do curso" },
         { property: "og:title", content: course?.title },
@@ -163,16 +163,17 @@ function CourseDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b bg-background/95 backdrop-blur sticky top-0 z-50">
+    <div className="min-h-screen bg-[#0a192f] text-slate-200">
+      <header className="border-b border-primary/10 bg-[#0a192f]/95 backdrop-blur sticky top-0 z-50">
         <div className="container mx-auto h-16 flex items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl">
+          <Link to="/" className="flex items-center gap-2 font-bold text-xl text-white">
             <Zap className="h-5 w-5 text-primary" fill="currentColor" />
-            <span>SoftCourse</span>
+            <span>INFORMÁTICA <span className="text-primary">do Josy</span></span>
           </Link>
+
           <Button variant="ghost" size="sm" asChild>
             <Link to="/">
-              <ChevronLeft className="mr-2 h-4 w-4" /> Voltar
+              <ChevronLeft className="mr-2 h-4 w-4" /> Voltar ao Início
             </Link>
           </Button>
         </div>
@@ -185,21 +186,23 @@ function CourseDetails() {
             <div className="space-y-4">
               <Badge variant="secondary" className="px-3 py-1">
                 {course.level || "Iniciante ao Avançado"}
+
               </Badge>
-              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight">
+              <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-white">
                 {course.title}
+
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
                 {course.description}
               </p>
             </div>
 
-            <div className="aspect-video bg-muted rounded-3xl flex items-center justify-center border-2 border-dashed">
+            <div className="aspect-video bg-[#112240] rounded-3xl flex items-center justify-center border-2 border-dashed border-slate-700">
               <BookOpen className="h-24 w-24 text-muted-foreground/50" />
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-2xl font-bold">O que você vai aprender</h2>
+              <h2 className="text-2xl font-bold text-white">O que você vai aprender</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
                   "Conteúdo prático e direto ao ponto",
@@ -207,7 +210,7 @@ function CourseDetails() {
                   "Acesso vitalício ao arquivo PDF",
                   "Suporte especializado incluso"
                 ].map((item, i) => (
-                  <div key={i} className="flex items-start gap-3 p-4 rounded-xl border bg-card">
+                  <div key={i} className="flex items-start gap-3 p-4 rounded-xl border border-slate-800 bg-[#112240]">
                     <ShieldCheck className="h-5 w-5 text-green-500 mt-0.5" />
                     <span className="text-sm font-medium">{item}</span>
                   </div>
@@ -218,10 +221,11 @@ function CourseDetails() {
 
           {/* Sidebar / Purchase Card */}
           <div className="lg:col-span-1">
-            <Card className="sticky top-24 shadow-xl border-primary/20">
+            <Card className="sticky top-24 shadow-xl border-primary/20 bg-[#112240] text-slate-200">
               <CardHeader className="text-center pb-2">
-                <CardTitle className="text-4xl font-bold">
+                <CardTitle className="text-4xl font-bold text-white">
                   R$ {course.price?.toFixed(2)}
+
                 </CardTitle>
                 <CardDescription>Pagamento único, acesso imediato</CardDescription>
               </CardHeader>
@@ -278,17 +282,18 @@ function CourseDetails() {
         </div>
       </main>
 
-      <footer className="bg-muted/30 border-t py-12 mt-20">
+      <footer className="bg-[#0a192f] border-t border-slate-800 py-12 mt-20">
         <div className="container mx-auto px-4 text-center space-y-4">
-          <div className="flex items-center justify-center gap-2 font-bold text-xl">
+          <div className="flex items-center justify-center gap-2 font-bold text-xl text-white">
             <Zap className="h-5 w-5 text-primary" fill="currentColor" />
-            <span>SoftCourse</span>
+            <span>INFORMÁTICA <span className="text-primary">do Josy</span></span>
           </div>
           <p className="text-sm text-muted-foreground">
             A melhor fonte de ferramentas digitais e conhecimento técnico.
           </p>
         </div>
       </footer>
+
     </div>
   );
 }
