@@ -115,7 +115,7 @@ function AdminCourses() {
         fileUrl = publicUrl;
       }
 
-      const courseData = {
+      const courseData: any = {
         title: formData.title,
         description: formData.description,
         price: parseFloat(formData.price),
@@ -129,6 +129,7 @@ function AdminCourses() {
         mercadopago_link: formData.mercadopago_link || null,
         updated_at: new Date().toISOString()
       };
+
 
 
       if (editingCourse) {
