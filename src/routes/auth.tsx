@@ -118,8 +118,39 @@ function AuthPage() {
             </CardFooter>
           </form>
         ) : (
-          <CardContent className="flex flex-col items-center pb-6">
-            <Button variant="outline" className="w-full" onClick={() => setIsSuccess(false)}>
+          <CardContent className="flex flex-col items-center pb-6 space-y-4">
+            <div className="p-3 bg-primary/10 rounded-full mb-2">
+              <Zap className="h-8 w-8 text-primary animate-pulse" />
+            </div>
+            <p className="text-sm text-center text-muted-foreground px-2">
+              Se você não recebeu o e-mail, verifique sua pasta de spam ou clique no botão abaixo para tentar novamente.
+            </p>
+            <Button 
+              variant="outline" 
+              className="w-full" 
+              onClick={async () => {
+                setIsLoading(true);
+                try {
+                  const { error } = await supabase.auth.resend({
+                    type: 'signup',
+                    email: email,
+                    options: {
+                      emailRedirectTo: `${window.location.origin}/auth/confirm`,
+                    }
+                  });
+                  if (error) throw error;
+                  toast.success("E-mail de confirmação reenviado!");
+                } catch (error: any) {
+                  toast.error(error.message || "Erro ao reenviar e-mail");
+                } finally {
+                  setIsLoading(false);
+                }
+              }}
+              disabled={isLoading}
+            >
+              {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Reenviar e-mail"}
+            </Button>
+            <Button variant="ghost" className="w-full text-xs" onClick={() => setIsSuccess(false)}>
               Voltar ao login
             </Button>
           </CardContent>
