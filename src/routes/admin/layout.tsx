@@ -103,6 +103,7 @@ function AdminLayout() {
       </div>
     </SidebarProvider>
   );
+}
 
 function AdminProfile() {
   const { data: session } = useQuery({
