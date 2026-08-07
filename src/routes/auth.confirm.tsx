@@ -44,25 +44,24 @@ function ConfirmEmailPage() {
         setStatus("success");
         setMessage("Seu e-mail foi confirmado com sucesso! Agora você pode acessar seus cursos.");
       } else {
-        // Se não houver erro na URL nem sessão, pode ser que o usuário acessou a página diretamente
         setStatus("loading");
-        setMessage("Aguardando confirmação...");
-        
-        // Tenta novamente após um pequeno delay, as vezes a sessão demora a injetar
-        setTimeout(async () => {
-          const { data: { session: retrySession } } = await supabase.auth.getSession();
-          if (retrySession) {
-            setStatus("success");
-            setMessage("Seu e-mail foi confirmado com sucesso!");
-          } else {
-            setStatus("expired");
-            setMessage("Não encontramos uma sessão ativa. O link pode ter expirado ou você já confirmou seu e-mail.");
-          }
-        }, 2000);
+        setMessage("Aguardando confirmação... Detectaremos automaticamente assim que você clicar no link do e-mail.");
       }
     };
 
     checkStatus();
+
+    // Inicia o listener de mudanças na autenticação para detectar confirmação sem refresh
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        setStatus("success");
+        setMessage("Seu e-mail foi confirmado com sucesso! Agora você pode acessar seus cursos.");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [search]);
 
   return (
