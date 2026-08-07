@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -153,7 +153,17 @@ function AuthPage() {
             <Button variant="ghost" className="w-full text-xs" onClick={() => setIsSuccess(false)}>
               Voltar ao login
             </Button>
+            <Button asChild variant="link" className="text-xs text-muted-foreground">
+              <Link to="/">Voltar para a página inicial</Link>
+            </Button>
           </CardContent>
+        )}
+        {!isSuccess && (
+          <div className="pb-6 px-6 text-center">
+            <Button asChild variant="link" className="text-xs text-muted-foreground p-0 h-auto">
+              <Link to="/">← Voltar para a página inicial</Link>
+            </Button>
+          </div>
         )}
       </Card>
     </div>
