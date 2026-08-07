@@ -1,7 +1,4 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-/**
- * Adicione um gerenciamento de categorias para meus softwares, para eu organizar e exibir listas por tema no site.
- */
 import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
