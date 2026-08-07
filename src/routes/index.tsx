@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+// Integre um carrinho e checkout para que as pessoas possam comprar os cursos em PDF com pagamento online.
 import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
