@@ -182,7 +182,7 @@ function Index() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {softwares.map((sw: any) => (
-                <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300">
+                <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
                       <div className="p-2 bg-primary/10 rounded-lg">
