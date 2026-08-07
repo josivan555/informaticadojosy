@@ -119,7 +119,7 @@ function Index() {
           </nav>
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" asChild>
-              <a href="/admin">Entrar</a>
+              <a href="/auth">Entrar</a>
             </Button>
             <Button size="sm">Começar Agora</Button>
           </div>
