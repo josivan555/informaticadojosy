@@ -139,9 +139,9 @@ function AuthPage() {
                     }
                   });
                   if (error) throw error;
-                  toast.success("E-mail de confirmação reenviado!");
+                  toast.success(`E-mail de confirmação reenviado para ${email}! Verifique sua caixa de entrada.`);
                 } catch (error: any) {
-                  toast.error(error.message || "Erro ao reenviar e-mail");
+                  toast.error(`Falha ao reenviar: ${error.message || "Tente novamente em instantes"}`);
                 } finally {
                   setIsLoading(false);
                 }
