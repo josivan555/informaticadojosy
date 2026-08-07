@@ -249,17 +249,28 @@ function Index() {
                     </div>
                     <div className="mt-6 flex items-center justify-between">
                       <span className="text-3xl font-bold">R$ {course.price?.toFixed(2)}</span>
-                      <Button 
-                        className="rounded-full px-6"
-                        onClick={() => handleBuyCourse(course)}
-                        disabled={(!course.paddle_price_id && !course.mercadopago_link) || isCheckoutLoading === course.id}
-                      >
-                        {isCheckoutLoading === course.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          (course.paddle_price_id || course.mercadopago_link) ? 'Comprar Agora' : 'Em breve'
-                        )}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline"
+                          className="rounded-full px-4"
+                          asChild
+                        >
+                          <Link to="/courses/$courseId" params={{ courseId: course.id }}>
+                            Detalhes
+                          </Link>
+                        </Button>
+                        <Button 
+                          className="rounded-full px-6"
+                          onClick={() => handleBuyCourse(course)}
+                          disabled={(!course.paddle_price_id && !course.mercadopago_link) || isCheckoutLoading === course.id}
+                        >
+                          {isCheckoutLoading === course.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            (course.paddle_price_id || course.mercadopago_link) ? 'Comprar Agora' : 'Em breve'
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
