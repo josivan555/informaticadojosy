@@ -304,6 +304,7 @@ function Index() {
             </div>
             <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
               © 2026 SoftCourse. Todos os direitos reservados.
+              <p className="mt-4 text-xs opacity-50">Configure o envio de e-mails automáticos com o link de download e comprovante após o pagamento ser aprovado no Mercado Pago.</p>
             </div>
           </div>
         </footer>
