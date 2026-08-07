@@ -66,6 +66,9 @@ const COURSES = [
 ];
 
 function Index() {
+  const { data: softwares } = useSuspenseQuery(softwaresQueryOptions);
+  const { data: courses } = useSuspenseQuery(coursesQueryOptions);
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header/Nav */}
@@ -135,7 +138,7 @@ function Index() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {SOFTWARES.map((sw) => (
+              {softwares.map((sw: any) => (
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300">
                   <CardHeader>
                     <div className="flex justify-between items-start mb-2">
@@ -157,7 +160,10 @@ function Index() {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button className="w-full group-hover:bg-primary transition-colors">
+                    <Button 
+                      className="w-full group-hover:bg-primary transition-colors"
+                      onClick={() => sw.file_url && window.open(sw.file_url, '_blank')}
+                    >
                       <Download className="mr-2 h-4 w-4" /> Baixar Agora
                     </Button>
                   </CardFooter>
@@ -179,7 +185,7 @@ function Index() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {COURSES.map((course) => (
+              {courses.map((course: any) => (
                 <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border bg-card hover:border-primary/50 transition-colors">
                   <div className="flex-shrink-0 w-full lg:w-48 h-64 bg-muted rounded-xl flex items-center justify-center relative overflow-hidden group">
                     <BookOpen className="h-12 w-12 text-muted-foreground" />
@@ -198,8 +204,13 @@ function Index() {
                       </div>
                     </div>
                     <div className="mt-6 flex items-center justify-between">
-                      <span className="text-3xl font-bold">{course.price}</span>
-                      <Button className="rounded-full px-6">Comprar Agora</Button>
+                      <span className="text-3xl font-bold">R$ {course.price.toFixed(2)}</span>
+                      <Button 
+                        className="rounded-full px-6"
+                        onClick={() => course.file_url && window.open(course.file_url, '_blank')}
+                      >
+                        Comprar Agora
+                      </Button>
                     </div>
                   </div>
                 </div>
