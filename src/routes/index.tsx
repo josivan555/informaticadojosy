@@ -7,7 +7,12 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 import heroBannerAsset from "@/assets/main-hero-banner.png.asset.json";
+import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User, LogOut } from "lucide-react";
+
 
 
 const softwaresQueryOptions = {
@@ -53,6 +58,31 @@ function Index() {
   const { data: courses } = useSuspenseQuery(coursesQueryOptions);
   const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
   const navigate = useNavigate();
+  
+  const { data: session } = useQuery({
+    queryKey: ["session"],
+    queryFn: async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      return session;
+    },
+  });
+
+  const { data: roleData } = useQuery({
+    queryKey: ["user-role", session?.user?.id],
+    enabled: !!session?.user?.id,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session!.user.id)
+        .eq("role", "admin")
+        .single();
+      return data;
+    },
+  });
+
+  const isAdmin = session?.user?.email === "informaticadojosy@gmail.com" || !!roleData;
+
 
   useEffect(() => {
     // @ts-ignore
@@ -78,6 +108,11 @@ function Index() {
     navigate({ to: `/courses/${course.id}` });
   };
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    window.location.reload();
+  };
+
   return (
     <div className="min-h-screen bg-[#0a192f] text-slate-200">
       {/* Header/Nav */}
@@ -92,15 +127,46 @@ function Index() {
             <a href="#softwares" className="hover:text-primary transition-colors">Softwares</a>
             <a href="#cursos" className="hover:text-primary transition-colors">Cursos</a>
             <a href="#sobre" className="hover:text-primary transition-colors">Sobre</a>
+            {isAdmin && (
+              <Link to="/admin" className="text-primary hover:underline transition-colors">Painel Admin</Link>
+            )}
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" asChild>
-              <a href="/auth">Entrar</a>
-            </Button>
-            <Button size="sm">Começar Agora</Button>
+            {session ? (
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Avatar className="h-8 w-8 border border-primary/20">
+                    <AvatarImage 
+                      src={session.user.email === "informaticadojosy@gmail.com" ? profileAdminAsset.url : undefined} 
+                      className="object-cover"
+                    />
+                    <AvatarFallback className="bg-slate-800">
+                      <User className="h-4 w-4" />
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="hidden sm:inline text-sm font-medium truncate max-w-[100px]">
+                    {session.user.email === "informaticadojosy@gmail.com" ? "Josy" : "Logado"}
+                  </span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-slate-400 hover:text-white">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sair
+                </Button>
+              </div>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/auth">Entrar</Link>
+                </Button>
+                <Button size="sm" asChild>
+                  <Link to="/auth">Começar Agora</Link>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </header>
+
 
       <main>
         {/* Hero Section with Banner */}
