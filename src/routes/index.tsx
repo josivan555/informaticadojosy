@@ -69,8 +69,13 @@ function Index() {
       return;
     }
 
-    if (!course.paddle_price_id) {
-      toast.error("Este curso ainda não possui um ID de preço configurado");
+    if (!course.paddle_price_id && !course.mercadopago_link) {
+      toast.error("Este curso ainda não possui um método de pagamento configurado");
+      return;
+    }
+
+    if (course.mercadopago_link) {
+      window.open(course.mercadopago_link, '_blank');
       return;
     }
 
@@ -247,12 +252,12 @@ function Index() {
                       <Button 
                         className="rounded-full px-6"
                         onClick={() => handleBuyCourse(course)}
-                        disabled={!course.paddle_price_id || isCheckoutLoading === course.id}
+                        disabled={(!course.paddle_price_id && !course.mercadopago_link) || isCheckoutLoading === course.id}
                       >
                         {isCheckoutLoading === course.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
-                          course.paddle_price_id ? 'Comprar Agora' : 'Em breve'
+                          (course.paddle_price_id || course.mercadopago_link) ? 'Comprar Agora' : 'Em breve'
                         )}
                       </Button>
                     </div>
