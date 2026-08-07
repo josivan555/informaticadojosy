@@ -3,6 +3,34 @@ import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap } from
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+
+const softwaresQueryOptions = {
+  queryKey: ["softwares"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("softwares")
+      .select("*")
+      .eq("status", "published")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+};
+
+const coursesQueryOptions = {
+  queryKey: ["courses"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("courses")
+      .select("*")
+      .eq("status", "published")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+};
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -15,55 +43,6 @@ export const Route = createFileRoute("/")({
     ],
   }),
 });
-
-const SOFTWARES = [
-  {
-    id: 1,
-    name: "Utilitário Pro v2.0",
-    description: "Otimização completa para seu Windows com apenas um clique.",
-    version: "2.0.4",
-    size: "45MB",
-    category: "Utilitário",
-    downloads: "1.2k",
-  },
-  {
-    id: 2,
-    name: "DevTool Lite",
-    description: "Ambiente leve para desenvolvimento rápido de scripts Python.",
-    version: "1.5.0",
-    size: "120MB",
-    category: "Desenvolvimento",
-    downloads: "850",
-  },
-  {
-    id: 3,
-    name: "PhotoEdit Express",
-    description: "Editor de fotos rápido com filtros profissionais e IA.",
-    version: "3.2.1",
-    size: "89MB",
-    category: "Design",
-    downloads: "2.1k",
-  }
-];
-
-const COURSES = [
-  {
-    id: 1,
-    title: "Mastering Python 2026",
-    description: "Do zero ao profissional com projetos reais em PDF.",
-    price: "R$ 49,90",
-    pages: "250",
-    level: "Iniciante/Intermediário",
-  },
-  {
-    id: 2,
-    title: "Marketing Digital para DEVs",
-    description: "Como vender seus softwares e serviços na internet.",
-    price: "R$ 67,00",
-    pages: "180",
-    level: "Avançado",
-  }
-];
 
 function Index() {
   const { data: softwares } = useSuspenseQuery(softwaresQueryOptions);
@@ -84,7 +63,9 @@ function Index() {
             <a href="#sobre" className="hover:text-primary transition-colors">Sobre</a>
           </nav>
           <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm">Entrar</Button>
+            <Button variant="ghost" size="sm" asChild>
+              <a href="/admin">Entrar</a>
+            </Button>
             <Button size="sm">Começar Agora</Button>
           </div>
         </div>
@@ -105,11 +86,13 @@ function Index() {
                 Baixe ferramentas exclusivas para produtividade e adquira conhecimentos práticos com nossos cursos em PDF de alta qualidade.
               </p>
               <div className="flex flex-wrap gap-4 pt-4">
-                <Button size="lg" className="h-12 px-8">
-                  Explorar Softwares <ChevronRight className="ml-2 h-4 w-4" />
+                <Button size="lg" className="h-12 px-8" asChild>
+                  <a href="#softwares">
+                    Explorar Softwares <ChevronRight className="ml-2 h-4 w-4" />
+                  </a>
                 </Button>
-                <Button size="lg" variant="outline" className="h-12 px-8">
-                  Ver Cursos
+                <Button size="lg" variant="outline" className="h-12 px-8" asChild>
+                  <a href="#cursos">Ver Cursos</a>
                 </Button>
               </div>
               <div className="flex items-center gap-8 pt-8 text-sm text-muted-foreground">
@@ -163,12 +146,18 @@ function Index() {
                     <Button 
                       className="w-full group-hover:bg-primary transition-colors"
                       onClick={() => sw.file_url && window.open(sw.file_url, '_blank')}
+                      disabled={!sw.file_url}
                     >
-                      <Download className="mr-2 h-4 w-4" /> Baixar Agora
+                      <Download className="mr-2 h-4 w-4" /> {sw.file_url ? 'Baixar Agora' : 'Em breve'}
                     </Button>
                   </CardFooter>
                 </Card>
               ))}
+              {softwares.length === 0 && (
+                <div className="col-span-full text-center py-12 text-muted-foreground">
+                  Nenhum software disponível no momento.
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -204,17 +193,23 @@ function Index() {
                       </div>
                     </div>
                     <div className="mt-6 flex items-center justify-between">
-                      <span className="text-3xl font-bold">R$ {course.price.toFixed(2)}</span>
+                      <span className="text-3xl font-bold">R$ {course.price?.toFixed(2)}</span>
                       <Button 
                         className="rounded-full px-6"
                         onClick={() => course.file_url && window.open(course.file_url, '_blank')}
+                        disabled={!course.file_url}
                       >
-                        Comprar Agora
+                        {course.file_url ? 'Comprar Agora' : 'Esgotado'}
                       </Button>
                     </div>
                   </div>
                 </div>
               ))}
+              {courses.length === 0 && (
+                <div className="col-span-full text-center py-12 text-muted-foreground">
+                  Nenhum curso disponível no momento.
+                </div>
+              )}
             </div>
           </div>
         </section>
