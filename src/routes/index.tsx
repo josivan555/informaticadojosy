@@ -291,7 +291,9 @@ function Index() {
                 <h2 className="text-3xl font-bold tracking-tight">Cursos em PDF (Pix e Cartão)</h2>
                 <p className="text-muted-foreground">Aprenda novas habilidades com material didático focado, pague com Pix ou Cartão via Mercado Pago.</p>
               </div>
-              <Button variant="link" className="p-0">Ver todos cursos</Button>
+              <Button variant="link" className="p-0" asChild>
+                <Link to="/courses">Ver todos cursos</Link>
+              </Button>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
