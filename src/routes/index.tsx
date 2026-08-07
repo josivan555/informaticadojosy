@@ -295,9 +295,9 @@ function Index() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div className="col-span-1 md:col-span-2 space-y-4">
-                <div className="flex items-center gap-2 font-bold text-xl tracking-tighter">
+                <div className="flex items-center gap-2 font-bold text-xl tracking-tighter text-white">
                   <Zap className="h-5 w-5 text-primary" fill="currentColor" />
-                  <span>SoftCourse</span>
+                  <span>INFORMÁTICA <span className="text-primary">do Josy</span></span>
                 </div>
                 <p className="text-sm text-muted-foreground max-w-xs">
                   A melhor fonte de ferramentas digitais e conhecimento técnico desde 2026.
