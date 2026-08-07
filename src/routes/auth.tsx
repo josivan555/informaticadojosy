@@ -53,7 +53,7 @@ function AuthPage() {
         <CardHeader className="space-y-1 flex flex-col items-center">
           <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter mb-4">
             <Zap className="h-6 w-6 text-primary" fill="currentColor" />
-            <span>SoftCourse</span>
+            <span>INFORMÁTICA do Josy</span>
           </div>
           <CardTitle className="text-2xl">
             {isSignUp ? "Criar Conta" : "Acesso Administrativo"}

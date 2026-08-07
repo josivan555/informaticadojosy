@@ -39,10 +39,10 @@ const coursesQueryOptions = {
 export const Route = createFileRoute("/")({
   component: Index,
   head: () => ({
-    title: "SoftCourse - Download de Programas e Cursos em PDF",
+    title: "INFORMÁTICA do Josy - Download de Programas e Cursos em PDF",
     meta: [
       { name: "description", content: "O melhor portal para baixar softwares utilitários e adquirir cursos especializados em PDF." },
-      { property: "og:title", content: "SoftCourse - Downloads & Cursos" },
+      { property: "og:title", content: "INFORMÁTICA do Josy - Downloads & Cursos" },
       { property: "og:description", content: "Encontre os melhores softwares e cursos digitais em um só lugar." },
     ],
   }),
@@ -320,7 +320,7 @@ function Index() {
               </div>
             </div>
             <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
-              © 2026 SoftCourse. Todos os direitos reservados.
+              © 2026 INFORMÁTICA do Josy. Todos os direitos reservados.
               <p className="mt-4 text-xs opacity-50">Após a confirmação do pagamento no Mercado Pago, você receberá automaticamente um e-mail com o link de download e o comprovante da sua compra.</p>
             </div>
           </div>
