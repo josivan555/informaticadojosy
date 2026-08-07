@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      checkout_sessions: {
+        Row: {
+          course_id: string | null
+          created_at: string | null
+          external_checkout_id: string | null
+          id: string
+          payment_method: string | null
+          software_id: string | null
+          status: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          course_id?: string | null
+          created_at?: string | null
+          external_checkout_id?: string | null
+          id?: string
+          payment_method?: string | null
+          software_id?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          course_id?: string | null
+          created_at?: string | null
+          external_checkout_id?: string | null
+          id?: string
+          payment_method?: string | null
+          software_id?: string | null
+          status?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkout_sessions_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkout_sessions_software_id_fkey"
+            columns: ["software_id"]
+            isOneToOne: false
+            referencedRelation: "softwares"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       courses: {
         Row: {
           created_at: string | null
