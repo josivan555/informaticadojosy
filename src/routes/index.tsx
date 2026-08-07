@@ -1,5 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2 } from "lucide-react";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -249,17 +249,28 @@ function Index() {
                     </div>
                     <div className="mt-6 flex items-center justify-between">
                       <span className="text-3xl font-bold">R$ {course.price?.toFixed(2)}</span>
-                      <Button 
-                        className="rounded-full px-6"
-                        onClick={() => handleBuyCourse(course)}
-                        disabled={(!course.paddle_price_id && !course.mercadopago_link) || isCheckoutLoading === course.id}
-                      >
-                        {isCheckoutLoading === course.id ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          (course.paddle_price_id || course.mercadopago_link) ? 'Comprar Agora' : 'Em breve'
-                        )}
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline"
+                          className="rounded-full px-4"
+                          asChild
+                        >
+                          <Link to="/courses/$courseId" params={{ courseId: course.id }}>
+                            Detalhes
+                          </Link>
+                        </Button>
+                        <Button 
+                          className="rounded-full px-6"
+                          onClick={() => handleBuyCourse(course)}
+                          disabled={(!course.paddle_price_id && !course.mercadopago_link) || isCheckoutLoading === course.id}
+                        >
+                          {isCheckoutLoading === course.id ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            (course.paddle_price_id || course.mercadopago_link) ? 'Comprar Agora' : 'Em breve'
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -304,7 +315,7 @@ function Index() {
             </div>
             <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
               © 2026 SoftCourse. Todos os direitos reservados.
-              <p className="mt-4 text-xs opacity-50">Configure o envio de e-mails automáticos com o link de download e comprovante após o pagamento ser aprovado no Mercado Pago.</p>
+              <p className="mt-4 text-xs opacity-50">Crie uma página de detalhes para cada curso com descrição, botão de compra e link de acesso ao PDF após a confirmação do pagamento.</p>
             </div>
           </div>
         </footer>
