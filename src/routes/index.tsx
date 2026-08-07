@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+// Integre a validação do acesso do curso via webhook do Stripe para que o status de compra atualize automaticamente após o checkout.
 // Implementar uma página pública que liste meus cursos com capa, descrição e botão para comprar via checkout.
 // Implemente controle de acesso para que apenas usuários com compra ativa possam visualizar e baixar os PDFs.
 // Implemente o download do PDF do curso automaticamente após a confirmação do checkout e login do usuário.
