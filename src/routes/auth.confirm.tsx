@@ -12,14 +12,24 @@ export const Route = createFileRoute("/auth/confirm")({
 function ConfirmEmailPage() {
   const [status, setStatus] = useState<"loading" | "success" | "error" | "expired">("loading");
   const [message, setMessage] = useState("Verificando seu e-mail...");
+  const search = Route.useSearch() as any;
 
   useEffect(() => {
-    const checkSession = async () => {
+    const checkStatus = async () => {
+      // Verifica erros na URL (comum quando o link expira)
+      if (search.error || search.error_description) {
+        const isExpired = search.error_description?.toLowerCase().includes("expired") || 
+                         search.error_description?.toLowerCase().includes("invalid");
+        setStatus(isExpired ? "expired" : "error");
+        setMessage(search.error_description || "Ocorreu um erro ao verificar sua conta.");
+        return;
+      }
+
       const { data: { session }, error } = await supabase.auth.getSession();
       
       if (error) {
         setStatus("error");
-        setMessage("Ocorreu um erro ao verificar sua conta. Tente novamente.");
+        setMessage("Erro ao recuperar sessão: " + error.message);
         return;
       }
 
@@ -27,16 +37,26 @@ function ConfirmEmailPage() {
         setStatus("success");
         setMessage("Seu e-mail foi confirmado com sucesso! Agora você pode acessar seus cursos.");
       } else {
-        // Se não houver sessão, pode ser que o link tenha expirado ou seja inválido
-        // No Supabase, se o usuário clica no link e é redirecionado pra cá sem sessão, 
-        // geralmente significa que algo falhou no fluxo automático ou o link expirou.
-        setStatus("expired");
-        setMessage("O link de confirmação parece ter expirado ou é inválido. Por favor, tente se cadastrar novamente ou solicite um novo link.");
+        // Se não houver erro na URL nem sessão, pode ser que o usuário acessou a página diretamente
+        setStatus("loading");
+        setMessage("Aguardando confirmação...");
+        
+        // Tenta novamente após um pequeno delay, as vezes a sessão demora a injetar
+        setTimeout(async () => {
+          const { data: { session: retrySession } } = await supabase.auth.getSession();
+          if (retrySession) {
+            setStatus("success");
+            setMessage("Seu e-mail foi confirmado com sucesso!");
+          } else {
+            setStatus("expired");
+            setMessage("Não encontramos uma sessão ativa. O link pode ter expirado ou você já confirmou seu e-mail.");
+          }
+        }, 2000);
       }
     };
 
-    checkSession();
-  }, []);
+    checkStatus();
+  }, [search]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
