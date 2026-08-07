@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,6 +52,7 @@ function Index() {
   const { data: softwares } = useSuspenseQuery(softwaresQueryOptions);
   const { data: courses } = useSuspenseQuery(coursesQueryOptions);
   const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // @ts-ignore
@@ -64,45 +65,17 @@ function Index() {
     }
   }, []);
 
-  const handleBuyCourse = (course: any) => {
-    // @ts-ignore
-    if (!window.Paddle) {
-      toast.error("Erro ao carregar sistema de pagamentos");
-      return;
-    }
-
-    if (!course.paddle_price_id && !course.mercadopago_link) {
-      toast.error("Este curso ainda não possui um método de pagamento configurado");
-      return;
-    }
-
-    if (course.mercadopago_link) {
-      window.open(course.mercadopago_link, '_blank');
-      return;
-    }
-
-    setIsCheckoutLoading(course.id);
+  const handleBuyCourse = async (course: any) => {
+    const { data: { session: authSession } } = await supabase.auth.getSession();
     
-    // @ts-ignore
-    window.Paddle.Checkout.open({
-      items: [{ priceId: course.paddle_price_id, quantity: 1 }],
-      settings: {
-        displayMode: 'overlay',
-        theme: 'light',
-        locale: 'pt'
-      },
-      eventCallback: (data: any) => {
-        if (data.name === 'checkout.completed') {
-          toast.success("Compra realizada com sucesso!");
-          if (course.file_url) {
-            window.open(course.file_url, '_blank');
-          }
-        }
-        if (data.name === 'checkout.closed') {
-          setIsCheckoutLoading(null);
-        }
-      }
-    });
+    if (!authSession) {
+      toast.error("Você precisa estar logado para comprar");
+      navigate({ to: "/auth" });
+      return;
+    }
+
+    // Redireciona para a página de detalhes para garantir o fluxo de liberação
+    navigate({ to: `/courses/${course.id}` });
   };
 
   return (
