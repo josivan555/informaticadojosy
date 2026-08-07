@@ -54,6 +54,28 @@ function CourseDetails() {
   });
 
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState(false);
+
+  useEffect(() => {
+    const checkPurchaseStatus = async () => {
+      const { data: { session: authSession } } = await supabase.auth.getSession();
+      if (!authSession) return;
+
+      const { data: purchase } = await supabase
+        .from('checkout_sessions')
+        .select('*')
+        .eq('course_id', params.courseId)
+        .eq('user_id', authSession.user.id)
+        .eq('status', 'completed')
+        .maybeSingle();
+
+      if (purchase) {
+        setHasPurchased(true);
+      }
+    };
+
+    checkPurchaseStatus();
+  }, [params.courseId]);
 
   useEffect(() => {
     // @ts-ignore
@@ -66,14 +88,33 @@ function CourseDetails() {
     }
   }, []);
 
-  const handleBuy = () => {
+  const handleBuy = async () => {
+    const { data: { session: authSession } } = await supabase.auth.getSession();
+    
+    if (!authSession) {
+      toast.error("Você precisa estar logado para comprar");
+      window.location.href = "/auth";
+      return;
+    }
+
     if (!course.paddle_price_id && !course.mercadopago_link) {
       toast.error("Método de pagamento não configurado");
       return;
     }
 
     if (course.mercadopago_link) {
+      // Create a pending session before redirecting
+      // In a real flow, you'd use Mercado Pago API to create a preference and get an ID
+      // Here we'll use a placeholder or the link itself as reference
+      await supabase.from('checkout_sessions').insert({
+        user_id: authSession.user.id,
+        course_id: course.id,
+        payment_method: 'mercadopago',
+        status: 'pending'
+      });
+      
       window.open(course.mercadopago_link, '_blank');
+      toast.info("Redirecionando para o Mercado Pago...");
       return;
     }
 
@@ -92,16 +133,33 @@ function CourseDetails() {
         theme: 'light',
         locale: 'pt'
       },
-      eventCallback: (data: any) => {
+      eventCallback: async (data: any) => {
         if (data.name === 'checkout.completed') {
+          // Update local session
+          await supabase.from('checkout_sessions').insert({
+            user_id: authSession.user.id,
+            course_id: course.id,
+            external_checkout_id: data.data.checkout.id,
+            payment_method: 'paddle',
+            status: 'completed'
+          });
+          
+          setHasPurchased(true);
           toast.success("Compra confirmada!");
-          if (course.file_url) window.open(course.file_url, '_blank');
         }
         if (data.name === 'checkout.closed') {
           setIsCheckoutLoading(false);
         }
       }
     });
+  };
+
+  const handleDownload = () => {
+    if (course.file_url) {
+      window.open(course.file_url, '_blank');
+    } else {
+      toast.error("Arquivo não disponível");
+    }
   };
 
   return (
@@ -183,17 +241,26 @@ function CourseDetails() {
                   </div>
                 </div>
 
-                <Button 
-                  className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02]"
-                  onClick={handleBuy}
-                  disabled={isCheckoutLoading}
-                >
-                  {isCheckoutLoading ? (
-                    <Loader2 className="h-6 w-6 animate-spin" />
-                  ) : (
-                    <>Comprar Agora <ArrowRight className="ml-2 h-5 w-5" /></>
-                  )}
-                </Button>
+                {hasPurchased ? (
+                  <Button 
+                    className="w-full h-14 text-lg font-bold rounded-2xl bg-green-600 hover:bg-green-700 shadow-lg shadow-green-900/20 transition-all hover:scale-[1.02]"
+                    onClick={handleDownload}
+                  >
+                    <Download className="ml-2 h-5 w-5" /> Baixar PDF Agora
+                  </Button>
+                ) : (
+                  <Button 
+                    className="w-full h-14 text-lg font-bold rounded-2xl shadow-lg shadow-primary/20 transition-all hover:scale-[1.02]"
+                    onClick={handleBuy}
+                    disabled={isCheckoutLoading}
+                  >
+                    {isCheckoutLoading ? (
+                      <Loader2 className="h-6 w-6 animate-spin" />
+                    ) : (
+                      <>Comprar Agora <ArrowRight className="ml-2 h-5 w-5" /></>
+                    )}
+                  </Button>
+                )}
 
                 <div className="flex flex-col items-center gap-2">
                   <div className="flex items-center gap-1 text-yellow-500">
