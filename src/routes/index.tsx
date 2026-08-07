@@ -7,6 +7,8 @@ import { useSuspenseQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
+import heroBannerAsset from "@/assets/main-hero-banner.png.asset.json";
+
 
 const softwaresQueryOptions = {
   queryKey: ["softwares"],
