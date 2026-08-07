@@ -82,6 +82,14 @@ function AdminLayout() {
                       </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <a href="/admin/downloads">
+                        <Download className="h-4 w-4" />
+                        <span>Downloads</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
