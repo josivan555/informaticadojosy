@@ -21,6 +21,8 @@ export type Database = {
           file_url: string | null
           id: string
           level: string | null
+          paddle_price_id: string | null
+          paddle_product_id: string | null
           pages: number | null
           price: number
           status: string | null
@@ -33,6 +35,8 @@ export type Database = {
           file_url?: string | null
           id?: string
           level?: string | null
+          paddle_price_id?: string | null
+          paddle_product_id?: string | null
           pages?: number | null
           price: number
           status?: string | null
@@ -45,6 +49,8 @@ export type Database = {
           file_url?: string | null
           id?: string
           level?: string | null
+          paddle_price_id?: string | null
+          paddle_product_id?: string | null
           pages?: number | null
           price?: number
           status?: string | null

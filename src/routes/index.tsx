@@ -1,10 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap } from "lucide-react";
+import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
 
 const softwaresQueryOptions = {
   queryKey: ["softwares"],
@@ -47,6 +49,54 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { data: softwares } = useSuspenseQuery(softwaresQueryOptions);
   const { data: courses } = useSuspenseQuery(coursesQueryOptions);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
+
+  useEffect(() => {
+    // @ts-ignore
+    if (window.Paddle) {
+      // @ts-ignore
+      window.Paddle.Setup({ 
+        seller: 12345, // ID do vendedor (Usuário deve alterar)
+        environment: 'sandbox' 
+      });
+    }
+  }, []);
+
+  const handleBuyCourse = (course: any) => {
+    // @ts-ignore
+    if (!window.Paddle) {
+      toast.error("Erro ao carregar sistema de pagamentos");
+      return;
+    }
+
+    if (!course.paddle_price_id) {
+      toast.error("Este curso ainda não possui um ID de preço configurado");
+      return;
+    }
+
+    setIsCheckoutLoading(course.id);
+    
+    // @ts-ignore
+    window.Paddle.Checkout.open({
+      items: [{ priceId: course.paddle_price_id, quantity: 1 }],
+      settings: {
+        displayMode: 'overlay',
+        theme: 'light',
+        locale: 'pt'
+      },
+      eventCallback: (data: any) => {
+        if (data.name === 'checkout.completed') {
+          toast.success("Compra realizada com sucesso!");
+          if (course.file_url) {
+            window.open(course.file_url, '_blank');
+          }
+        }
+        if (data.name === 'checkout.closed') {
+          setIsCheckoutLoading(null);
+        }
+      }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-background">
@@ -196,10 +246,14 @@ function Index() {
                       <span className="text-3xl font-bold">R$ {course.price?.toFixed(2)}</span>
                       <Button 
                         className="rounded-full px-6"
-                        onClick={() => course.file_url && window.open(course.file_url, '_blank')}
-                        disabled={!course.file_url}
+                        onClick={() => handleBuyCourse(course)}
+                        disabled={!course.paddle_price_id || isCheckoutLoading === course.id}
                       >
-                        {course.file_url ? 'Comprar Agora' : 'Esgotado'}
+                        {isCheckoutLoading === course.id ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          course.paddle_price_id ? 'Comprar Agora' : 'Em breve'
+                        )}
                       </Button>
                     </div>
                   </div>

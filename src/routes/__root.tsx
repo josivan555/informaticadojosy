@@ -92,6 +92,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         href: appCss,
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "preconnect", href: "https://cdn.paddle.com" },
     ],
   }),
   shellComponent: RootShell,
@@ -109,6 +110,7 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         {children}
         <Scripts />
+        <script src="https://cdn.paddle.com/paddlejs/v2/paddle.js" defer></script>
       </body>
     </html>
   );
