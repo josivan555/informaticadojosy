@@ -93,18 +93,16 @@ function AdminLayout() {
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-            <div className="mt-auto p-4 border-t">
+            <div className="mt-auto p-4 border-t flex flex-col gap-2">
+              <Button variant="outline" className="w-full justify-start gap-2" asChild>
+                <a href="/">
+                  <Home className="h-4 w-4" />
+                  <span>Ir para Página Inicial</span>
+                </a>
+              </Button>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <a href="/">
-                      <Home className="h-4 w-4" />
-                      <span>Voltar ao Site</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-                <SidebarMenuItem>
-                  <SidebarMenuButton onClick={handleSignOut}>
+                  <SidebarMenuButton onClick={handleSignOut} className="text-destructive hover:text-destructive">
                     <LogOut className="h-4 w-4" />
                     <span>Sair</span>
                   </SidebarMenuButton>
