@@ -104,8 +104,9 @@ function SoftwaresPage() {
         toast.error("Sistema de pagamentos não disponível");
       }
     } else {
-      if (sw.file_url) {
-        window.open(sw.file_url, '_blank');
+      const downloadUrl = sw.file_url || sw.external_download_url;
+      if (downloadUrl) {
+        window.open(downloadUrl, '_blank');
         toast.success("Download iniciado!");
       } else {
         toast.error("Link de download não disponível");
@@ -176,17 +177,23 @@ function SoftwaresPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredSoftwares.map((sw: any) => (
-            <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 flex flex-col bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200">
-              <CardHeader>
-                <div className="flex justify-between items-start mb-2">
-                  <div className="p-2 bg-primary/10 rounded-lg">
-                    <Laptop className="h-6 w-6 text-primary" />
-                  </div>
-                  <Badge variant={sw.price > 0 ? "default" : "secondary"}>
+            <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 flex flex-col bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
+              {sw.image_url ? (
+                <div className="w-full aspect-square overflow-hidden bg-[#0a192f] flex items-center justify-center p-4">
+                  <img src={sw.image_url} alt={sw.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" />
+                </div>
+              ) : (
+                <div className="w-full aspect-square overflow-hidden bg-[#0a192f] flex items-center justify-center">
+                  <Laptop className="h-16 w-16 text-primary/20" />
+                </div>
+              )}
+              <CardHeader className="pt-4">
+                <div className="flex justify-between items-start mb-1">
+                  <CardTitle className="text-xl line-clamp-1">{sw.name}</CardTitle>
+                  <Badge variant={sw.price > 0 ? "default" : "secondary"} className="shrink-0 ml-2">
                     {sw.price > 0 ? `R$ ${sw.price.toFixed(2)}` : "Grátis"}
                   </Badge>
                 </div>
-                <CardTitle className="text-xl">{sw.name}</CardTitle>
                 <CardDescription className="line-clamp-2 min-h-[2.5rem]">{sw.description}</CardDescription>
               </CardHeader>
               <CardContent className="flex-grow">
@@ -199,7 +206,7 @@ function SoftwaresPage() {
               </CardContent>
               <CardFooter className="pt-0">
                 <Button 
-                  className="w-full group-hover:bg-primary transition-colors h-11"
+                  className="w-full group-hover:bg-primary transition-colors h-11 bg-slate-800 text-white hover:bg-primary border-0"
                   onClick={() => handleDownload(sw)}
                   disabled={isCheckoutLoading === sw.id}
                 >
@@ -210,7 +217,7 @@ function SoftwaresPage() {
                       {sw.price > 0 ? (
                         <>Comprar e Baixar <Download className="ml-2 h-4 w-4" /></>
                       ) : (
-                        <>Baixar Agora <Download className="ml-2 h-4 w-4" /></>
+                        <>Download Oficial <Download className="ml-2 h-4 w-4" /></>
                       )}
                     </>
                   )}
