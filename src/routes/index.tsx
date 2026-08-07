@@ -110,9 +110,10 @@ function Index() {
       {/* Header/Nav */}
       <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-[#0a192f]/90 backdrop-blur supports-[backdrop-filter]:bg-[#0a192f]/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter">
+          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter text-white">
             <Zap className="h-6 w-6 text-primary" fill="currentColor" />
-            <span>SoftCourse</span>
+            <span className="hidden sm:inline">INFORMÁTICA <span className="text-primary">do Josy</span></span>
+            <span className="sm:hidden text-primary">IJ</span>
           </div>
           <nav className="hidden md:flex gap-6 text-sm font-medium">
             <a href="#softwares" className="hover:text-primary transition-colors">Softwares</a>
