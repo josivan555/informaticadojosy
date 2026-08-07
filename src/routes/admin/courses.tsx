@@ -68,7 +68,8 @@ function AdminCourses() {
         status: course.status,
         paddle_product_id: course.paddle_product_id || "",
         paddle_price_id: course.paddle_price_id || "",
-        mercadopago_link: course.mercadopago_link || ""
+        mercadopago_link: course.mercadopago_link || "",
+        image_url: course.image_url || ""
       });
 
     } else {
