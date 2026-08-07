@@ -102,7 +102,7 @@ function AdminLayout() {
               </Button>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton onClick={handleSignOut} className="text-destructive hover:text-destructive">
+                  <SidebarMenuButton onClick={handleSignOut}>
                     <LogOut className="h-4 w-4" />
                     <span>Sair</span>
                   </SidebarMenuButton>
