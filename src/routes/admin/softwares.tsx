@@ -241,6 +241,29 @@ function AdminSoftwares() {
                 <Input id="category" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="ex: Utilitário" />
               </div>
             </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="price">Preço (R$)</Label>
+                <Input id="price" type="number" step="0.01" value={formData.price} onChange={(e) => setFormData({...formData, price: parseFloat(e.target.value)})} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="mercadopago_link">Link Mercado Pago</Label>
+                <Input id="mercadopago_link" value={formData.mercadopago_link} onChange={(e) => setFormData({...formData, mercadopago_link: e.target.value})} placeholder="https://..." />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 border p-3 rounded-lg bg-muted/30">
+              <div className="space-y-2 col-span-2">
+                <Label className="text-xs font-bold uppercase opacity-70">Configuração Paddle (Opcional)</Label>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="paddle_product_id" className="text-xs">Product ID</Label>
+                <Input id="paddle_product_id" className="h-8 text-xs" value={formData.paddle_product_id} onChange={(e) => setFormData({...formData, paddle_product_id: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="paddle_price_id" className="text-xs">Price ID</Label>
+                <Input id="paddle_price_id" className="h-8 text-xs" value={formData.paddle_price_id} onChange={(e) => setFormData({...formData, paddle_price_id: e.target.value})} />
+              </div>
+            </div>
             <div className="space-y-2">
               <Label htmlFor="file">Arquivo do Programa (Opcional se já existir)</Label>
               <Input id="file" type="file" onChange={(e) => setFile(e.target.files?.[0] || null)} />
