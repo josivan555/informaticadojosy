@@ -317,7 +317,7 @@ function Index() {
             </div>
             <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
               © 2026 SoftCourse. Todos os direitos reservados.
-              <p className="mt-4 text-xs opacity-50">Adicione uma página para listar meus programas de computadores com botões de baixar e paginação, separando downloads gratuitos e pagos.</p>
+              <p className="mt-4 text-xs opacity-50">Após a confirmação do pagamento no Mercado Pago, você receberá automaticamente um e-mail com o link de download e o comprovante da sua compra.</p>
             </div>
           </div>
         </footer>
