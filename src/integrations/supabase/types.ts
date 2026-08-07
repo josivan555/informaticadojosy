@@ -70,7 +70,11 @@ export type Database = {
           downloads: number | null
           file_url: string | null
           id: string
+          mercadopago_link: string | null
           name: string
+          paddle_price_id: string | null
+          paddle_product_id: string | null
+          price: number | null
           size: string | null
           status: string | null
           updated_at: string | null
@@ -83,7 +87,11 @@ export type Database = {
           downloads?: number | null
           file_url?: string | null
           id?: string
+          mercadopago_link?: string | null
           name: string
+          paddle_price_id?: string | null
+          paddle_product_id?: string | null
+          price?: number | null
           size?: string | null
           status?: string | null
           updated_at?: string | null
@@ -96,7 +104,11 @@ export type Database = {
           downloads?: number | null
           file_url?: string | null
           id?: string
+          mercadopago_link?: string | null
           name?: string
+          paddle_price_id?: string | null
+          paddle_product_id?: string | null
+          price?: number | null
           size?: string | null
           status?: string | null
           updated_at?: string | null

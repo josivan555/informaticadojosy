@@ -172,7 +172,9 @@ function Index() {
                 <h2 className="text-3xl font-bold tracking-tight">Softwares para PC</h2>
                 <p className="text-muted-foreground">Utilitários e ferramentas prontas para baixar.</p>
               </div>
-              <Button variant="link" className="p-0">Ver todos softwares</Button>
+              <Button variant="link" className="p-0" asChild>
+                <Link to="/softwares">Ver todos softwares</Link>
+              </Button>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -315,7 +317,7 @@ function Index() {
             </div>
             <div className="mt-12 pt-8 border-t text-center text-sm text-muted-foreground">
               © 2026 SoftCourse. Todos os direitos reservados.
-              <p className="mt-4 text-xs opacity-50">Crie uma página de detalhes para cada curso com descrição, botão de compra e link de acesso ao PDF após a confirmação do pagamento.</p>
+              <p className="mt-4 text-xs opacity-50">Adicione uma página para listar meus programas de computadores com botões de baixar e paginação, separando downloads gratuitos e pagos.</p>
             </div>
           </div>
         </footer>

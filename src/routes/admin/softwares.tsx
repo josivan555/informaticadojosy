@@ -24,7 +24,11 @@ function AdminSoftwares() {
     description: "",
     version: "",
     category: "",
-    status: "published"
+    status: "published",
+    price: 0,
+    paddle_product_id: "",
+    paddle_price_id: "",
+    mercadopago_link: ""
   });
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -56,7 +60,11 @@ function AdminSoftwares() {
         description: sw.description,
         version: sw.version,
         category: sw.category,
-        status: sw.status
+        status: sw.status,
+        price: sw.price || 0,
+        paddle_product_id: sw.paddle_product_id || "",
+        paddle_price_id: sw.paddle_price_id || "",
+        mercadopago_link: sw.mercadopago_link || ""
       });
     } else {
       setEditingSoftware(null);
@@ -65,7 +73,11 @@ function AdminSoftwares() {
         description: "",
         version: "",
         category: "",
-        status: "published"
+        status: "published",
+        price: 0,
+        paddle_product_id: "",
+        paddle_price_id: "",
+        mercadopago_link: ""
       });
     }
     setFile(null);
@@ -227,6 +239,29 @@ function AdminSoftwares() {
               <div className="space-y-2">
                 <Label htmlFor="category">Categoria</Label>
                 <Input id="category" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="ex: Utilitário" />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="price">Preço (R$)</Label>
+                <Input id="price" type="number" step="0.01" value={formData.price} onChange={(e) => setFormData({...formData, price: parseFloat(e.target.value)})} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="mercadopago_link">Link Mercado Pago</Label>
+                <Input id="mercadopago_link" value={formData.mercadopago_link} onChange={(e) => setFormData({...formData, mercadopago_link: e.target.value})} placeholder="https://..." />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4 border p-3 rounded-lg bg-muted/30">
+              <div className="space-y-2 col-span-2">
+                <Label className="text-xs font-bold uppercase opacity-70">Configuração Paddle (Opcional)</Label>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="paddle_product_id" className="text-xs">Product ID</Label>
+                <Input id="paddle_product_id" className="h-8 text-xs" value={formData.paddle_product_id} onChange={(e) => setFormData({...formData, paddle_product_id: e.target.value})} />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="paddle_price_id" className="text-xs">Price ID</Label>
+                <Input id="paddle_price_id" className="h-8 text-xs" value={formData.paddle_price_id} onChange={(e) => setFormData({...formData, paddle_price_id: e.target.value})} />
               </div>
             </div>
             <div className="space-y-2">

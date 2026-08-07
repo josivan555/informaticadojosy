@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SoftwaresRouteImport } from './routes/softwares'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
@@ -19,6 +20,11 @@ import { Route as CoursesCourseIdRouteImport } from './routes/courses/$courseId'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SoftwaresRoute = SoftwaresRouteImport.update({
+  id: '/softwares',
+  path: '/softwares',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
@@ -49,6 +55,7 @@ const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/layout': typeof AdminLayoutRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/layout': typeof AdminLayoutRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/layout': typeof AdminLayoutRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/softwares'
     | '/admin/courses'
     | '/admin/layout'
     | '/admin/softwares'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/softwares'
     | '/admin/courses'
     | '/admin/layout'
     | '/admin/softwares'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/softwares'
     | '/admin/courses'
     | '/admin/layout'
     | '/admin/softwares'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SoftwaresRoute: typeof SoftwaresRoute
   AdminCoursesRoute: typeof AdminCoursesRoute
   AdminLayoutRoute: typeof AdminLayoutRoute
   AdminSoftwaresRoute: typeof AdminSoftwaresRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/softwares': {
+      id: '/softwares'
+      path: '/softwares'
+      fullPath: '/softwares'
+      preLoaderRoute: typeof SoftwaresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SoftwaresRoute: SoftwaresRoute,
   AdminCoursesRoute: AdminCoursesRoute,
   AdminLayoutRoute: AdminLayoutRoute,
   AdminSoftwaresRoute: AdminSoftwaresRoute,
