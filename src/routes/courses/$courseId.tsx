@@ -49,7 +49,7 @@ function CourseDetails() {
         .eq("id", params.courseId)
         .single();
       if (error) throw error;
-      return data;
+      return data as any;
     },
   });
 
