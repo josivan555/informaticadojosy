@@ -27,7 +27,8 @@ function AdminCourses() {
     level: "",
     status: "published",
     paddle_product_id: "",
-    paddle_price_id: ""
+    paddle_price_id: "",
+    mercadopago_link: ""
   });
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
@@ -62,7 +63,8 @@ function AdminCourses() {
         level: course.level || "",
         status: course.status,
         paddle_product_id: course.paddle_product_id || "",
-        paddle_price_id: course.paddle_price_id || ""
+        paddle_price_id: course.paddle_price_id || "",
+        mercadopago_link: course.mercadopago_link || ""
       });
     } else {
       setEditingCourse(null);
@@ -74,7 +76,8 @@ function AdminCourses() {
         level: "",
         status: "published",
         paddle_product_id: "",
-        paddle_price_id: ""
+        paddle_price_id: "",
+        mercadopago_link: ""
       });
     }
     setFile(null);
@@ -116,6 +119,7 @@ function AdminCourses() {
         file_url: fileUrl,
         paddle_product_id: formData.paddle_product_id || null,
         paddle_price_id: formData.paddle_price_id || null,
+        mercadopago_link: formData.mercadopago_link || null,
         updated_at: new Date().toISOString()
       };
 
@@ -248,6 +252,10 @@ function AdminCourses() {
             <div className="space-y-2">
               <Label htmlFor="level">Nível</Label>
               <Input id="level" value={formData.level} onChange={(e) => setFormData({...formData, level: e.target.value})} placeholder="ex: Iniciante" />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="mercadopago_link">Link de Pagamento Mercado Pago</Label>
+              <Input id="mercadopago_link" value={formData.mercadopago_link} onChange={(e) => setFormData({...formData, mercadopago_link: e.target.value})} placeholder="https://www.mercadopago.com.br/checkout/v1/redirect?pref_id=..." />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
