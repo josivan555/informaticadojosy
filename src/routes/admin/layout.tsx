@@ -68,6 +68,14 @@ function AdminLayout() {
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
+                      <a href="/admin/software-categories">
+                        <Tags className="h-4 w-4" />
+                        <span>Categorias Softwares</span>
+                      </a>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
                       <a href="/admin/courses">
                         <BookOpen className="h-4 w-4" />
                         <span>Cursos</span>

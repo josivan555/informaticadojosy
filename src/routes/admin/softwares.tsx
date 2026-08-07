@@ -24,6 +24,7 @@ function AdminSoftwares() {
     description: "",
     version: "",
     category: "",
+    category_id: "",
     status: "published",
     price: 0,
     paddle_product_id: "",
@@ -41,7 +42,7 @@ function AdminSoftwares() {
     setLoading(true);
     const { data, error } = await supabase
       .from("softwares")
-      .select("*")
+      .select("*, software_categories(name)")
       .order("created_at", { ascending: false });
     
     if (error) {
@@ -52,6 +53,15 @@ function AdminSoftwares() {
     setLoading(false);
   };
 
+  const [categories, setCategories] = useState<any[]>([]);
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const { data } = await supabase.from("software_categories").select("*").order("name");
+      setCategories(data || []);
+    };
+    fetchCategories();
+  }, []);
+
   const handleOpenDialog = (sw: any = null) => {
     if (sw) {
       setEditingSoftware(sw);
@@ -60,6 +70,7 @@ function AdminSoftwares() {
         description: sw.description,
         version: sw.version,
         category: sw.category,
+        category_id: sw.category_id || "",
         status: sw.status,
         price: sw.price || 0,
         paddle_product_id: sw.paddle_product_id || "",
@@ -73,6 +84,7 @@ function AdminSoftwares() {
         description: "",
         version: "",
         category: "",
+        category_id: "",
         status: "published",
         price: 0,
         paddle_product_id: "",
@@ -196,7 +208,7 @@ function AdminSoftwares() {
                 <TableRow key={sw.id}>
                   <TableCell className="font-medium">{sw.name}</TableCell>
                   <TableCell>{sw.version}</TableCell>
-                  <TableCell>{sw.category}</TableCell>
+                  <TableCell>{sw.software_categories?.name || sw.category}</TableCell>
                   <TableCell>
                     <span className={`px-2 py-1 rounded-full text-xs ${sw.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                       {sw.status === 'published' ? 'Publicado' : 'Rascunho'}
@@ -237,8 +249,18 @@ function AdminSoftwares() {
                 <Input id="version" value={formData.version} onChange={(e) => setFormData({...formData, version: e.target.value})} placeholder="ex: 1.0.0" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="category">Categoria</Label>
-                <Input id="category" value={formData.category} onChange={(e) => setFormData({...formData, category: e.target.value})} placeholder="ex: Utilitário" />
+                <Label htmlFor="category_id">Categoria</Label>
+                <select 
+                  id="category_id" 
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  value={formData.category_id} 
+                  onChange={(e) => setFormData({...formData, category_id: e.target.value})}
+                >
+                  <option value="">Selecione uma categoria</option>
+                  {categories.map(cat => (
+                    <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  ))}
+                </select>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">

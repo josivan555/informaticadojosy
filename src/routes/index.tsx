@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 /**
- * Implemente uma área admin para eu cadastrar, editar e remover meus programas de computadores e controlar os links de download exibidos no site.
+ * Adicione um gerenciamento de categorias para meus softwares, para eu organizar e exibir listas por tema no site.
  */
 import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
