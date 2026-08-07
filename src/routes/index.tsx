@@ -222,8 +222,8 @@ function Index() {
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tight">Cursos em PDF</h2>
-                <p className="text-muted-foreground">Aprenda novas habilidades com material didático focado.</p>
+                <h2 className="text-3xl font-bold tracking-tight">Cursos em PDF (Pix e Cartão)</h2>
+                <p className="text-muted-foreground">Aprenda novas habilidades com material didático focado, pague com Pix ou Cartão via Mercado Pago.</p>
               </div>
               <Button variant="link" className="p-0">Ver todos cursos</Button>
             </div>
