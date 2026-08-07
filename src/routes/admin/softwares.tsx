@@ -73,7 +73,11 @@ function AdminSoftwares() {
         description: "",
         version: "",
         category: "",
-        status: "published"
+        status: "published",
+        price: 0,
+        paddle_product_id: "",
+        paddle_price_id: "",
+        mercadopago_link: ""
       });
     }
     setFile(null);
