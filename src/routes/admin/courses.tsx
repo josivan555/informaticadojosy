@@ -127,6 +127,7 @@ function AdminCourses() {
         category: formData.category,
         status: formData.status,
         file_url: fileUrl,
+        image_url: formData.image_url || null,
         paddle_product_id: formData.paddle_product_id || null,
         paddle_price_id: formData.paddle_price_id || null,
         mercadopago_link: formData.mercadopago_link || null,
