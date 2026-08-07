@@ -168,7 +168,7 @@ function Index() {
 
 
         {/* Software Section */}
-        <section id="softwares" className="py-20 bg-muted/30">
+        <section id="softwares" className="py-20 bg-[#0f2244]/30">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div className="space-y-2">
