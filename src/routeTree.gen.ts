@@ -15,6 +15,7 @@ import { Route as SoftwaresRouteImport } from './routes/softwares'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
+import { Route as AdminSoftwareCategoriesRouteImport } from './routes/admin/software-categories'
 import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses/$courseId'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago-webhook'
@@ -49,6 +50,11 @@ const AdminLayoutRoute = AdminLayoutRouteImport.update({
   path: '/admin/layout',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSoftwareCategoriesRoute = AdminSoftwareCategoriesRouteImport.update({
+  id: '/admin/software-categories',
+  path: '/admin/software-categories',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSoftwaresRoute = AdminSoftwaresRouteImport.update({
   id: '/admin/softwares',
   path: '/admin/softwares',
@@ -72,6 +78,7 @@ export interface FileRoutesByFullPath {
   '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/layout': typeof AdminLayoutRoute
+  '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -83,6 +90,7 @@ export interface FileRoutesByTo {
   '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/layout': typeof AdminLayoutRoute
+  '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/admin': typeof AdminIndexRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/layout': typeof AdminLayoutRoute
+  '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
   '/admin/': typeof AdminIndexRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
     | '/softwares'
     | '/admin/courses'
     | '/admin/layout'
+    | '/admin/software-categories'
     | '/admin/softwares'
     | '/courses/$courseId'
     | '/admin/'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
     | '/softwares'
     | '/admin/courses'
     | '/admin/layout'
+    | '/admin/software-categories'
     | '/admin/softwares'
     | '/courses/$courseId'
     | '/admin'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '/softwares'
     | '/admin/courses'
     | '/admin/layout'
+    | '/admin/software-categories'
     | '/admin/softwares'
     | '/courses/$courseId'
     | '/admin/'
@@ -142,6 +154,7 @@ export interface RootRouteChildren {
   SoftwaresRoute: typeof SoftwaresRoute
   AdminCoursesRoute: typeof AdminCoursesRoute
   AdminLayoutRoute: typeof AdminLayoutRoute
+  AdminSoftwareCategoriesRoute: typeof AdminSoftwareCategoriesRoute
   AdminSoftwaresRoute: typeof AdminSoftwaresRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   AdminIndexRoute: typeof AdminIndexRoute
@@ -192,6 +205,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLayoutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/software-categories': {
+      id: '/admin/software-categories'
+      path: '/admin/software-categories'
+      fullPath: '/admin/software-categories'
+      preLoaderRoute: typeof AdminSoftwareCategoriesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/softwares': {
       id: '/admin/softwares'
       path: '/admin/softwares'
@@ -222,6 +242,7 @@ const rootRouteChildren: RootRouteChildren = {
   SoftwaresRoute: SoftwaresRoute,
   AdminCoursesRoute: AdminCoursesRoute,
   AdminLayoutRoute: AdminLayoutRoute,
+  AdminSoftwareCategoriesRoute: AdminSoftwareCategoriesRoute,
   AdminSoftwaresRoute: AdminSoftwaresRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   AdminIndexRoute: AdminIndexRoute,
