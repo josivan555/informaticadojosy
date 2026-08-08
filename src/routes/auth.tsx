@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Zap, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
+import logoAsset from "@/assets/logo.png.asset.json";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
@@ -59,8 +60,8 @@ function AuthPage() {
     <div className="min-h-screen flex items-center justify-center bg-muted/30 px-4">
       <Card className="w-full max-w-md">
         <CardHeader className="space-y-1 flex flex-col items-center">
-          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter mb-4">
-            <Zap className="h-6 w-6 text-primary" fill="currentColor" />
+          <div className="flex items-center gap-3 font-bold text-2xl tracking-tighter mb-4">
+            <img src={logoAsset.url} alt="Logo" className="h-10 w-10 object-contain rounded-md" />
             <span>INFORMÁTICA do Josy</span>
           </div>
           <CardTitle className="text-2xl">
@@ -122,8 +123,8 @@ function AuthPage() {
           </form>
         ) : (
           <CardContent className="flex flex-col items-center pb-6 space-y-4">
-            <div className="p-3 bg-primary/10 rounded-full mb-2">
-              <Zap className="h-8 w-8 text-primary animate-pulse" />
+            <div className="p-1 bg-primary/10 rounded-full mb-2">
+              <img src={logoAsset.url} alt="Logo" className="h-12 w-12 object-contain animate-pulse" />
             </div>
             <p className="text-sm text-center text-muted-foreground px-2">
               Se você não recebeu o e-mail, verifique sua pasta de spam ou clique no botão abaixo para tentar novamente.
