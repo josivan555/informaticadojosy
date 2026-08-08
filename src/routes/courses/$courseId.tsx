@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, ChevronLeft, Download, ShieldCheck, Star, Zap, Loader2, ArrowRight } from "lucide-react";
+import { getPurchasedDownloadUrl } from "@/lib/downloads.functions";
 
 export const Route = createFileRoute("/courses/$courseId")({
   component: CourseDetails,
@@ -154,10 +155,13 @@ function CourseDetails() {
     });
   };
 
-  const handleDownload = () => {
-    if (course.file_url) {
-      window.open(course.file_url, '_blank');
-    } else {
+  const handleDownload = async () => {
+    try {
+      const { url } = await getPurchasedDownloadUrl({
+        data: { kind: "course", itemId: params.courseId },
+      });
+      window.open(url, '_blank');
+    } catch {
       toast.error("Arquivo não disponível");
     }
   };
