@@ -265,8 +265,13 @@ function Index() {
 
                         if (sw.price > 0) {
                           navigate({ to: "/softwares" }); // Redirect to software list for purchase flow
-                        } else if (sw.file_url) {
-                          window.open(sw.file_url, '_blank');
+                        } else {
+                          try {
+                            const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+                            window.open(url, '_blank');
+                          } catch {
+                            toast.error("Link de download não disponível");
+                          }
                         }
                       }}
                       disabled={!sw.file_url && sw.price === 0}
