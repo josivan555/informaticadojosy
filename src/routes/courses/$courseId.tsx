@@ -29,8 +29,8 @@ export const Route = createFileRoute("/courses/$courseId")({
   head: (data) => {
     const course = data.loaderData as any;
     return {
-      title: `${course?.title || "Curso"} - INFORMÁTICA do Josy`,
       meta: [
+        { title: `${course?.title || "Curso"} - Informática do Josy` },
         { name: "description", content: course?.description || "Detalhes do curso" },
         { property: "og:title", content: course?.title },
         { property: "og:description", content: course?.description },

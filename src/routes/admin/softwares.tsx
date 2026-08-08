@@ -17,7 +17,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/admin/softwares")({
   component: AdminSoftwares,
   head: () => ({
-    title: "Gerenciar Softwares - Painel Admin",
+    meta: [{ title: "Gerenciar Softwares - Painel Admin" }],
   }),
 });
 

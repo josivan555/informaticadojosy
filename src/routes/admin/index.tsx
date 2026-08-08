@@ -5,7 +5,7 @@ import { Laptop, BookOpen, Users, Download } from "lucide-react";
 export const Route = createFileRoute("/admin/")({
   component: AdminDashboard,
   head: () => ({
-    title: "Dashboard - Painel Admin",
+    meta: [{ title: "Dashboard - Painel Admin" }],
   }),
 });
 
