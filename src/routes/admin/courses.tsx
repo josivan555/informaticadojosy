@@ -1,3 +1,6 @@
+/**
+ * Gerenciamento de cursos com capa, vídeo de apresentação, descrição via IA e checkout configurado.
+ */
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, Edit, Save, Loader2 } from "lucide-react";
+import { Plus, Trash2, Edit, Save, Loader2, Sparkles, Image as ImageIcon, Video } from "lucide-react";
+import { generateSoftwareDescription as generateCourseDescription } from "@/lib/ai.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/courses")({
@@ -30,7 +34,8 @@ function AdminCourses() {
     paddle_product_id: "",
     paddle_price_id: "",
     mercadopago_link: "",
-    image_url: ""
+    image_url: "",
+    video_url: ""
   });
 
   const [file, setFile] = useState<File | null>(null);
@@ -69,7 +74,8 @@ function AdminCourses() {
         paddle_product_id: course.paddle_product_id || "",
         paddle_price_id: course.paddle_price_id || "",
         mercadopago_link: course.mercadopago_link || "",
-        image_url: course.image_url || ""
+        image_url: course.image_url || "",
+        video_url: course.video_url || ""
       });
 
     } else {
@@ -90,7 +96,30 @@ function AdminCourses() {
 
     }
     setFile(null);
+    setImageFile(null);
+    setVideoFile(null);
     setIsDialogOpen(true);
+  };
+
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
+  const [generatingAI, setGeneratingAI] = useState(false);
+
+  const handleGenerateAI = async () => {
+    if (!formData.title) {
+      toast.error("Digite o título do curso primeiro");
+      return;
+    }
+    setGeneratingAI(true);
+    try {
+      const result = await generateCourseDescription({ data: { name: formData.title } });
+      setFormData({ ...formData, description: result.description });
+      toast.success("Descrição gerada pela IA!");
+    } catch (err) {
+      toast.error("Erro ao gerar descrição");
+    } finally {
+      setGeneratingAI(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -99,23 +128,37 @@ function AdminCourses() {
 
     try {
       let fileUrl = editingCourse?.file_url || "";
+      let imageUrl = formData.image_url || "";
+      let videoUrl = formData.video_url || "";
 
       if (file) {
         const fileExt = file.name.split('.').pop();
         const fileName = `${Math.random()}.${fileExt}`;
         const filePath = `courses/${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-          .from('files')
-          .upload(filePath, file);
-
+        const { error: uploadError } = await supabase.storage.from('files').upload(filePath, file);
         if (uploadError) throw uploadError;
-
-        const { data: { publicUrl } } = supabase.storage
-          .from('files')
-          .getPublicUrl(filePath);
-        
+        const { data: { publicUrl } } = supabase.storage.from('files').getPublicUrl(filePath);
         fileUrl = publicUrl;
+      }
+
+      if (imageFile) {
+        const fileExt = imageFile.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `covers/${fileName}`;
+        const { error: uploadError } = await supabase.storage.from('files').upload(filePath, imageFile);
+        if (uploadError) throw uploadError;
+        const { data: { publicUrl } } = supabase.storage.from('files').getPublicUrl(filePath);
+        imageUrl = publicUrl;
+      }
+
+      if (videoFile) {
+        const fileExt = videoFile.name.split('.').pop();
+        const fileName = `${Math.random()}.${fileExt}`;
+        const filePath = `videos/${fileName}`;
+        const { error: uploadError } = await supabase.storage.from('files').upload(filePath, videoFile);
+        if (uploadError) throw uploadError;
+        const { data: { publicUrl } } = supabase.storage.from('files').getPublicUrl(filePath);
+        videoUrl = publicUrl;
       }
 
       const courseData: any = {
@@ -127,7 +170,8 @@ function AdminCourses() {
         category: formData.category,
         status: formData.status,
         file_url: fileUrl,
-        image_url: formData.image_url || null,
+        image_url: imageUrl,
+        video_url: videoUrl,
         paddle_product_id: formData.paddle_product_id || null,
         paddle_price_id: formData.paddle_price_id || null,
         mercadopago_link: formData.mercadopago_link || null,
@@ -239,7 +283,7 @@ function AdminCourses() {
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-w-md">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>{editingCourse ? "Editar Curso" : "Adicionar Novo Curso"}</DialogTitle>
           </DialogHeader>
@@ -249,8 +293,21 @@ function AdminCourses() {
               <Input id="title" value={formData.title} onChange={(e) => setFormData({...formData, title: e.target.value})} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="description">Descrição</Label>
-              <Textarea id="description" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} />
+              <div className="flex items-center justify-between">
+                <Label htmlFor="description">Descrição</Label>
+                <Button 
+                  type="button" 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-7 text-xs"
+                  onClick={handleGenerateAI}
+                  disabled={generatingAI}
+                >
+                  {generatingAI ? <Loader2 className="mr-1 h-3 w-3 animate-spin" /> : <Sparkles className="mr-1 h-3 w-3" />}
+                  Gerar com IA
+                </Button>
+              </div>
+              <Textarea id="description" className="min-h-[100px]" value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -285,12 +342,25 @@ function AdminCourses() {
                 <Input id="paddle_price_id" value={formData.paddle_price_id} onChange={(e) => setFormData({...formData, paddle_price_id: e.target.value})} placeholder="pri_..." />
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="image_url">URL da Capa (Capa do Curso)</Label>
-              <Input id="image_url" value={formData.image_url} onChange={(e) => setFormData({...formData, image_url: e.target.value})} placeholder="https://exemplo.com/imagem.png" />
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="image">Capa do Curso</Label>
+                <div className="flex items-center gap-2">
+                  <Input id="image" type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
+                  {formData.image_url && !imageFile && (
+                    <div className="h-10 w-10 rounded border overflow-hidden flex-shrink-0">
+                      <img src={formData.image_url} alt="Capa atual" className="h-full w-full object-cover" />
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="video">Vídeo de Apresentação</Label>
+                <Input id="video" type="file" accept="video/*" onChange={(e) => setVideoFile(e.target.files?.[0] || null)} />
+              </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="file">Arquivo PDF (Opcional se já existir)</Label>
+              <Label htmlFor="file">Arquivo PDF do Curso (Opcional se já existir)</Label>
               <Input id="file" type="file" accept=".pdf" onChange={(e) => setFile(e.target.files?.[0] || null)} />
             </div>
             <DialogFooter>
