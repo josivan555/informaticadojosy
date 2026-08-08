@@ -10,7 +10,7 @@ import { ptBR } from "date-fns/locale";
 export const Route = createFileRoute("/admin/downloads")({
   component: AdminDownloads,
   head: () => ({
-    meta: [{ title: "Histórico de Downloads - Painel Admin" }],
+    meta: [{ title: "Histórico de Downloads - Informática do Josy" }],
   }),
 });
 
