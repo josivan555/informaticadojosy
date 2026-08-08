@@ -81,6 +81,9 @@ function AdminSoftwares() {
       version: "",
       size: "",
       mercadopago_link: "",
+      category_id: null,
+      image_url: null,
+      file_url: null,
     },
   });
 
