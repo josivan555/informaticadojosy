@@ -189,7 +189,7 @@ function AdminSoftwares() {
     },
     onError: (error: any) => {
       console.error("Mutation error detail:", error);
-      toast.error(`Erro ao salvar software: ${error.message || 'Erro desconhecido'}`);
+      toast.error(`Erro ao salvar software: ${error.message || 'Erro desconhecido'}. Verifique se todos os campos obrigatórios (*) estão preenchidos corretamente.`);
     },
   });
 
