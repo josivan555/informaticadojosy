@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BookOpen, ChevronLeft, Download, ShieldCheck, Star, Zap, Loader2, ArrowRight } from "lucide-react";
+import { BookOpen, ChevronLeft, Download, ShieldCheck, Star, Zap, Loader2, ArrowRight, Play } from "lucide-react";
 import { getPurchasedDownloadUrl } from "@/lib/downloads.functions";
 
 export const Route = createFileRoute("/courses/$courseId")({
@@ -201,8 +201,15 @@ function CourseDetails() {
               </p>
             </div>
 
-            <div className="aspect-video bg-[#112240] rounded-3xl flex items-center justify-center border-2 border-slate-700 overflow-hidden relative">
-              {course.image_url ? (
+            <div className="aspect-video bg-[#112240] rounded-3xl flex items-center justify-center border-2 border-slate-700 overflow-hidden relative group">
+              {course.video_url ? (
+                <video 
+                  src={course.video_url} 
+                  controls 
+                  className="w-full h-full object-cover"
+                  poster={course.image_url}
+                />
+              ) : course.image_url ? (
                 <img 
                   src={course.image_url} 
                   alt={course.title} 
