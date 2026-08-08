@@ -325,7 +325,7 @@ function AdminCourses() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormItem>
-                    <FormLabel>Capa do Curso</FormLabel>
+                    <FormLabel className="text-white">Capa do Curso</FormLabel>
                     <div className="flex gap-2">
                       <Input
                         type="file"
@@ -336,7 +336,7 @@ function AdminCourses() {
                     </div>
                   </FormItem>
                   <FormItem>
-                    <FormLabel>Arquivo PDF</FormLabel>
+                    <FormLabel className="text-white">Arquivo PDF</FormLabel>
                     <div className="flex gap-2">
                       <Input
                         type="file"
@@ -350,7 +350,7 @@ function AdminCourses() {
 
                 <div className="grid grid-cols-1 gap-4">
                   <FormItem>
-                    <FormLabel>Upload de Vídeo (Opcional)</FormLabel>
+                    <FormLabel className="text-white">Upload de Vídeo (Opcional)</FormLabel>
                     <div className="flex gap-2">
                       <Input
                         type="file"
