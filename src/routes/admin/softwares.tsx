@@ -46,17 +46,17 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const softwareSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
-  description: z.string().nullable().optional(),
+  description: z.string().nullable(),
   category_id: z.string().min(1, "Categoria é obrigatória"),
   price: z.coerce.number().min(0),
-  version: z.string().nullable().optional(),
-  size: z.string().nullable().optional(),
+  version: z.string().nullable(),
+  size: z.string().nullable(),
   status: z.string(),
-  mercadopago_link: z.string().nullable().optional(),
-  image_url: z.string().nullable().optional(),
-  file_url: z.string().nullable().optional(),
-  external_download_url: z.string().nullable().optional(),
-  video_url: z.string().nullable().optional(),
+  mercadopago_link: z.string().nullable(),
+  image_url: z.string().nullable(),
+  file_url: z.string().nullable(),
+  external_download_url: z.string().nullable(),
+  video_url: z.string().nullable(),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
@@ -77,17 +77,17 @@ function AdminSoftwares() {
     resolver: zodResolver(softwareSchema),
     defaultValues: {
       name: "",
-      description: "",
+      description: null,
       price: 0,
       status: "active",
-      version: "",
-      size: "",
-      mercadopago_link: "",
-      category_id: null,
+      version: null,
+      size: null,
+      mercadopago_link: null,
+      category_id: "",
       image_url: null,
       file_url: null,
-      external_download_url: "",
-      video_url: "",
+      external_download_url: null,
+      video_url: null,
     },
   });
 
