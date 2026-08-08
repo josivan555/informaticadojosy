@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SoftwaresRouteImport } from './routes/softwares'
-import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminDownloadsRouteImport } from './routes/admin/downloads'
@@ -39,15 +38,10 @@ const SoftwaresRoute = SoftwaresRouteImport.update({
   path: '/softwares',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminLayoutRoute = AdminLayoutRouteImport.update({
-  id: '/admin',
-  path: '/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/',
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCoursesRoute = AdminCoursesRouteImport.update({
   id: '/admin/courses',
@@ -328,13 +322,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
