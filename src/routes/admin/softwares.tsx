@@ -347,7 +347,7 @@ function AdminSoftwares() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <FormItem>
-                    <FormLabel>Capa do Software</FormLabel>
+                    <FormLabel className="text-white">Capa do Software</FormLabel>
                     <div className="flex gap-2">
                       <Input
                         type="file"
@@ -358,7 +358,7 @@ function AdminSoftwares() {
                     </div>
                   </FormItem>
                   <FormItem>
-                    <FormLabel>Arquivo (Zip/Exe)</FormLabel>
+                    <FormLabel className="text-white">Arquivo (Zip/Exe)</FormLabel>
                     <div className="flex gap-2">
                       <Input
                         type="file"
@@ -384,7 +384,7 @@ function AdminSoftwares() {
                     )}
                   />
                   <FormItem>
-                    <FormLabel>Upload de Vídeo (Opcional)</FormLabel>
+                    <FormLabel className="text-white">Upload de Vídeo (Opcional)</FormLabel>
                     <div className="flex gap-2">
                       <Input
                         type="file"
