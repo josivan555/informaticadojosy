@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import heroBannerAsset from "@/assets/main-hero-banner.png.asset.json";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
 import { User, LogOut } from "lucide-react";
 
 
