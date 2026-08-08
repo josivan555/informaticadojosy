@@ -14,7 +14,7 @@ import { Plus, Trash2, Edit, Save, Loader2, Sparkles, ImageIcon } from "lucide-r
 import { generateSoftwareDescription } from "@/lib/ai.functions";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/admin/softwares")({
+export const Route = createFileRoute("/admin/_admin/softwares")({
   component: AdminSoftwares,
   head: () => ({
     meta: [{ title: "Gerenciar Softwares - Informática do Josy" }],

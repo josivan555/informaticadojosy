@@ -14,7 +14,7 @@ import { Plus, Trash2, Edit, Save, Loader2, Sparkles, Image as ImageIcon, Video 
 import { generateSoftwareDescription as generateCourseDescription } from "@/lib/ai.functions";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/admin/courses")({
+export const Route = createFileRoute("/admin/_admin/courses")({
   component: AdminCourses,
   head: () => ({
     meta: [{ title: "Gerenciar Cursos - Informática do Josy" }],

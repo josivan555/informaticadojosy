@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Plus, Trash2, Edit, Save, Loader2, Tags } from "lucide-react";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/admin/software-categories")({
+export const Route = createFileRoute("/admin/_admin/software-categories")({
   component: AdminSoftwareCategories,
   head: () => ({
     meta: [{ title: "Categorias de Software - Informática do Josy" }],

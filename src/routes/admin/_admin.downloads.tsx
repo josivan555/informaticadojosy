@@ -7,7 +7,7 @@ import { Download, Laptop, Calendar } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
-export const Route = createFileRoute("/admin/downloads")({
+export const Route = createFileRoute("/admin/_admin/downloads")({
   component: AdminDownloads,
   head: () => ({
     meta: [{ title: "Histórico de Downloads - Informática do Josy" }],
