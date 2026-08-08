@@ -2,6 +2,7 @@
  * Gerenciamento de softwares com upload de capa, descrição automática via IA e links de download.
  */
 import { createFileRoute } from "@tanstack/react-router";
+import { Route as AdminLayoutRoute } from './layout';
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/softwares")({
+  getParentRoute: () => AdminLayoutRoute,
   component: AdminSoftwares,
   head: () => ({
     meta: [{ title: "Gerenciar Softwares - Painel Admin" }],

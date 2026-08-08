@@ -2,6 +2,7 @@
  * Gerenciamento de cursos com capa, vídeo de apresentação, descrição via IA e checkout configurado.
  */
 import { createFileRoute } from "@tanstack/react-router";
+import { Route as AdminLayoutRoute } from './layout';
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,7 @@ import { generateSoftwareDescription as generateCourseDescription } from "@/lib/
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/courses")({
+  getParentRoute: () => AdminLayoutRoute,
   component: AdminCourses,
   head: () => ({
     meta: [{ title: "Gerenciar Cursos - Painel Admin" }],

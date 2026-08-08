@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, redirect, Link } from "@tanstack/react-router";
+import { Route as AdminLayoutRoute } from './layout';
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
 import { Laptop, BookOpen, LayoutDashboard, LogOut, Home, User, Tags, Download } from "lucide-react";
