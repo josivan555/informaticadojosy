@@ -39,12 +39,12 @@ export const SidebarMenuItem = ({ children }: { children: React.ReactNode }) => 
   <li>{children}</li>
 )
 
-export const SidebarMenuButton = ({ asChild, children, onClick }: { asChild?: boolean; children: React.ReactNode; onClick?: () => void }) => {
+export const SidebarMenuButton = ({ asChild, children, onClick, className }: { asChild?: boolean; children: React.ReactNode; onClick?: () => void; className?: string }) => {
   const Comp = asChild ? Slot : "button"
   return (
     <Comp
       onClick={onClick}
-      className="flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+      className={cn("flex w-full items-center gap-2 rounded-md px-2 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground", className)}
     >
       {children}
     </Comp>
