@@ -12,10 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SoftwaresRouteImport } from './routes/softwares'
-import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminDownloadsRouteImport } from './routes/admin/downloads'
+import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
 import { Route as AdminSoftwareCategoriesRouteImport } from './routes/admin/software-categories'
 import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
@@ -38,35 +38,35 @@ const SoftwaresRoute = SoftwaresRouteImport.update({
   path: '/softwares',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminLayoutRoute = AdminLayoutRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/admin/',
+  path: '/admin/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AdminLayoutRoute,
-} as any)
 const AdminCoursesRoute = AdminCoursesRouteImport.update({
-  id: '/courses',
-  path: '/courses',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/courses',
+  path: '/admin/courses',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDownloadsRoute = AdminDownloadsRouteImport.update({
-  id: '/downloads',
-  path: '/downloads',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/downloads',
+  path: '/admin/downloads',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLayoutRoute = AdminLayoutRouteImport.update({
+  id: '/admin/layout',
+  path: '/admin/layout',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSoftwareCategoriesRoute = AdminSoftwareCategoriesRouteImport.update({
-  id: '/software-categories',
-  path: '/software-categories',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/software-categories',
+  path: '/admin/software-categories',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSoftwaresRoute = AdminSoftwaresRouteImport.update({
-  id: '/softwares',
-  path: '/softwares',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/softwares',
+  path: '/admin/softwares',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthConfirmRoute = AuthConfirmRouteImport.update({
   id: '/confirm',
@@ -94,9 +94,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/softwares': typeof SoftwaresRoute
-  '/admin': typeof AdminLayoutRouteWithChildren
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
+  '/admin/layout': typeof AdminLayoutRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
   '/auth/confirm': typeof AuthConfirmRoute
@@ -111,6 +111,7 @@ export interface FileRoutesByTo {
   '/softwares': typeof SoftwaresRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
+  '/admin/layout': typeof AdminLayoutRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
   '/auth/confirm': typeof AuthConfirmRoute
@@ -124,9 +125,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
   '/softwares': typeof SoftwaresRoute
-  '/admin': typeof AdminLayoutRouteWithChildren
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
+  '/admin/layout': typeof AdminLayoutRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
   '/auth/confirm': typeof AuthConfirmRoute
@@ -141,9 +142,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/softwares'
-    | '/admin'
     | '/admin/courses'
     | '/admin/downloads'
+    | '/admin/layout'
     | '/admin/software-categories'
     | '/admin/softwares'
     | '/auth/confirm'
@@ -158,6 +159,7 @@ export interface FileRouteTypes {
     | '/softwares'
     | '/admin/courses'
     | '/admin/downloads'
+    | '/admin/layout'
     | '/admin/software-categories'
     | '/admin/softwares'
     | '/auth/confirm'
@@ -170,9 +172,9 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/softwares'
-    | '/admin'
     | '/admin/courses'
     | '/admin/downloads'
+    | '/admin/layout'
     | '/admin/software-categories'
     | '/admin/softwares'
     | '/auth/confirm'
@@ -186,23 +188,16 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   SoftwaresRoute: typeof SoftwaresRoute
-  AdminLayoutRoute: typeof AdminLayoutRouteWithChildren
+  AdminCoursesRoute: typeof AdminCoursesRoute
+  AdminDownloadsRoute: typeof AdminDownloadsRoute
+  AdminLayoutRoute: typeof AdminLayoutRoute
+  AdminSoftwareCategoriesRoute: typeof AdminSoftwareCategoriesRoute
+  AdminSoftwaresRoute: typeof AdminSoftwaresRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
   ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
-
-const AdminLayoutRouteChildren: AdminLayoutRouteChildren = {
-  AdminCoursesRoute: AdminCoursesRoute,
-  AdminDownloadsRoute: AdminDownloadsRoute,
-  AdminSoftwareCategoriesRoute: AdminSoftwareCategoriesRoute,
-  AdminSoftwaresRoute: AdminSoftwaresRoute,
-  AdminIndexRoute: AdminIndexRoute,
-}
-
-const AdminLayoutRouteWithChildren = AdminLayoutRoute._addFileChildren(
-  AdminLayoutRouteChildren,
-)
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
@@ -227,47 +222,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SoftwaresRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
+    '/admin/': {
+      id: '/admin/'
       path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminLayoutRouteImport
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin/courses': {
       id: '/admin/courses'
-      path: '/courses'
+      path: '/admin/courses'
       fullPath: '/admin/courses'
       preLoaderRoute: typeof AdminCoursesRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/downloads': {
       id: '/admin/downloads'
-      path: '/downloads'
+      path: '/admin/downloads'
       fullPath: '/admin/downloads'
       preLoaderRoute: typeof AdminDownloadsRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/layout': {
+      id: '/admin/layout'
+      path: '/admin/layout'
+      fullPath: '/admin/layout'
+      preLoaderRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/software-categories': {
       id: '/admin/software-categories'
-      path: '/software-categories'
+      path: '/admin/software-categories'
       fullPath: '/admin/software-categories'
       preLoaderRoute: typeof AdminSoftwareCategoriesRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/softwares': {
       id: '/admin/softwares'
-      path: '/softwares'
+      path: '/admin/softwares'
       fullPath: '/admin/softwares'
       preLoaderRoute: typeof AdminSoftwaresRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/confirm': {
       id: '/auth/confirm'
@@ -314,8 +309,13 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRouteWithChildren,
   SoftwaresRoute: SoftwaresRoute,
-  AdminLayoutRoute: AdminLayoutRouteWithChildren,
+  AdminCoursesRoute: AdminCoursesRoute,
+  AdminDownloadsRoute: AdminDownloadsRoute,
+  AdminLayoutRoute: AdminLayoutRoute,
+  AdminSoftwareCategoriesRoute: AdminSoftwareCategoriesRoute,
+  AdminSoftwaresRoute: AdminSoftwaresRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
+  AdminIndexRoute: AdminIndexRoute,
   CoursesIndexRoute: CoursesIndexRoute,
   ApiPublicMercadopagoWebhookRoute: ApiPublicMercadopagoWebhookRoute,
 }
