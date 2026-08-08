@@ -78,9 +78,15 @@ export const getPurchasedDownloadUrl = createServerFn({ method: "POST" })
     const table = data.kind === "course" ? "courses" : "softwares";
     const { data: item } = await context.supabase
       .from(table)
-      .select("file_url")
+      .select("file_url, external_download_url")
       .eq("id", data.itemId)
       .maybeSingle();
+
+    if (!item) throw new Error("Item não encontrado");
+
+    if ((item as any).external_download_url) {
+      return { url: (item as any).external_download_url };
+    }
 
     const path = toStoragePath((item as any)?.file_url);
     if (!path) throw new Error("Arquivo não disponível");
