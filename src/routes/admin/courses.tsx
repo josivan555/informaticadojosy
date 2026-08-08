@@ -159,7 +159,7 @@ function AdminCourses() {
     },
     onError: (error: any) => {
       console.error("Mutation error detail (courses):", error);
-      toast.error(`Erro ao salvar curso: ${error.message || 'Erro desconhecido'}`);
+      toast.error(`Erro ao salvar curso: ${error.message || 'Erro desconhecido'}. Verifique se todos os campos obrigatórios (*) estão preenchidos corretamente.`);
     },
   });
 
