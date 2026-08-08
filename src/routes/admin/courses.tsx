@@ -266,7 +266,7 @@ function AdminCourses() {
               <DialogTitle>{editingId ? "Editar Curso" : "Novo Curso"}</DialogTitle>
             </DialogHeader>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="space-y-4">
+              <form onSubmit={(e) => { e.preventDefault(); }} className="space-y-4">
                 <FormField
                   control={form.control}
                   name="title"
