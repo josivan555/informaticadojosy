@@ -136,6 +136,8 @@ function AdminSoftwares() {
         file_url: values.file_url || null,
       };
 
+      console.log("Saving software with values:", cleanedValues);
+
       if (editingId) {
         const { data, error } = await supabase
           .from("softwares")
@@ -285,9 +287,9 @@ function AdminSoftwares() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nome</FormLabel>
+                        <FormLabel className="text-white">Nome <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
-                          <Input {...field} className="bg-slate-900 border-slate-700" />
+                          <Input {...field} value={field.value || ""} className="bg-slate-900 border-slate-700 text-white" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -298,10 +300,10 @@ function AdminSoftwares() {
                     name="category_id"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Categoria</FormLabel>
+                        <FormLabel className="text-white">Categoria <span className="text-red-500">*</span></FormLabel>
                         <Select onValueChange={field.onChange} value={field.value || ""}>
                           <FormControl>
-                            <SelectTrigger className="bg-slate-900 border-slate-700">
+                            <SelectTrigger className="bg-slate-900 border-slate-700 text-white">
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
                           </FormControl>

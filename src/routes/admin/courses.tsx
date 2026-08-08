@@ -111,6 +111,8 @@ function AdminCourses() {
         file_url: values.file_url || null,
       };
 
+      console.log("Saving course with values:", cleanedValues);
+
       if (editingId) {
         const { data, error } = await supabase
           .from("courses")
