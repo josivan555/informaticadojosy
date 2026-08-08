@@ -43,7 +43,7 @@ const courseSchema = z.object({
   price: z.coerce.number().min(0),
   level: z.string().nullable(),
   pages: z.coerce.number().min(0).nullable(),
-  status: z.string(),
+  status: z.string().nullable(),
   mercadopago_link: z.string().nullable(),
   video_url: z.string().nullable(),
   image_url: z.string().nullable(),
