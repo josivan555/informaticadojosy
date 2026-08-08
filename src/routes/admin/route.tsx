@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import logoAsset from "@/assets/logo.png.asset.json";
 
-export const Route = createFileRoute("/admin/layout")({
+export const Route = createFileRoute("/admin")({
   beforeLoad: async ({ location }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
@@ -49,7 +49,7 @@ function AdminLayout() {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#0a192f] text-slate-200">
-        <Sidebar className="border-r border-slate-800 bg-[#0d1b33]">
+        <Sidebar className="border-r border-slate-800 bg-[#0d1b33] fixed h-screen">
           <SidebarHeader className="p-4 border-b border-slate-800">
             <div className="flex flex-row items-center gap-3">
               <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded" />
@@ -64,7 +64,7 @@ function AdminLayout() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild className={isActive('/admin') ? "bg-accent text-accent-foreground" : ""}>
+                    <SidebarMenuButton asChild className={isActive('/admin') && location.pathname.split('/').length <= 2 ? "bg-accent text-accent-foreground" : ""}>
                       <Link to="/admin">
                         <LayoutDashboard className="h-4 w-4" />
                         <span>Dashboard</span>

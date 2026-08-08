@@ -10,14 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteRouteImport } from './routes/admin/route'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as SoftwaresRouteImport } from './routes/softwares'
-import { Route as AdminIndexRouteImport } from './routes/admin/index'
-import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
-import { Route as AdminDownloadsRouteImport } from './routes/admin/downloads'
-import { Route as AdminLayoutRouteImport } from './routes/admin/layout'
-import { Route as AdminSoftwareCategoriesRouteImport } from './routes/admin/software-categories'
-import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as CoursesIndexRouteImport } from './routes/courses/index'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses/$courseId'
@@ -28,6 +23,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRouteRoute = AdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -36,36 +36,6 @@ const AuthRoute = AuthRouteImport.update({
 const SoftwaresRoute = SoftwaresRouteImport.update({
   id: '/softwares',
   path: '/softwares',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminIndexRoute = AdminIndexRouteImport.update({
-  id: '/admin/',
-  path: '/admin/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminCoursesRoute = AdminCoursesRouteImport.update({
-  id: '/admin/courses',
-  path: '/admin/courses',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminDownloadsRoute = AdminDownloadsRouteImport.update({
-  id: '/admin/downloads',
-  path: '/admin/downloads',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminLayoutRoute = AdminLayoutRouteImport.update({
-  id: '/admin/layout',
-  path: '/admin/layout',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminSoftwareCategoriesRoute = AdminSoftwareCategoriesRouteImport.update({
-  id: '/admin/software-categories',
-  path: '/admin/software-categories',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AdminSoftwaresRoute = AdminSoftwaresRouteImport.update({
-  id: '/admin/softwares',
-  path: '/admin/softwares',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthConfirmRoute = AuthConfirmRouteImport.update({
@@ -92,47 +62,32 @@ const ApiPublicMercadopagoWebhookRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRoute
   '/auth': typeof AuthRouteWithChildren
   '/softwares': typeof SoftwaresRoute
-  '/admin/courses': typeof AdminCoursesRoute
-  '/admin/downloads': typeof AdminDownloadsRoute
-  '/admin/layout': typeof AdminLayoutRoute
-  '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
-  '/admin/softwares': typeof AdminSoftwaresRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
-  '/admin/': typeof AdminIndexRoute
   '/courses/': typeof CoursesIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRoute
   '/auth': typeof AuthRouteWithChildren
   '/softwares': typeof SoftwaresRoute
-  '/admin/courses': typeof AdminCoursesRoute
-  '/admin/downloads': typeof AdminDownloadsRoute
-  '/admin/layout': typeof AdminLayoutRoute
-  '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
-  '/admin/softwares': typeof AdminSoftwaresRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
-  '/admin': typeof AdminIndexRoute
   '/courses': typeof CoursesIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRouteRoute
   '/auth': typeof AuthRouteWithChildren
   '/softwares': typeof SoftwaresRoute
-  '/admin/courses': typeof AdminCoursesRoute
-  '/admin/downloads': typeof AdminDownloadsRoute
-  '/admin/layout': typeof AdminLayoutRoute
-  '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
-  '/admin/softwares': typeof AdminSoftwaresRoute
   '/auth/confirm': typeof AuthConfirmRoute
   '/courses/$courseId': typeof CoursesCourseIdRoute
-  '/admin/': typeof AdminIndexRoute
   '/courses/': typeof CoursesIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
@@ -140,61 +95,41 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin'
     | '/auth'
     | '/softwares'
-    | '/admin/courses'
-    | '/admin/downloads'
-    | '/admin/layout'
-    | '/admin/software-categories'
-    | '/admin/softwares'
     | '/auth/confirm'
     | '/courses/$courseId'
-    | '/admin/'
     | '/courses/'
     | '/api/public/mercadopago-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin'
     | '/auth'
     | '/softwares'
-    | '/admin/courses'
-    | '/admin/downloads'
-    | '/admin/layout'
-    | '/admin/software-categories'
-    | '/admin/softwares'
     | '/auth/confirm'
     | '/courses/$courseId'
-    | '/admin'
     | '/courses'
     | '/api/public/mercadopago-webhook'
   id:
     | '__root__'
     | '/'
+    | '/admin'
     | '/auth'
     | '/softwares'
-    | '/admin/courses'
-    | '/admin/downloads'
-    | '/admin/layout'
-    | '/admin/software-categories'
-    | '/admin/softwares'
     | '/auth/confirm'
     | '/courses/$courseId'
-    | '/admin/'
     | '/courses/'
     | '/api/public/mercadopago-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRouteRoute: typeof AdminRouteRoute
   AuthRoute: typeof AuthRouteWithChildren
   SoftwaresRoute: typeof SoftwaresRoute
-  AdminCoursesRoute: typeof AdminCoursesRoute
-  AdminDownloadsRoute: typeof AdminDownloadsRoute
-  AdminLayoutRoute: typeof AdminLayoutRoute
-  AdminSoftwareCategoriesRoute: typeof AdminSoftwareCategoriesRoute
-  AdminSoftwaresRoute: typeof AdminSoftwaresRoute
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
-  AdminIndexRoute: typeof AdminIndexRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
   ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
@@ -206,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -220,48 +162,6 @@ declare module '@tanstack/react-router' {
       path: '/softwares'
       fullPath: '/softwares'
       preLoaderRoute: typeof SoftwaresRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/': {
-      id: '/admin/'
-      path: '/admin'
-      fullPath: '/admin/'
-      preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/courses': {
-      id: '/admin/courses'
-      path: '/admin/courses'
-      fullPath: '/admin/courses'
-      preLoaderRoute: typeof AdminCoursesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/downloads': {
-      id: '/admin/downloads'
-      path: '/admin/downloads'
-      fullPath: '/admin/downloads'
-      preLoaderRoute: typeof AdminDownloadsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/layout': {
-      id: '/admin/layout'
-      path: '/admin/layout'
-      fullPath: '/admin/layout'
-      preLoaderRoute: typeof AdminLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/software-categories': {
-      id: '/admin/software-categories'
-      path: '/admin/software-categories'
-      fullPath: '/admin/software-categories'
-      preLoaderRoute: typeof AdminSoftwareCategoriesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/admin/softwares': {
-      id: '/admin/softwares'
-      path: '/admin/softwares'
-      fullPath: '/admin/softwares'
-      preLoaderRoute: typeof AdminSoftwaresRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth/confirm': {
@@ -307,15 +207,10 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRouteRoute: AdminRouteRoute,
   AuthRoute: AuthRouteWithChildren,
   SoftwaresRoute: SoftwaresRoute,
-  AdminCoursesRoute: AdminCoursesRoute,
-  AdminDownloadsRoute: AdminDownloadsRoute,
-  AdminLayoutRoute: AdminLayoutRoute,
-  AdminSoftwareCategoriesRoute: AdminSoftwareCategoriesRoute,
-  AdminSoftwaresRoute: AdminSoftwaresRoute,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
-  AdminIndexRoute: AdminIndexRoute,
   CoursesIndexRoute: CoursesIndexRoute,
   ApiPublicMercadopagoWebhookRoute: ApiPublicMercadopagoWebhookRoute,
 }
