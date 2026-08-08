@@ -1,4 +1,4 @@
-import { createFileRoute, Link, redirect, Outlet } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect, Outlet, useLocation } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
 import { Laptop, BookOpen, LayoutDashboard, LogOut, Home, User, Tags, Download } from "lucide-react";
@@ -33,9 +33,17 @@ export const Route = createFileRoute("/admin/layout")({
 });
 
 function AdminLayout() {
+  const location = useLocation();
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     window.location.href = "/";
+  };
+
+  const isActive = (path: string) => {
+    if (path === '/admin') {
+      return location.pathname === '/admin' || location.pathname === '/admin/';
+    }
+    return location.pathname.startsWith(path);
   };
 
   return (
@@ -56,7 +64,7 @@ function AdminLayout() {
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild className={isActive('/admin') ? "bg-accent text-accent-foreground" : ""}>
                       <Link to="/admin">
                         <LayoutDashboard className="h-4 w-4" />
                         <span>Dashboard</span>
@@ -64,7 +72,7 @@ function AdminLayout() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild className={isActive('/admin/softwares') ? "bg-accent text-accent-foreground" : ""}>
                       <Link to="/admin/softwares">
                         <Laptop className="h-4 w-4" />
                         <span>Softwares</span>
@@ -72,7 +80,7 @@ function AdminLayout() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild className={isActive('/admin/software-categories') ? "bg-accent text-accent-foreground" : ""}>
                       <Link to="/admin/software-categories">
                         <Tags className="h-4 w-4" />
                         <span>Categorias Softwares</span>
@@ -80,7 +88,7 @@ function AdminLayout() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild className={isActive('/admin/courses') ? "bg-accent text-accent-foreground" : ""}>
                       <Link to="/admin/courses">
                         <BookOpen className="h-4 w-4" />
                         <span>Cursos</span>
@@ -88,7 +96,7 @@ function AdminLayout() {
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild>
+                    <SidebarMenuButton asChild className={isActive('/admin/downloads') ? "bg-accent text-accent-foreground" : ""}>
                       <Link to="/admin/downloads">
                         <Download className="h-4 w-4" />
                         <span>Downloads</span>
