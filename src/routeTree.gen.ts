@@ -40,33 +40,33 @@ const SoftwaresRoute = SoftwaresRouteImport.update({
 } as any)
 const AdminIndexRoute = AdminIndexRouteImport.update({
   id: '/admin/',
-  path: '/',
-  getParentRoute: () => AdminLayoutRoute,
+  path: '/admin/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCoursesRoute = AdminCoursesRouteImport.update({
-  id: '/courses',
-  path: '/courses',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/courses',
+  path: '/admin/courses',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminDownloadsRoute = AdminDownloadsRouteImport.update({
-  id: '/downloads',
-  path: '/downloads',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/downloads',
+  path: '/admin/downloads',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminLayoutRoute = AdminLayoutRouteImport.update({
-  id: '/admin',
-  path: '/admin',
+  id: '/admin/layout',
+  path: '/admin/layout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSoftwareCategoriesRoute = AdminSoftwareCategoriesRouteImport.update({
-  id: '/software-categories',
-  path: '/software-categories',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/software-categories',
+  path: '/admin/software-categories',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AdminSoftwaresRoute = AdminSoftwaresRouteImport.update({
-  id: '/softwares',
-  path: '/softwares',
-  getParentRoute: () => AdminLayoutRoute,
+  id: '/admin/softwares',
+  path: '/admin/softwares',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthConfirmRoute = AuthConfirmRouteImport.update({
   id: '/confirm',
@@ -188,18 +188,15 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRouteWithChildren
   SoftwaresRoute: typeof SoftwaresRoute
-  AdminLayoutRoute: typeof AdminLayoutRouteWithChildren
-  CoursesCourseIdRoute: typeof CoursesCourseIdRoute
-  CoursesIndexRoute: typeof CoursesIndexRoute
-  ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
-}
-
-export interface AdminLayoutRouteChildren {
-  AdminIndexRoute: typeof AdminIndexRoute
   AdminCoursesRoute: typeof AdminCoursesRoute
   AdminDownloadsRoute: typeof AdminDownloadsRoute
+  AdminLayoutRoute: typeof AdminLayoutRoute
   AdminSoftwareCategoriesRoute: typeof AdminSoftwareCategoriesRoute
   AdminSoftwaresRoute: typeof AdminSoftwaresRoute
+  CoursesCourseIdRoute: typeof CoursesCourseIdRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+  CoursesIndexRoute: typeof CoursesIndexRoute
+  ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -225,47 +222,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SoftwaresRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/admin': {
-      id: '/admin'
-      path: '/admin'
-      fullPath: '/admin'
-      preLoaderRoute: typeof AdminLayoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin/': {
       id: '/admin/'
-      path: '/'
+      path: '/admin'
       fullPath: '/admin/'
       preLoaderRoute: typeof AdminIndexRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/courses': {
       id: '/admin/courses'
-      path: '/courses'
+      path: '/admin/courses'
       fullPath: '/admin/courses'
       preLoaderRoute: typeof AdminCoursesRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/downloads': {
       id: '/admin/downloads'
-      path: '/downloads'
+      path: '/admin/downloads'
       fullPath: '/admin/downloads'
       preLoaderRoute: typeof AdminDownloadsRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin/layout': {
+      id: '/admin/layout'
+      path: '/admin/layout'
+      fullPath: '/admin/layout'
+      preLoaderRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/software-categories': {
       id: '/admin/software-categories'
-      path: '/software-categories'
+      path: '/admin/software-categories'
       fullPath: '/admin/software-categories'
       preLoaderRoute: typeof AdminSoftwareCategoriesRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/admin/softwares': {
       id: '/admin/softwares'
-      path: '/softwares'
+      path: '/admin/softwares'
       fullPath: '/admin/softwares'
       preLoaderRoute: typeof AdminSoftwaresRouteImport
-      parentRoute: typeof AdminLayoutRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/confirm': {
       id: '/auth/confirm'
@@ -325,3 +322,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
