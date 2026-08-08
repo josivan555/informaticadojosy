@@ -262,7 +262,7 @@ function AdminSoftwares() {
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Categoria</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <Select onValueChange={field.onChange} value={field.value || ""}>
                           <FormControl>
                             <SelectTrigger className="bg-slate-900 border-slate-700">
                               <SelectValue placeholder="Selecione" />
@@ -306,7 +306,7 @@ function AdminSoftwares() {
                         </Button>
                       </div>
                       <FormControl>
-                        <Textarea {...field} className="bg-slate-900 border-slate-700 min-h-[100px]" />
+                        <Textarea {...field} value={field.value || ""} className="bg-slate-900 border-slate-700 min-h-[100px]" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -334,7 +334,7 @@ function AdminSoftwares() {
                       <FormItem>
                         <FormLabel>Link Mercado Pago (Opcional)</FormLabel>
                         <FormControl>
-                          <Input {...field} placeholder="https://..." className="bg-slate-900 border-slate-700" />
+                          <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-slate-900 border-slate-700" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -419,7 +419,7 @@ function AdminSoftwares() {
                         <img src={software.image_url} className="h-10 w-10 rounded object-cover border border-slate-700" alt="" />
                       ) : (
                         <div className="h-10 w-10 rounded bg-slate-800 flex items-center justify-center">
-                          <Laptop className="h-5 w-5 text-slate-500" />
+                          <Monitor className="h-5 w-5 text-slate-500" />
                         </div>
                       )}
                       <div>
@@ -461,4 +461,5 @@ function AdminSoftwares() {
     </div>
   );
 }
+
 
