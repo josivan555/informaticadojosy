@@ -1,3 +1,6 @@
+/**
+ * Gerenciamento de softwares com upload de capa, descrição automática via IA e links de download.
+ */
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
