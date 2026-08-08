@@ -19,6 +19,7 @@ import { useQuery } from "@tanstack/react-query";
 import heroBannerAsset from "@/assets/main-hero-banner.png.asset.json";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
 import { User, LogOut } from "lucide-react";
 
 
@@ -265,8 +266,13 @@ function Index() {
 
                         if (sw.price > 0) {
                           navigate({ to: "/softwares" }); // Redirect to software list for purchase flow
-                        } else if (sw.file_url) {
-                          window.open(sw.file_url, '_blank');
+                        } else {
+                          try {
+                            const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+                            window.open(url, '_blank');
+                          } catch {
+                            toast.error("Link de download não disponível");
+                          }
                         }
                       }}
                       disabled={!sw.file_url && sw.price === 0}

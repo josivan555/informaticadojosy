@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Download, Laptop, Star, ShieldCheck, Zap, Loader2, ChevronLeft, ChevronRight, Search, Filter } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getFreeSoftwareDownloadUrl, getPurchasedDownloadUrl } from "@/lib/downloads.functions";
 
 export const Route = createFileRoute("/softwares")({
   component: SoftwaresPage,
@@ -92,10 +93,17 @@ function SoftwaresPage() {
         window.Paddle.Checkout.open({
           items: [{ priceId: sw.paddle_price_id, quantity: 1 }],
           settings: { displayMode: 'overlay', theme: 'light', locale: 'pt' },
-          eventCallback: (data: any) => {
+          eventCallback: async (data: any) => {
             if (data.name === 'checkout.completed') {
               toast.success("Compra realizada! Iniciando download...");
-              if (sw.file_url) window.open(sw.file_url, '_blank');
+              try {
+                const { url } = await getPurchasedDownloadUrl({
+                  data: { kind: "software", itemId: sw.id },
+                });
+                window.open(url, '_blank');
+              } catch {
+                toast.error("Não foi possível liberar o download agora. Tente novamente em instantes.");
+              }
             }
             if (data.name === 'checkout.closed') setIsCheckoutLoading(null);
           }
@@ -104,11 +112,11 @@ function SoftwaresPage() {
         toast.error("Sistema de pagamentos não disponível");
       }
     } else {
-      const downloadUrl = sw.file_url || sw.external_download_url;
-      if (downloadUrl) {
-        window.open(downloadUrl, '_blank');
+      try {
+        const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+        window.open(url, '_blank');
         toast.success("Download iniciado!");
-      } else {
+      } catch {
         toast.error("Link de download não disponível");
       }
     }
