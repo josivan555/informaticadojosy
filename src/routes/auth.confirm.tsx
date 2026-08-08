@@ -14,6 +14,9 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/auth/confirm")({
   component: ConfirmEmailPage,
   validateSearch: (search) => searchSchema.parse(search),
+  head: () => ({
+    meta: [{ title: "Confirmar E-mail - Informática do Josy" }],
+  }),
 });
 
 function ConfirmEmailPage() {

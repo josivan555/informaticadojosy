@@ -12,6 +12,9 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/software-categories")({
   component: AdminSoftwareCategories,
+  head: () => ({
+    meta: [{ title: "Categorias de Software - Painel Admin" }],
+  }),
 });
 
 function AdminSoftwareCategories() {
