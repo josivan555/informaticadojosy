@@ -47,13 +47,17 @@ function AdminLayout() {
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#0a192f] text-slate-200">
         <Sidebar className="border-r border-slate-800 bg-[#0d1b33]">
-          <SidebarHeader className="p-4 border-b border-slate-800 flex flex-row items-center gap-3">
-            <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded" />
-            <AdminProfile />
+          <SidebarHeader className="p-4 border-b border-slate-800">
+            <div className="flex flex-row items-center gap-3">
+              <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded" />
+              <AdminProfile />
+            </div>
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <SidebarGroupLabel className="text-slate-400">Administração</SidebarGroupLabel>
+              <SidebarGroupLabel>
+                <span className="text-slate-400">Administração</span>
+              </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
@@ -108,9 +112,11 @@ function AdminLayout() {
               </Button>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton onClick={handleSignOut} className="text-slate-300 hover:bg-slate-800">
-                    <LogOut className="h-4 w-4" />
-                    <span>Sair</span>
+                  <SidebarMenuButton onClick={handleSignOut}>
+                    <div className="flex items-center gap-2 text-slate-300">
+                      <LogOut className="h-4 w-4" />
+                      <span>Sair</span>
+                    </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               </SidebarMenu>
