@@ -39,16 +39,16 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const courseSchema = z.object({
   title: z.string().min(2, "Título é obrigatório"),
-  description: z.string().min(10, "Descrição é obrigatória"),
-  price: z.coerce.number().min(0),
-  level: z.string().nullable(),
-  pages: z.coerce.number().min(0).nullable(),
-  status: z.string().nullable(),
-  mercadopago_link: z.string().nullable(),
-  video_url: z.string().nullable(),
-  image_url: z.string().nullable(),
-  file_url: z.string().nullable(),
-  external_download_url: z.string().nullable(),
+  description: z.string().optional().nullable(),
+  price: z.coerce.number().min(0).optional().default(0),
+  level: z.string().optional().nullable(),
+  pages: z.coerce.number().min(0).optional().nullable(),
+  status: z.string().optional().default("active"),
+  mercadopago_link: z.string().optional().nullable(),
+  video_url: z.string().optional().nullable(),
+  image_url: z.string().optional().nullable(),
+  file_url: z.string().optional().nullable(),
+  external_download_url: z.string().optional().nullable(),
 });
 
 type CourseFormValues = z.infer<typeof courseSchema>;
@@ -96,13 +96,16 @@ function AdminCourses() {
 
   const mutation = useMutation({
     mutationFn: async (values: CourseFormValues) => {
-      // Clean up values: convert empty strings to null for optional fields
+      // Clean up values: convert empty strings or undefined to null for optional fields
       const cleanedValues = {
         ...values,
+        description: values.description || null,
         level: values.level || null,
         mercadopago_link: values.mercadopago_link || null,
         video_url: values.video_url || null,
         external_download_url: values.external_download_url || null,
+        price: values.price ?? 0,
+        status: values.status || 'active',
       };
 
       console.log("Saving course with values:", cleanedValues);

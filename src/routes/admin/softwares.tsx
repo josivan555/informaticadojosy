@@ -46,17 +46,17 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const softwareSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
-  description: z.string().min(10, "Descrição é obrigatória"),
-  category_id: z.string().nullable(),
-  price: z.coerce.number().min(0),
-  version: z.string().nullable(),
-  size: z.string().nullable(),
-  status: z.string(),
-  mercadopago_link: z.string().nullable(),
-  image_url: z.string().nullable(),
-  file_url: z.string().nullable(),
-  external_download_url: z.string().nullable(),
-  video_url: z.string().nullable(),
+  description: z.string().optional().nullable(),
+  category_id: z.string().min(1, "Categoria é obrigatória"),
+  price: z.coerce.number().min(0).optional().default(0),
+  version: z.string().optional().nullable(),
+  size: z.string().optional().nullable(),
+  status: z.string().optional().default("active"),
+  mercadopago_link: z.string().optional().nullable(),
+  image_url: z.string().optional().nullable(),
+  file_url: z.string().optional().nullable(),
+  external_download_url: z.string().optional().nullable(),
+  video_url: z.string().optional().nullable(),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
@@ -120,15 +120,18 @@ function AdminSoftwares() {
 
   const mutation = useMutation({
     mutationFn: async (values: SoftwareFormValues) => {
-      // Clean up values: convert empty strings to null for optional fields
+      // Clean up values: convert empty strings or undefined to null for optional fields
       const cleanedValues = {
         ...values,
+        description: values.description || null,
         version: values.version || null,
         size: values.size || null,
         mercadopago_link: values.mercadopago_link || null,
         external_download_url: values.external_download_url || null,
         video_url: values.video_url || null,
         category_id: values.category_id || null,
+        price: values.price ?? 0,
+        status: values.status || 'active',
       };
 
       console.log("Saving software with values:", cleanedValues);
