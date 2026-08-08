@@ -492,7 +492,12 @@ function AdminSoftwares() {
                       mutation.mutate(form.getValues());
                     }}
                   >
-                    {mutation.isPending ? "Salvando..." : editingId ? "Atualizar" : "Criar Software"}
+                    {mutation.isPending ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Salvando...
+                      </>
+                    ) : editingId ? "Atualizar" : "Criar Software"}
                   </Button>
                 </DialogFooter>
               </form>
