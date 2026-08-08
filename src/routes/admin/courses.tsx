@@ -39,16 +39,16 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const courseSchema = z.object({
   title: z.string().min(2, "Título é obrigatório"),
-  description: z.string().optional().nullable(),
-  price: z.coerce.number().min(0).optional().default(0),
-  level: z.string().optional().nullable(),
-  pages: z.coerce.number().min(0).optional().nullable(),
-  status: z.string().optional().default("active"),
-  mercadopago_link: z.string().optional().nullable(),
-  video_url: z.string().optional().nullable(),
-  image_url: z.string().optional().nullable(),
-  file_url: z.string().optional().nullable(),
-  external_download_url: z.string().optional().nullable(),
+  description: z.string().nullish(),
+  price: z.coerce.number().min(0).default(0),
+  level: z.string().nullish(),
+  pages: z.coerce.number().min(0).nullish(),
+  status: z.string().default("active"),
+  mercadopago_link: z.string().nullish(),
+  video_url: z.string().nullish(),
+  image_url: z.string().nullish(),
+  file_url: z.string().nullish(),
+  external_download_url: z.string().nullish(),
 });
 
 type CourseFormValues = z.infer<typeof courseSchema>;
@@ -96,9 +96,9 @@ function AdminCourses() {
 
   const mutation = useMutation({
     mutationFn: async (values: CourseFormValues) => {
-      // Clean up values: convert empty strings or undefined to null for optional fields
+      // Clean up values: convert undefined/empty to null for database
       const cleanedValues = {
-        ...values,
+        title: values.title,
         description: values.description || null,
         level: values.level || null,
         mercadopago_link: values.mercadopago_link || null,
@@ -106,6 +106,9 @@ function AdminCourses() {
         external_download_url: values.external_download_url || null,
         price: values.price ?? 0,
         status: values.status || 'active',
+        pages: values.pages || null,
+        image_url: values.image_url || null,
+        file_url: values.file_url || null,
       };
 
       console.log("Saving course with values:", cleanedValues);

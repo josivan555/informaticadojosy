@@ -46,17 +46,17 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const softwareSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
-  description: z.string().optional().nullable(),
+  description: z.string().nullish(),
   category_id: z.string().min(1, "Categoria é obrigatória"),
-  price: z.coerce.number().min(0).optional().default(0),
-  version: z.string().optional().nullable(),
-  size: z.string().optional().nullable(),
-  status: z.string().optional().default("active"),
-  mercadopago_link: z.string().optional().nullable(),
-  image_url: z.string().optional().nullable(),
-  file_url: z.string().optional().nullable(),
-  external_download_url: z.string().optional().nullable(),
-  video_url: z.string().optional().nullable(),
+  price: z.coerce.number().min(0).default(0),
+  version: z.string().nullish(),
+  size: z.string().nullish(),
+  status: z.string().default("active"),
+  mercadopago_link: z.string().nullish(),
+  image_url: z.string().nullish(),
+  file_url: z.string().nullish(),
+  external_download_url: z.string().nullish(),
+  video_url: z.string().nullish(),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
@@ -120,9 +120,9 @@ function AdminSoftwares() {
 
   const mutation = useMutation({
     mutationFn: async (values: SoftwareFormValues) => {
-      // Clean up values: convert empty strings or undefined to null for optional fields
+      // Clean up values: convert undefined/empty to null for database
       const cleanedValues = {
-        ...values,
+        name: values.name,
         description: values.description || null,
         version: values.version || null,
         size: values.size || null,
@@ -132,6 +132,8 @@ function AdminSoftwares() {
         category_id: values.category_id || null,
         price: values.price ?? 0,
         status: values.status || 'active',
+        image_url: values.image_url || null,
+        file_url: values.file_url || null,
       };
 
       console.log("Saving software with values:", cleanedValues);
