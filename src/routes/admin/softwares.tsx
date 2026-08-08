@@ -120,7 +120,9 @@ function AdminSoftwares() {
 
   const mutation = useMutation({
     mutationFn: async (values: SoftwareFormValues) => {
-      // Clean up values: convert undefined/empty to null for database
+      // Convert price string to number if it comes as string
+      const priceValue = typeof values.price === 'string' ? parseFloat(values.price) : values.price;
+      
       const cleanedValues = {
         name: values.name,
         description: values.description || null,
@@ -130,7 +132,7 @@ function AdminSoftwares() {
         external_download_url: values.external_download_url || null,
         video_url: values.video_url || null,
         category_id: values.category_id || null,
-        price: values.price || 0,
+        price: isNaN(priceValue) ? 0 : priceValue,
         status: values.status || 'active',
         image_url: values.image_url || null,
         file_url: values.file_url || null,
@@ -147,7 +149,7 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase update error:", error);
-          throw error;
+          throw new Error(error.message);
         }
         return data;
       } else {
@@ -158,7 +160,7 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase insert error:", error);
-          throw error;
+          throw new Error(error.message);
         }
         return data;
       }
@@ -371,9 +373,15 @@ function AdminSoftwares() {
                     name="price"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Preço (0 para gratuito)</FormLabel>
+                        <FormLabel className="text-white">Preço (0 para gratuito)</FormLabel>
                         <FormControl>
-                          <Input type="number" step="0.01" {...field} className="bg-slate-900 border-slate-700" />
+                          <Input 
+                            type="number" 
+                            step="0.01" 
+                            {...field} 
+                            value={field.value ?? 0}
+                            className="bg-slate-900 border-slate-700 text-white" 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -468,7 +476,20 @@ function AdminSoftwares() {
                   >
                     Cancelar
                   </Button>
-                  <Button type="submit" className="flex-1 bg-cyan-600 hover:bg-cyan-700" disabled={mutation.isPending}>
+                  <Button 
+                    type="button" 
+                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white" 
+                    disabled={mutation.isPending}
+                    onClick={async () => {
+                      const isValid = await form.trigger();
+                      if (!isValid) {
+                        console.log("Form invalid:", form.formState.errors);
+                        toast.error("Por favor, preencha os campos obrigatórios (*)");
+                        return;
+                      }
+                      mutation.mutate(form.getValues());
+                    }}
+                  >
                     {mutation.isPending ? "Salvando..." : editingId ? "Atualizar" : "Criar Software"}
                   </Button>
                 </DialogFooter>
