@@ -10,6 +10,9 @@ import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
+  head: () => ({
+    title: "Entrar ou Cadastrar - Informática do Josy",
+  }),
 });
 
 function AuthPage() {
