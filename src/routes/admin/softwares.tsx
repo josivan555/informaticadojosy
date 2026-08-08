@@ -140,6 +140,7 @@ function AdminSoftwares() {
 
       console.log("Saving software with values:", cleanedValues);
 
+      let result;
       if (editingId) {
         const { data, error } = await supabase
           .from("softwares")
@@ -151,7 +152,7 @@ function AdminSoftwares() {
           console.error("Supabase update error:", error);
           throw new Error(error.message);
         }
-        return data;
+        result = data;
       } else {
         const { data, error } = await supabase
           .from("softwares")
@@ -162,8 +163,9 @@ function AdminSoftwares() {
           console.error("Supabase insert error:", error);
           throw new Error(error.message);
         }
-        return data;
+        result = data;
       }
+      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-softwares"] });
@@ -295,7 +297,7 @@ function AdminSoftwares() {
               <DialogTitle>{editingId ? "Editar Software" : "Novo Software"}</DialogTitle>
             </DialogHeader>
             <Form {...form}>
-              <form onSubmit={form.handleSubmit((v) => mutation.mutate(v))} className="space-y-4">
+              <form onSubmit={(e) => { e.preventDefault(); }} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}

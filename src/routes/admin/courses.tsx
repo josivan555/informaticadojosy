@@ -432,7 +432,20 @@ function AdminCourses() {
                   >
                     Cancelar
                   </Button>
-                  <Button type="submit" className="flex-1 bg-cyan-600 hover:bg-cyan-700" disabled={mutation.isPending}>
+                  <Button 
+                    type="button" 
+                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white" 
+                    disabled={mutation.isPending}
+                    onClick={async () => {
+                      const isValid = await form.trigger();
+                      if (!isValid) {
+                        console.log("Form invalid (courses):", form.formState.errors);
+                        toast.error("Por favor, preencha o título do curso.");
+                        return;
+                      }
+                      mutation.mutate(form.getValues());
+                    }}
+                  >
                     {mutation.isPending ? "Salvando..." : editingId ? "Atualizar" : "Criar Curso"}
                   </Button>
                 </DialogFooter>
