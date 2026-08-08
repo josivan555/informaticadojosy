@@ -348,6 +348,20 @@ function AdminCourses() {
                   </FormItem>
                 </div>
 
+                <div className="grid grid-cols-1 gap-4">
+                  <FormItem>
+                    <FormLabel>Upload de Vídeo (Opcional)</FormLabel>
+                    <div className="flex gap-2">
+                      <Input
+                        type="file"
+                        accept="video/*"
+                        className="bg-slate-900 border-slate-700"
+                        onChange={(e) => handleFileUpload(e, "video_url" as any)} 
+                      />
+                    </div>
+                  </FormItem>
+                </div>
+
                 <DialogFooter className="pt-4">
                   <Button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-700" disabled={mutation.isPending}>
                     {mutation.isPending ? "Salvando..." : editingId ? "Atualizar" : "Criar Curso"}
