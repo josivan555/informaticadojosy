@@ -1,12 +1,4 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-// na minha area de administrador, coloque a opção de colocar os links de programas com os botões de downloads, capas dos programas, pra ficar parecido com essa imagem
-// Integre a validação do acesso do curso via webhook do Stripe para que o status de compra atualize automaticamente após o checkout.
-// Implementar uma página pública que liste meus cursos com capa, descrição e botão para comprar via checkout.
-// Implemente controle de acesso para que apenas usuários com compra ativa possam visualizar e baixar os PDFs.
-// Implemente o download do PDF do curso automaticamente após a confirmação do checkout e login do usuário.
-// Integre um carrinho e checkout para que as pessoas possam comprar os cursos em PDF com pagamento online.
-// Adicione uma área “Meus cursos” para listar minhas compras e disponibilizar do download do PDF após a confirmação do checkout.
-// Crie um painel administrativo para cadastrar cursos, enviar o PDF, definir capa, preço e controlar publicar/despublicar.
 import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loader2, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
