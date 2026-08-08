@@ -9,6 +9,7 @@ import { useState, useEffect } from "react";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import heroBannerAsset from "@/assets/main-hero-banner.png.asset.json";
+import logoAsset from "@/assets/logo.png.asset.json";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
@@ -119,8 +120,8 @@ function Index() {
       {/* Header/Nav */}
       <header className="sticky top-0 z-50 w-full border-b border-primary/10 bg-[#0a192f]/90 backdrop-blur supports-[backdrop-filter]:bg-[#0a192f]/60">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2 font-bold text-2xl tracking-tighter text-white">
-            <Zap className="h-6 w-6 text-primary" fill="currentColor" />
+          <div className="flex items-center gap-3 font-bold text-2xl tracking-tighter text-white">
+            <img src={logoAsset.url} alt="Logo" className="h-10 w-10 object-contain rounded-md" />
             <span className="hidden sm:inline">INFORMÁTICA <span className="text-primary">do Josy</span></span>
             <span className="sm:hidden text-primary">IJ</span>
           </div>
@@ -371,8 +372,8 @@ function Index() {
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
               <div className="col-span-1 md:col-span-2 space-y-4">
-                <div className="flex items-center gap-2 font-bold text-xl tracking-tighter text-white">
-                  <Zap className="h-5 w-5 text-primary" fill="currentColor" />
+                <div className="flex items-center gap-3 font-bold text-xl tracking-tighter text-white">
+                  <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded-md" />
                   <span>INFORMÁTICA <span className="text-primary">do Josy</span></span>
                 </div>
                 <p className="text-sm text-muted-foreground max-w-xs">

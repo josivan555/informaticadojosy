@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
+import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/admin/layout")({
   beforeLoad: async ({ location }) => {
@@ -42,7 +43,8 @@ function AdminLayout() {
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
         <Sidebar>
-          <SidebarHeader className="p-4 border-b">
+          <SidebarHeader className="p-4 border-b flex flex-row items-center gap-3">
+            <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded" />
             <AdminProfile />
           </SidebarHeader>
           <SidebarContent>
