@@ -346,8 +346,8 @@ function AdminSoftwares() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
-                  <FormItem>
-                    <FormLabel className="text-white">Capa do Software</FormLabel>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Capa do Software</label>
                     <div className="flex gap-2">
                       <Input
                         type="file"
@@ -356,9 +356,9 @@ function AdminSoftwares() {
                         onChange={(e) => handleFileUpload(e, "image_url")}
                       />
                     </div>
-                  </FormItem>
-                  <FormItem>
-                    <FormLabel className="text-white">Arquivo (Zip/Exe)</FormLabel>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Arquivo (Zip/Exe)</label>
                     <div className="flex gap-2">
                       <Input
                         type="file"
@@ -366,7 +366,7 @@ function AdminSoftwares() {
                         onChange={(e) => handleFileUpload(e, "file_url")}
                       />
                     </div>
-                  </FormItem>
+                  </div>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
@@ -383,8 +383,8 @@ function AdminSoftwares() {
                       </FormItem>
                     )}
                   />
-                  <FormItem>
-                    <FormLabel className="text-white">Upload de Vídeo (Opcional)</FormLabel>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Upload de Vídeo (Opcional)</label>
                     <div className="flex gap-2">
                       <Input
                         type="file"
@@ -393,7 +393,7 @@ function AdminSoftwares() {
                         onChange={(e) => handleFileUpload(e, "video_url")} 
                       />
                     </div>
-                  </FormItem>
+                  </div>
                 </div>
 
                 <DialogFooter className="pt-4">
