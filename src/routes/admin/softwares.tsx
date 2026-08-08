@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Search, Pencil, Trash2, Sparkles, Loader2, Upload } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Sparkles, Loader2, Monitor } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -52,7 +52,7 @@ const softwareSchema = z.object({
   version: z.string().nullable(),
   size: z.string().nullable(),
   status: z.string(),
-  mercadopago_link: z.string().url("Link inválido").nullable().or(z.literal("")),
+  mercadopago_link: z.string().nullable(),
   image_url: z.string().nullable(),
   file_url: z.string().nullable(),
 });
