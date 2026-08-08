@@ -55,6 +55,7 @@ const softwareSchema = z.object({
   mercadopago_link: z.string().nullable(),
   image_url: z.string().nullable(),
   file_url: z.string().nullable(),
+  video_url: z.string().nullable(),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
@@ -84,6 +85,7 @@ function AdminSoftwares() {
       category_id: null,
       image_url: null,
       file_url: null,
+      video_url: "",
     },
   });
 
@@ -163,6 +165,7 @@ function AdminSoftwares() {
       mercadopago_link: software.mercadopago_link || "",
       image_url: software.image_url || "",
       file_url: software.file_url || "",
+      video_url: software.video_url || "",
     });
     setIsDialogOpen(true);
   };
@@ -186,13 +189,13 @@ function AdminSoftwares() {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "image_url" | "file_url") => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "image_url" | "file_url" | "video_url") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const fileExt = file.name.split(".").pop();
     const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const filePath = `${field === "image_url" ? "covers" : "files"}/${fileName}`;
+    const filePath = `${field === "image_url" ? "covers" : field === "video_url" ? "videos" : "files"}/${fileName}`;
 
     try {
       const { error: uploadError } = await supabase.storage
@@ -361,6 +364,33 @@ function AdminSoftwares() {
                         type="file"
                         className="bg-slate-900 border-slate-700"
                         onChange={(e) => handleFileUpload(e, "file_url")}
+                      />
+                    </div>
+                  </FormItem>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="video_url"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>URL do Vídeo (YouTube/Vimeo)</FormLabel>
+                        <FormControl>
+                          <Input {...field} value={field.value || ""} placeholder="https://youtube.com/..." className="bg-slate-900 border-slate-700" />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormItem>
+                    <FormLabel>Upload de Vídeo (Opcional)</FormLabel>
+                    <div className="flex gap-2">
+                      <Input
+                        type="file"
+                        accept="video/*"
+                        className="bg-slate-900 border-slate-700"
+                        onChange={(e) => handleFileUpload(e, "video_url")} 
                       />
                     </div>
                   </FormItem>

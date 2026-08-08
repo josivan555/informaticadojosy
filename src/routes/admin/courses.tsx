@@ -164,23 +164,23 @@ function AdminCourses() {
     }
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "image_url" | "file_url") => {
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "image_url" | "file_url" | "video_url") => {
     const file = e.target.files?.[0];
     if (!file) return;
 
     const fileExt = file.name.split(".").pop();
     const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const filePath = `${field === "image_url" ? "covers" : "courses"}/${fileName}`;
+    const filePath = `${field === "image_url" ? "covers" : field === "video_url" ? "videos" : "courses"}/${fileName}`;
 
     try {
       const { error: uploadError } = await supabase.storage
-        .from(field === "image_url" ? "softwares" : "courses")
+        .from(field === "image_url" ? "softwares" : field === "video_url" ? "softwares" : "courses")
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from(field === "image_url" ? "softwares" : "courses")
+        .from(field === "image_url" ? "softwares" : field === "video_url" ? "softwares" : "courses")
         .getPublicUrl(filePath);
 
       form.setValue(field, publicUrl);
@@ -343,6 +343,20 @@ function AdminCourses() {
                         accept=".pdf"
                         className="bg-slate-900 border-slate-700"
                         onChange={(e) => handleFileUpload(e, "file_url")}
+                      />
+                    </div>
+                  </FormItem>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  <FormItem>
+                    <FormLabel>Upload de Vídeo (Opcional)</FormLabel>
+                    <div className="flex gap-2">
+                      <Input
+                        type="file"
+                        accept="video/*"
+                        className="bg-slate-900 border-slate-700"
+                        onChange={(e) => handleFileUpload(e, "video_url")} 
                       />
                     </div>
                   </FormItem>
