@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Route as AdminLayoutRoute } from './layout';
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,10 +8,9 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 export const Route = createFileRoute("/admin/downloads")({
-  getParentRoute: () => AdminLayoutRoute,
   component: AdminDownloads,
   head: () => ({
-    meta: [{ title: "Histórico de Downloads - Painel Admin" }],
+    meta: [{ title: "Histórico de Downloads - Informática do Josy" }],
   }),
 });
 

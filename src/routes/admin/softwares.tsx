@@ -2,7 +2,6 @@
  * Gerenciamento de softwares com upload de capa, descrição automática via IA e links de download.
  */
 import { createFileRoute } from "@tanstack/react-router";
-import { Route as AdminLayoutRoute } from './layout';
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -11,15 +10,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, Dialog
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Plus, Trash2, Edit, Save, Loader2, Sparkles, Image as ImageIcon } from "lucide-react";
+import { Plus, Trash2, Edit, Save, Loader2, Sparkles, ImageIcon } from "lucide-react";
 import { generateSoftwareDescription } from "@/lib/ai.functions";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin/softwares")({
-  getParentRoute: () => AdminLayoutRoute,
   component: AdminSoftwares,
   head: () => ({
-    meta: [{ title: "Gerenciar Softwares - Painel Admin" }],
+    meta: [{ title: "Gerenciar Softwares - Informática do Josy" }],
   }),
 });
 

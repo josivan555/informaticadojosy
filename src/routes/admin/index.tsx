@@ -1,13 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Route as AdminLayoutRoute } from './layout';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Laptop, BookOpen, Users, Download } from "lucide-react";
 
 export const Route = createFileRoute("/admin/")({
-  getParentRoute: () => AdminLayoutRoute,
   component: AdminDashboard,
   head: () => ({
-    meta: [{ title: "Dashboard - Painel Admin" }],
+    meta: [{ title: "Dashboard - Informática do Josy" }],
   }),
 });
 
