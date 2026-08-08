@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { createFileRoute, Outlet, redirect, Link } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
 import { Laptop, BookOpen, LayoutDashboard, LogOut, Home, User, Tags, Download } from "lucide-react";
@@ -52,42 +52,42 @@ function AdminLayout() {
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <a href="/admin">
+                      <Link to="/admin">
                         <LayoutDashboard className="h-4 w-4" />
                         <span>Dashboard</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <a href="/admin/softwares">
+                      <Link to="/admin/softwares">
                         <Laptop className="h-4 w-4" />
                         <span>Softwares</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <a href="/admin/software-categories">
+                      <Link to="/admin/software-categories">
                         <Tags className="h-4 w-4" />
                         <span>Categorias Softwares</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <a href="/admin/courses">
+                      <Link to="/admin/courses">
                         <BookOpen className="h-4 w-4" />
                         <span>Cursos</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
-                      <a href="/admin/downloads">
+                      <Link to="/admin/downloads">
                         <Download className="h-4 w-4" />
                         <span>Downloads</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 </SidebarMenu>
@@ -95,10 +95,10 @@ function AdminLayout() {
             </SidebarGroup>
             <div className="mt-auto p-4 border-t flex flex-col gap-2">
               <Button variant="outline" className="w-full justify-start gap-2" asChild>
-                <a href="/">
+                <Link to="/">
                   <Home className="h-4 w-4" />
                   <span>Ir para Página Inicial</span>
-                </a>
+                </Link>
               </Button>
               <SidebarMenu>
                 <SidebarMenuItem>
