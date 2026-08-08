@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Laptop, BookOpen, Download, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-export const Route = createFileRoute("/admin/")({
+export const Route = createFileRoute("/admin/dashboard")({
   component: AdminDashboard,
   head: () => ({
     meta: [{ title: "Dashboard - Informática do Josy" }],
