@@ -10,7 +10,8 @@ function toStoragePath(url: string | null | undefined): string | null {
   const marker = `/object/public/${BUCKET}/`;
   const idx = url.indexOf(marker);
   if (idx === -1) return null;
-  return decodeURIComponent(url.slice(idx + marker.length).split("?")[0]);
+  const raw = url.slice(idx + marker.length).split("?")[0] ?? "";
+  return raw ? decodeURIComponent(raw) : null;
 }
 
 async function signPath(path: string): Promise<string> {
