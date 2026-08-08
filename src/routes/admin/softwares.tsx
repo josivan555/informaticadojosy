@@ -189,17 +189,17 @@ function AdminSoftwares() {
     setEditingId(software.id);
     form.reset({
       name: software.name,
-      description: software.description || "",
-      category_id: software.category_id || undefined,
+      description: software.description || null,
+      category_id: software.category_id || "",
       price: software.price || 0,
-      version: software.version || "",
-      size: software.size || "",
+      version: software.version || null,
+      size: software.size || null,
       status: software.status || "active",
-      mercadopago_link: software.mercadopago_link || "",
-      image_url: software.image_url || "",
-      file_url: software.file_url || "",
-      external_download_url: software.external_download_url || "",
-      video_url: software.video_url || "",
+      mercadopago_link: software.mercadopago_link || null,
+      image_url: software.image_url || null,
+      file_url: software.file_url || null,
+      external_download_url: software.external_download_url || null,
+      video_url: software.video_url || null,
     });
     setIsDialogOpen(true);
   };

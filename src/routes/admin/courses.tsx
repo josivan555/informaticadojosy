@@ -164,16 +164,16 @@ function AdminCourses() {
     setEditingId(course.id);
     form.reset({
       title: course.title,
-      description: course.description || "",
+      description: course.description || null,
       price: course.price || 0,
       level: course.level || "Básico",
       pages: course.pages || 0,
       status: course.status || "active",
-      mercadopago_link: course.mercadopago_link || "",
-      video_url: course.video_url || "",
+      mercadopago_link: course.mercadopago_link || null,
+      video_url: course.video_url || null,
       image_url: course.image_url || null,
       file_url: course.file_url || null,
-      external_download_url: course.external_download_url || "",
+      external_download_url: course.external_download_url || null,
     });
     setIsDialogOpen(true);
   };
