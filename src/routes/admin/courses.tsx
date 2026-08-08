@@ -39,11 +39,11 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const courseSchema = z.object({
   title: z.string().min(2, "Título é obrigatório"),
-  description: z.string().min(10, "Descrição é obrigatória"),
+  description: z.string().nullable(),
   price: z.coerce.number().min(0),
   level: z.string().nullable(),
   pages: z.coerce.number().min(0).nullable(),
-  status: z.string().nullable(),
+  status: z.string(),
   mercadopago_link: z.string().nullable(),
   video_url: z.string().nullable(),
   image_url: z.string().nullable(),
@@ -69,16 +69,16 @@ function AdminCourses() {
     resolver: zodResolver(courseSchema),
     defaultValues: {
       title: "",
-      description: "",
+      description: null,
       price: 0,
       level: "Básico",
       pages: 0,
       status: "active",
-      mercadopago_link: "",
-      video_url: "",
+      mercadopago_link: null,
+      video_url: null,
       image_url: null,
       file_url: null,
-      external_download_url: "",
+      external_download_url: null,
     },
   });
 
@@ -96,13 +96,19 @@ function AdminCourses() {
 
   const mutation = useMutation({
     mutationFn: async (values: CourseFormValues) => {
-      // Clean up values: convert empty strings to null for optional fields
+      // Clean up values: convert undefined/empty to null for database
       const cleanedValues = {
-        ...values,
+        title: values.title,
+        description: values.description || null,
         level: values.level || null,
         mercadopago_link: values.mercadopago_link || null,
         video_url: values.video_url || null,
         external_download_url: values.external_download_url || null,
+        price: values.price || 0,
+        status: values.status || 'active',
+        pages: values.pages || null,
+        image_url: values.image_url || null,
+        file_url: values.file_url || null,
       };
 
       console.log("Saving course with values:", cleanedValues);
@@ -160,16 +166,16 @@ function AdminCourses() {
     setEditingId(course.id);
     form.reset({
       title: course.title,
-      description: course.description || "",
+      description: course.description || null,
       price: course.price || 0,
       level: course.level || "Básico",
       pages: course.pages || 0,
       status: course.status || "active",
-      mercadopago_link: course.mercadopago_link || "",
-      video_url: course.video_url || "",
+      mercadopago_link: course.mercadopago_link || null,
+      video_url: course.video_url || null,
       image_url: course.image_url || null,
       file_url: course.file_url || null,
-      external_download_url: course.external_download_url || "",
+      external_download_url: course.external_download_url || null,
     });
     setIsDialogOpen(true);
   };

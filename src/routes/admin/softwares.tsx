@@ -46,8 +46,8 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const softwareSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
-  description: z.string().min(10, "Descrição é obrigatória"),
-  category_id: z.string().nullable(),
+  description: z.string().nullable(),
+  category_id: z.string().min(1, "Categoria é obrigatória"),
   price: z.coerce.number().min(0),
   version: z.string().nullable(),
   size: z.string().nullable(),
@@ -77,17 +77,17 @@ function AdminSoftwares() {
     resolver: zodResolver(softwareSchema),
     defaultValues: {
       name: "",
-      description: "",
+      description: null,
       price: 0,
       status: "active",
-      version: "",
-      size: "",
-      mercadopago_link: "",
-      category_id: null,
+      version: null,
+      size: null,
+      mercadopago_link: null,
+      category_id: "",
       image_url: null,
       file_url: null,
-      external_download_url: "",
-      video_url: "",
+      external_download_url: null,
+      video_url: null,
     },
   });
 
@@ -120,15 +120,20 @@ function AdminSoftwares() {
 
   const mutation = useMutation({
     mutationFn: async (values: SoftwareFormValues) => {
-      // Clean up values: convert empty strings to null for optional fields
+      // Clean up values: convert undefined/empty to null for database
       const cleanedValues = {
-        ...values,
+        name: values.name,
+        description: values.description || null,
         version: values.version || null,
         size: values.size || null,
         mercadopago_link: values.mercadopago_link || null,
         external_download_url: values.external_download_url || null,
         video_url: values.video_url || null,
         category_id: values.category_id || null,
+        price: values.price || 0,
+        status: values.status || 'active',
+        image_url: values.image_url || null,
+        file_url: values.file_url || null,
       };
 
       console.log("Saving software with values:", cleanedValues);
@@ -186,17 +191,17 @@ function AdminSoftwares() {
     setEditingId(software.id);
     form.reset({
       name: software.name,
-      description: software.description || "",
-      category_id: software.category_id || undefined,
+      description: software.description || null,
+      category_id: software.category_id || "",
       price: software.price || 0,
-      version: software.version || "",
-      size: software.size || "",
+      version: software.version || null,
+      size: software.size || null,
       status: software.status || "active",
-      mercadopago_link: software.mercadopago_link || "",
-      image_url: software.image_url || "",
-      file_url: software.file_url || "",
-      external_download_url: software.external_download_url || "",
-      video_url: software.video_url || "",
+      mercadopago_link: software.mercadopago_link || null,
+      image_url: software.image_url || null,
+      file_url: software.file_url || null,
+      external_download_url: software.external_download_url || null,
+      video_url: software.video_url || null,
     });
     setIsDialogOpen(true);
   };
@@ -282,9 +287,9 @@ function AdminSoftwares() {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Nome</FormLabel>
+                        <FormLabel className="text-white">Nome <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
-                          <Input {...field} className="bg-slate-900 border-slate-700" />
+                          <Input {...field} value={field.value || ""} className="bg-slate-900 border-slate-700 text-white" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -295,10 +300,10 @@ function AdminSoftwares() {
                     name="category_id"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Categoria</FormLabel>
+                        <FormLabel className="text-white">Categoria <span className="text-red-500">*</span></FormLabel>
                         <Select onValueChange={field.onChange} value={field.value || ""}>
                           <FormControl>
-                            <SelectTrigger className="bg-slate-900 border-slate-700">
+                            <SelectTrigger className="bg-slate-900 border-slate-700 text-white">
                               <SelectValue placeholder="Selecione" />
                             </SelectTrigger>
                           </FormControl>
