@@ -46,17 +46,17 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const softwareSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
-  description: z.string().nullish(),
+  description: z.string().nullable().optional(),
   category_id: z.string().min(1, "Categoria é obrigatória"),
-  price: z.coerce.number().min(0).default(0),
-  version: z.string().nullish(),
-  size: z.string().nullish(),
-  status: z.string().default("active"),
-  mercadopago_link: z.string().nullish(),
-  image_url: z.string().nullish(),
-  file_url: z.string().nullish(),
-  external_download_url: z.string().nullish(),
-  video_url: z.string().nullish(),
+  price: z.coerce.number().min(0),
+  version: z.string().nullable().optional(),
+  size: z.string().nullable().optional(),
+  status: z.string(),
+  mercadopago_link: z.string().nullable().optional(),
+  image_url: z.string().nullable().optional(),
+  file_url: z.string().nullable().optional(),
+  external_download_url: z.string().nullable().optional(),
+  video_url: z.string().nullable().optional(),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
@@ -130,13 +130,11 @@ function AdminSoftwares() {
         external_download_url: values.external_download_url || null,
         video_url: values.video_url || null,
         category_id: values.category_id || null,
-        price: values.price ?? 0,
+        price: values.price || 0,
         status: values.status || 'active',
         image_url: values.image_url || null,
         file_url: values.file_url || null,
       };
-
-      console.log("Saving software with values:", cleanedValues);
 
       if (editingId) {
         const { data, error } = await supabase

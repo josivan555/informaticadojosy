@@ -39,16 +39,16 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 
 const courseSchema = z.object({
   title: z.string().min(2, "Título é obrigatório"),
-  description: z.string().nullish(),
-  price: z.coerce.number().min(0).default(0),
-  level: z.string().nullish(),
-  pages: z.coerce.number().min(0).nullish(),
-  status: z.string().default("active"),
-  mercadopago_link: z.string().nullish(),
-  video_url: z.string().nullish(),
-  image_url: z.string().nullish(),
-  file_url: z.string().nullish(),
-  external_download_url: z.string().nullish(),
+  description: z.string().nullable().optional(),
+  price: z.coerce.number().min(0),
+  level: z.string().nullable().optional(),
+  pages: z.coerce.number().min(0).nullable().optional(),
+  status: z.string(),
+  mercadopago_link: z.string().nullable().optional(),
+  video_url: z.string().nullable().optional(),
+  image_url: z.string().nullable().optional(),
+  file_url: z.string().nullable().optional(),
+  external_download_url: z.string().nullable().optional(),
 });
 
 type CourseFormValues = z.infer<typeof courseSchema>;
@@ -104,14 +104,12 @@ function AdminCourses() {
         mercadopago_link: values.mercadopago_link || null,
         video_url: values.video_url || null,
         external_download_url: values.external_download_url || null,
-        price: values.price ?? 0,
+        price: values.price || 0,
         status: values.status || 'active',
         pages: values.pages || null,
         image_url: values.image_url || null,
         file_url: values.file_url || null,
       };
-
-      console.log("Saving course with values:", cleanedValues);
 
       if (editingId) {
         const { data, error } = await supabase
