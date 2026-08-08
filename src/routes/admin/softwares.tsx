@@ -47,14 +47,14 @@ import { generateSoftwareDescription } from "@/lib/ai.functions";
 const softwareSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
   description: z.string().min(10, "Descrição é obrigatória"),
-  category_id: z.string().optional(),
+  category_id: z.string().nullable().optional(),
   price: z.coerce.number().min(0),
-  version: z.string().optional(),
-  size: z.string().optional(),
+  version: z.string().nullable().optional(),
+  size: z.string().nullable().optional(),
   status: z.string().default("active"),
-  mercadopago_link: z.string().url("Link inválido").optional().or(z.literal("")),
-  image_url: z.string().optional(),
-  file_url: z.string().optional(),
+  mercadopago_link: z.string().url("Link inválido").nullable().optional().or(z.literal("")),
+  image_url: z.string().nullable().optional(),
+  file_url: z.string().nullable().optional(),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
