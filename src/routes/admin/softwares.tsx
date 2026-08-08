@@ -501,6 +501,7 @@ function AdminSoftwares() {
         </Dialog>
       </div>
 
+
       <div className="flex items-center bg-[#0d1b33] px-4 py-2 rounded-lg border border-slate-800">
         <Search className="h-4 w-4 text-slate-400 mr-2" />
         <Input
