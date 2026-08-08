@@ -1,4 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
+import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
+import { Laptop, BookOpen, LayoutDashboard, LogOut, Home, User, Tags, Download, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useQuery } from "@tanstack/react-query";
+import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
+import logoAsset from "@/assets/logo.png.asset.json";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Laptop, BookOpen, Users, Download } from "lucide-react";
 
