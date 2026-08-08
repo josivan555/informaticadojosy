@@ -169,7 +169,7 @@ function AdminSoftwares() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-softwares"] });
-      toast.success(editingId ? "Software atualizado!" : "Software adicionado!");
+      toast.success(editingId ? "Software atualizado com sucesso!" : "Software cadastrado com sucesso!");
       setIsDialogOpen(false);
       form.reset({
         name: "",

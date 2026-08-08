@@ -140,7 +140,7 @@ function AdminCourses() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
-      toast.success(editingId ? "Curso atualizado!" : "Curso adicionado!");
+      toast.success(editingId ? "Curso atualizado com sucesso!" : "Curso cadastrado com sucesso!");
       setIsDialogOpen(false);
       form.reset({
         title: "",
