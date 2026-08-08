@@ -71,6 +71,7 @@ export type Database = {
           description: string | null
           file_url: string | null
           id: string
+          image_url: string | null
           level: string | null
           mercadopago_link: string | null
           paddle_price_id: string | null
@@ -87,6 +88,7 @@ export type Database = {
           description?: string | null
           file_url?: string | null
           id?: string
+          image_url?: string | null
           level?: string | null
           mercadopago_link?: string | null
           paddle_price_id?: string | null
@@ -103,6 +105,7 @@ export type Database = {
           description?: string | null
           file_url?: string | null
           id?: string
+          image_url?: string | null
           level?: string | null
           mercadopago_link?: string | null
           paddle_price_id?: string | null
