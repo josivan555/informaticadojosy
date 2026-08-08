@@ -96,15 +96,40 @@ function AdminCourses() {
 
   const mutation = useMutation({
     mutationFn: async (values: CourseFormValues) => {
+      // Clean up values: convert empty strings to null for optional fields
+      const cleanedValues = {
+        ...values,
+        level: values.level || null,
+        mercadopago_link: values.mercadopago_link || null,
+        video_url: values.video_url || null,
+        external_download_url: values.external_download_url || null,
+      };
+
+      console.log("Saving course with values:", cleanedValues);
+
       if (editingId) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from("courses")
-          .update(values)
-          .eq("id", editingId);
-        if (error) throw error;
+          .update(cleanedValues)
+          .eq("id", editingId)
+          .select();
+        
+        if (error) {
+          console.error("Supabase update error (courses):", error);
+          throw error;
+        }
+        return data;
       } else {
-        const { error } = await supabase.from("courses").insert([values]);
-        if (error) throw error;
+        const { data, error } = await supabase
+          .from("courses")
+          .insert([cleanedValues])
+          .select();
+        
+        if (error) {
+          console.error("Supabase insert error (courses):", error);
+          throw error;
+        }
+        return data;
       }
     },
     onSuccess: () => {
@@ -114,8 +139,9 @@ function AdminCourses() {
       form.reset();
       setEditingId(null);
     },
-    onError: (error) => {
-      toast.error("Erro ao salvar curso: " + error.message);
+    onError: (error: any) => {
+      console.error("Mutation error detail (courses):", error);
+      toast.error(`Erro ao salvar curso: ${error.message || 'Erro desconhecido'}`);
     },
   });
 

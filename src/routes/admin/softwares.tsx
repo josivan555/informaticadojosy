@@ -120,15 +120,42 @@ function AdminSoftwares() {
 
   const mutation = useMutation({
     mutationFn: async (values: SoftwareFormValues) => {
+      // Clean up values: convert empty strings to null for optional fields
+      const cleanedValues = {
+        ...values,
+        version: values.version || null,
+        size: values.size || null,
+        mercadopago_link: values.mercadopago_link || null,
+        external_download_url: values.external_download_url || null,
+        video_url: values.video_url || null,
+        category_id: values.category_id || null,
+      };
+
+      console.log("Saving software with values:", cleanedValues);
+
       if (editingId) {
-        const { error } = await supabase
+        const { data, error } = await supabase
           .from("softwares")
-          .update(values)
-          .eq("id", editingId);
-        if (error) throw error;
+          .update(cleanedValues)
+          .eq("id", editingId)
+          .select();
+        
+        if (error) {
+          console.error("Supabase update error:", error);
+          throw error;
+        }
+        return data;
       } else {
-        const { error } = await supabase.from("softwares").insert([values]);
-        if (error) throw error;
+        const { data, error } = await supabase
+          .from("softwares")
+          .insert([cleanedValues])
+          .select();
+        
+        if (error) {
+          console.error("Supabase insert error:", error);
+          throw error;
+        }
+        return data;
       }
     },
     onSuccess: () => {
@@ -138,8 +165,9 @@ function AdminSoftwares() {
       form.reset();
       setEditingId(null);
     },
-    onError: (error) => {
-      toast.error("Erro ao salvar software: " + error.message);
+    onError: (error: any) => {
+      console.error("Mutation error detail:", error);
+      toast.error(`Erro ao salvar software: ${error.message || 'Erro desconhecido'}`);
     },
   });
 
