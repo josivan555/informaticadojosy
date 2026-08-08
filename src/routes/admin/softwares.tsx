@@ -167,7 +167,20 @@ function AdminSoftwares() {
       queryClient.invalidateQueries({ queryKey: ["admin-softwares"] });
       toast.success(editingId ? "Software atualizado!" : "Software adicionado!");
       setIsDialogOpen(false);
-      form.reset();
+      form.reset({
+        name: "",
+        description: null,
+        price: 0,
+        status: "active",
+        version: null,
+        size: null,
+        mercadopago_link: null,
+        category_id: "",
+        image_url: null,
+        file_url: null,
+        external_download_url: null,
+        video_url: null,
+      });
       setEditingId(null);
     },
     onError: (error: any) => {
@@ -446,8 +459,16 @@ function AdminSoftwares() {
                   </div>
                 </div>
 
-                <DialogFooter className="pt-4">
-                  <Button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-700" disabled={mutation.isPending}>
+                <DialogFooter className="pt-4 flex flex-row gap-2">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    className="flex-1 bg-transparent border-slate-700 text-white hover:bg-slate-800"
+                    onClick={() => setIsDialogOpen(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit" className="flex-1 bg-cyan-600 hover:bg-cyan-700" disabled={mutation.isPending}>
                     {mutation.isPending ? "Salvando..." : editingId ? "Atualizar" : "Criar Software"}
                   </Button>
                 </DialogFooter>

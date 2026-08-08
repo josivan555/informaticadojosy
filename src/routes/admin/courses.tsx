@@ -142,7 +142,19 @@ function AdminCourses() {
       queryClient.invalidateQueries({ queryKey: ["admin-courses"] });
       toast.success(editingId ? "Curso atualizado!" : "Curso adicionado!");
       setIsDialogOpen(false);
-      form.reset();
+      form.reset({
+        title: "",
+        description: null,
+        price: 0,
+        level: "Básico",
+        pages: 0,
+        status: "active",
+        mercadopago_link: null,
+        video_url: null,
+        image_url: null,
+        file_url: null,
+        external_download_url: null,
+      });
       setEditingId(null);
     },
     onError: (error: any) => {
@@ -411,8 +423,16 @@ function AdminCourses() {
                   </div>
                 </div>
 
-                <DialogFooter className="pt-4">
-                  <Button type="submit" className="w-full bg-cyan-600 hover:bg-cyan-700" disabled={mutation.isPending}>
+                <DialogFooter className="pt-4 flex flex-row gap-2">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    className="flex-1 bg-transparent border-slate-700 text-white hover:bg-slate-800"
+                    onClick={() => setIsDialogOpen(false)}
+                  >
+                    Cancelar
+                  </Button>
+                  <Button type="submit" className="flex-1 bg-cyan-600 hover:bg-cyan-700" disabled={mutation.isPending}>
                     {mutation.isPending ? "Salvando..." : editingId ? "Atualizar" : "Criar Curso"}
                   </Button>
                 </DialogFooter>
