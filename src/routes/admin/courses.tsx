@@ -91,7 +91,8 @@ function AdminCourses() {
         paddle_product_id: "",
         paddle_price_id: "",
         mercadopago_link: "",
-        image_url: ""
+        image_url: "",
+        video_url: ""
       });
 
     }
