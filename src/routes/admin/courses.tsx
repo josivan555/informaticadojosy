@@ -48,6 +48,7 @@ const courseSchema = z.object({
   video_url: z.string().nullable(),
   image_url: z.string().nullable(),
   file_url: z.string().nullable(),
+  external_download_url: z.string().nullable(),
 });
 
 type CourseFormValues = z.infer<typeof courseSchema>;
@@ -77,6 +78,7 @@ function AdminCourses() {
       video_url: "",
       image_url: null,
       file_url: null,
+      external_download_url: "",
     },
   });
 
@@ -141,6 +143,7 @@ function AdminCourses() {
       video_url: course.video_url || "",
       image_url: course.image_url || null,
       file_url: course.file_url || null,
+      external_download_url: course.external_download_url || "",
     });
     setIsDialogOpen(true);
   };
@@ -347,6 +350,20 @@ function AdminCourses() {
                     </div>
                   </div>
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="external_download_url"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Link de Download Externo (Opcional - caso já esteja em um servidor)</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-slate-900 border-slate-700" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <div className="grid grid-cols-1 gap-4">
                   <div className="space-y-2">

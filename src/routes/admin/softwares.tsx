@@ -55,6 +55,7 @@ const softwareSchema = z.object({
   mercadopago_link: z.string().nullable(),
   image_url: z.string().nullable(),
   file_url: z.string().nullable(),
+  external_download_url: z.string().nullable(),
   video_url: z.string().nullable(),
 });
 
@@ -85,6 +86,7 @@ function AdminSoftwares() {
       category_id: null,
       image_url: null,
       file_url: null,
+      external_download_url: "",
       video_url: "",
     },
   });
@@ -165,6 +167,7 @@ function AdminSoftwares() {
       mercadopago_link: software.mercadopago_link || "",
       image_url: software.image_url || "",
       file_url: software.file_url || "",
+      external_download_url: software.external_download_url || "",
       video_url: software.video_url || "",
     });
     setIsDialogOpen(true);
@@ -368,6 +371,20 @@ function AdminSoftwares() {
                     </div>
                   </div>
                 </div>
+
+                <FormField
+                  control={form.control}
+                  name="external_download_url"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Link de Download Externo (Opcional - caso já esteja em um servidor)</FormLabel>
+                      <FormControl>
+                        <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-slate-900 border-slate-700" />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 
                 <div className="grid grid-cols-2 gap-4">
                   <FormField

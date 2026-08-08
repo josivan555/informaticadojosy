@@ -69,6 +69,7 @@ export type Database = {
         Row: {
           created_at: string | null
           description: string | null
+          external_download_url: string | null
           file_url: string | null
           id: string
           image_url: string | null
@@ -86,6 +87,7 @@ export type Database = {
         Insert: {
           created_at?: string | null
           description?: string | null
+          external_download_url?: string | null
           file_url?: string | null
           id?: string
           image_url?: string | null
@@ -103,6 +105,7 @@ export type Database = {
         Update: {
           created_at?: string | null
           description?: string | null
+          external_download_url?: string | null
           file_url?: string | null
           id?: string
           image_url?: string | null
@@ -182,6 +185,7 @@ export type Database = {
           created_at: string | null
           description: string | null
           downloads: number | null
+          external_download_url: string | null
           file_url: string | null
           id: string
           image_url: string | null
@@ -202,6 +206,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           downloads?: number | null
+          external_download_url?: string | null
           file_url?: string | null
           id?: string
           image_url?: string | null
@@ -222,6 +227,7 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           downloads?: number | null
+          external_download_url?: string | null
           file_url?: string | null
           id?: string
           image_url?: string | null
