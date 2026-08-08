@@ -14,8 +14,8 @@ import { getFreeSoftwareDownloadUrl, getPurchasedDownloadUrl } from "@/lib/downl
 export const Route = createFileRoute("/softwares")({
   component: SoftwaresPage,
   head: () => ({
-    title: "Programas e Softwares - INFORMÁTICA do Josy",
     meta: [
+      { title: "Programas e Softwares - Informática do Josy" },
       { name: "description", content: "Baixe os melhores programas utilitários, ferramentas de produtividade e softwares exclusivos." },
     ],
   }),

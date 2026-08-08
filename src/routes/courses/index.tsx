@@ -8,8 +8,8 @@ import { Badge } from "@/components/ui/badge";
 export const Route = createFileRoute("/courses/")({
   component: CoursesList,
   head: () => ({
-    title: "Todos os Cursos - INFORMÁTICA do Josy",
     meta: [
+      { title: "Todos os Cursos - Informática do Josy" },
       { name: "description", content: "Explore nossa lista completa de cursos em PDF." },
     ],
   }),
