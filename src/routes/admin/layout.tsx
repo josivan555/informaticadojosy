@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 
-export const Route = createFileRoute("/admin")({
+export const Route = createFileRoute("/admin/layout")({
   beforeLoad: async ({ location }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
