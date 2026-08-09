@@ -127,11 +127,11 @@ function SoftwareDetails() {
 
             <div className="p-6 rounded-2xl bg-[#112240] border border-slate-800 space-y-4">
               <div className="text-2xl font-bold text-white">
-                {sw.price > 0 ? `R$ ${sw.price.toFixed(2)}` : "Gratuito"}
+                {sw.price && sw.price > 0 ? `R$ ${sw.price.toFixed(2)}` : "Gratuito"}
               </div>
               <Button className="w-full h-12 text-lg font-bold" onClick={handleDownload}>
                 <Download className="mr-2 h-5 w-5" /> 
-                {sw.price > 0 ? "Comprar Agora" : "Baixar Agora"}
+                {sw.price && sw.price > 0 ? "Comprar Agora" : "Baixar Agora"}
               </Button>
             </div>
 
