@@ -133,6 +133,9 @@ function AdminCourses() {
         
         if (error) {
           console.error("Supabase insert error (courses):", error);
+          if (error.code === '42501') {
+            throw new Error("Permissão negada ao criar curso. Verifique seu status de administrador.");
+          }
           throw error;
         }
         return data;
