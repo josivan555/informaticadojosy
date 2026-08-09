@@ -224,33 +224,40 @@ function Index() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {softwares?.map((sw: any) => (
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
-                  <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center p-0">
-                    {sw.image_url ? (
-                      <img 
-                        src={sw.image_url} 
-                        alt={sw.name} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        onError={(e) => {
-                          console.error("Erro ao carregar imagem:", sw.image_url);
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.parentElement!.innerHTML = '<div class="flex items-center justify-center w-full h-full"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/20"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2"/></svg></div>';
-                        }}
-                      />
-                    ) : (
-                      <Laptop className="h-12 w-12 text-primary/20" />
-                    )}
-                  </div>
+                  <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="block">
+                    <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center p-0">
+                      {sw.image_url ? (
+                        <img 
+                          src={sw.image_url} 
+                          alt={sw.name} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            if (e.currentTarget.parentElement) {
+                              e.currentTarget.parentElement.innerHTML = '<div class="flex items-center justify-center w-full h-full bg-slate-800"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/20"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2"/></svg></div>';
+                            }
+                          }}
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center w-full h-full bg-slate-800">
+                          <Laptop className="h-12 w-12 text-primary/20" />
+                        </div>
+                      )}
+                    </div>
+                  </Link>
                   <CardHeader className="pt-4">
                     <div className="flex justify-between items-start mb-2">
                       <div className="p-2 bg-primary/10 rounded-lg shrink-0">
                         <Laptop className="h-5 w-5 text-primary" />
                       </div>
                       <Badge variant="outline" className="ml-2 truncate">{sw.category || "Software"}</Badge>
-                      {sw.status !== 'published' && (
-                        <Badge variant="secondary" className="ml-2 bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Rascunho</Badge>
-                      )}
+                      {/* Removido o badge de Rascunho para usuários finais */}
                     </div>
-                    <CardTitle className="text-xl line-clamp-1">{sw.name}</CardTitle>
+                    <CardTitle className="text-xl line-clamp-1">
+                      <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="hover:text-primary transition-colors">
+                        {sw.name}
+                      </Link>
+                    </CardTitle>
                     <CardDescription className="line-clamp-2 min-h-[3rem]">{sw.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
@@ -258,48 +265,26 @@ function Index() {
                       <span>Versão {sw.version}</span>
                       <span>•</span>
                       <span>{sw.size}</span>
-                      <span>•</span>
-                      <span>{sw.downloads} downloads</span>
                     </div>
                   </CardContent>
                   <CardFooter className="flex flex-col gap-2">
                     <Button 
                       className="w-full group-hover:bg-primary transition-colors"
-                      onClick={async () => {
-                        // Record download history if user is logged in
-                        const { data: { session: authSession } } = await supabase.auth.getSession();
-                        if (authSession) {
-                          await supabase.from("download_history").insert({
-                            user_id: authSession.user.id,
-                            software_id: sw.id
-                          });
-                        }
-
-                        if (sw.price > 0) {
-                          navigate({ to: "/softwares" }); // Redirect to software list for purchase flow
-                        } else {
-                          const downloadUrl = sw.external_download_url || sw.file_url;
-                          if (downloadUrl) {
-                            if (sw.external_download_url) {
-                              window.open(sw.external_download_url, '_blank');
-                            } else {
-                              try {
-                                const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
-                                window.open(url, '_blank');
-                              } catch {
-                                toast.error("Link de download não disponível");
-                              }
-                            }
-                          } else {
-                            toast.error("Em breve: download ainda não disponível");
-                          }
-                        }
-                      }}
-                      disabled={!sw.file_url && !sw.external_download_url && sw.price === 0}
+                      asChild
                     >
-                      <Download className="mr-2 h-4 w-4" /> 
-                      {sw.price > 0 ? `Comprar (R$ ${sw.price.toFixed(2)})` : (sw.file_url || sw.external_download_url) ? 'Baixar Grátis' : 'Em breve'}
+                      <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }}>
+                        <ArrowRight className="mr-2 h-4 w-4" /> 
+                        Ver Detalhes
+                      </Link>
                     </Button>
+                    {sw.price > 0 && (
+                      <p className="text-[10px] text-center text-muted-foreground">
+                        Premium (R$ {sw.price.toFixed(2)})
+                      </p>
+                    )}
+                  </CardFooter>
+                </Card>
+              ))}
                     {sw.price > 0 && (
                       <p className="text-[10px] text-center text-muted-foreground">
                         *Requer login para processar o pagamento
