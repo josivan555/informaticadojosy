@@ -226,7 +226,7 @@ function Index() {
               {softwares?.map((sw: any) => (
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
                   <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="block">
-                    <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center p-0">
+                    <div className="w-full aspect-video overflow-hidden bg-[#0a192f] flex items-center justify-center p-0">
                       {sw.image_url ? (
                         <img 
                           src={sw.image_url} 
@@ -235,14 +235,19 @@ function Index() {
                           loading="lazy"
                           decoding="async"
                           onError={(e) => {
-                            console.error("Erro ao carregar imagem:", sw.image_url);
-                            // Fallback se a imagem falhar
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.parentElement?.classList.add('bg-slate-800');
-                            const icon = document.createElement('div');
-                            icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-laptop text-primary/20"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"></path></svg>';
-                            icon.className = 'flex items-center justify-center w-full h-full';
-                            e.currentTarget.parentElement?.appendChild(icon);
+                            const target = e.currentTarget;
+                            const parent = target.parentElement;
+                            if (parent) {
+                              target.style.display = 'none';
+                              parent.classList.add('bg-slate-800');
+                              // Avoid duplicate icons
+                              if (!parent.querySelector('.fallback-icon')) {
+                                const iconContainer = document.createElement('div');
+                                iconContainer.className = 'fallback-icon flex items-center justify-center w-full h-full';
+                                iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/20"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"></path></svg>';
+                                parent.appendChild(iconContainer);
+                              }
+                            }
                           }}
                         />
                       ) : (

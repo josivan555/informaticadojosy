@@ -186,15 +186,31 @@ function SoftwaresPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredSoftwares.map((sw: any) => (
             <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 flex flex-col bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
-              {sw.image_url ? (
-                <div className="w-full aspect-square overflow-hidden bg-[#0a192f] flex items-center justify-center p-4">
-                  <img src={sw.image_url} alt={sw.name} className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500" />
-                </div>
-              ) : (
-                <div className="w-full aspect-square overflow-hidden bg-[#0a192f] flex items-center justify-center">
+              <div className="w-full aspect-square overflow-hidden bg-[#0a192f] flex items-center justify-center p-4">
+                {sw.image_url ? (
+                  <img 
+                    src={sw.image_url} 
+                    alt={sw.name} 
+                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                    onError={(e) => {
+                      const target = e.currentTarget;
+                      const parent = target.parentElement;
+                      if (parent) {
+                        target.style.display = 'none';
+                        parent.classList.add('bg-slate-800');
+                        if (!parent.querySelector('.fallback-icon')) {
+                          const iconContainer = document.createElement('div');
+                          iconContainer.className = 'fallback-icon flex items-center justify-center w-full h-full';
+                          iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/20"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"></path></svg>';
+                          parent.appendChild(iconContainer);
+                        }
+                      }
+                    }}
+                  />
+                ) : (
                   <Laptop className="h-16 w-16 text-primary/20" />
-                </div>
-              )}
+                )}
+              </div>
               <CardHeader className="pt-4">
                 <div className="flex justify-between items-start mb-1">
                   <CardTitle className="text-xl line-clamp-1">{sw.name}</CardTitle>
