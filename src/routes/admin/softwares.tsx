@@ -423,9 +423,20 @@ function AdminSoftwares() {
                       <Input
                         type="file"
                         accept="image/*"
-                        className="bg-slate-900 border-slate-700"
-                        onChange={(e) => handleFileUpload(e, "image_url")}
+                        className="bg-slate-900 border-slate-700 cursor-pointer"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) handleFileUpload(e, "image_url");
+                        }}
                       />
+                      {form.watch("image_url") && (
+                        <div className="mt-2 relative group">
+                          <img src={form.watch("image_url")!} alt="Preview" className="w-full h-32 object-cover rounded-md border border-slate-700" />
+                          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-md">
+                            <span className="text-[10px] text-white">Capa Carregada</span>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   <div className="space-y-2">
