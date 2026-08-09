@@ -47,7 +47,7 @@ function SoftwareDetails() {
   }
 
   const handleDownload = async () => {
-    if (sw.price > 0) {
+    if (sw.price && sw.price > 0) {
       toast.info("Este software é Premium. Entre em contato ou use o link de compra.");
       return;
     }
