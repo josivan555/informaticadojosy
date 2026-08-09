@@ -120,7 +120,7 @@ function AdminSoftwares() {
 
   const mutation = useMutation({
     mutationFn: async (values: SoftwareFormValues) => {
-      // Convert price string to number if it comes as string
+      // Ensure values are properly typed for Supabase
       const priceValue = typeof values.price === 'string' ? parseFloat(values.price) : values.price;
       
       const cleanedValues = {
@@ -140,7 +140,6 @@ function AdminSoftwares() {
 
       console.log("Saving software with values:", cleanedValues);
 
-      let result;
       if (editingId) {
         const { data, error } = await supabase
           .from("softwares")
@@ -150,9 +149,9 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase update error:", error);
-          throw new Error(error.message);
+          throw error;
         }
-        result = data;
+        return data;
       } else {
         const { data, error } = await supabase
           .from("softwares")
@@ -161,11 +160,10 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase insert error:", error);
-          throw new Error(error.message);
+          throw error;
         }
-        result = data;
+        return data;
       }
-      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-softwares"] });
