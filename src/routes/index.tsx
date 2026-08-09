@@ -278,18 +278,27 @@ function Index() {
                         if (sw.price > 0) {
                           navigate({ to: "/softwares" }); // Redirect to software list for purchase flow
                         } else {
-                          try {
-                            const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
-                            window.open(url, '_blank');
-                          } catch {
-                            toast.error("Link de download não disponível");
+                          const downloadUrl = sw.external_download_url || sw.file_url;
+                          if (downloadUrl) {
+                            if (sw.external_download_url) {
+                              window.open(sw.external_download_url, '_blank');
+                            } else {
+                              try {
+                                const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+                                window.open(url, '_blank');
+                              } catch {
+                                toast.error("Link de download não disponível");
+                              }
+                            }
+                          } else {
+                            toast.error("Em breve: download ainda não disponível");
                           }
                         }
                       }}
-                      disabled={!sw.file_url && sw.price === 0}
+                      disabled={!sw.file_url && !sw.external_download_url && sw.price === 0}
                     >
                       <Download className="mr-2 h-4 w-4" /> 
-                      {sw.price > 0 ? `Comprar (R$ ${sw.price.toFixed(2)})` : sw.file_url ? 'Baixar Grátis' : 'Em breve'}
+                      {sw.price > 0 ? `Comprar (R$ ${sw.price.toFixed(2)})` : (sw.file_url || sw.external_download_url) ? 'Baixar Grátis' : 'Em breve'}
                     </Button>
                     {sw.price > 0 && (
                       <p className="text-[10px] text-center text-muted-foreground">
