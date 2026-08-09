@@ -569,77 +569,137 @@ function AdminSoftwares() {
         />
       </div>
 
-      <div className="bg-[#0d1b33] rounded-xl border border-slate-800 overflow-hidden">
-        <Table>
-          <TableHeader className="bg-slate-900/50">
-            <TableRow className="border-slate-800 hover:bg-transparent">
-              <TableHead className="text-slate-400">Software</TableHead>
-              <TableHead className="text-slate-400">Categoria</TableHead>
-              <TableHead className="text-slate-400">Preço</TableHead>
-              <TableHead className="text-slate-400 text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              <TableRow>
-                <TableCell colSpan={4} className="text-center py-10">
-                  <Loader2 className="h-6 w-6 animate-spin mx-auto text-cyan-500" />
-                </TableCell>
+      {viewMode === "list" ? (
+        <div className="bg-[#0d1b33] rounded-xl border border-slate-800 overflow-hidden">
+          <Table>
+            <TableHeader className="bg-slate-900/50">
+              <TableRow className="border-slate-800 hover:bg-transparent">
+                <TableHead className="text-slate-400">Software</TableHead>
+                <TableHead className="text-slate-400">Categoria</TableHead>
+                <TableHead className="text-slate-400">Preço</TableHead>
+                <TableHead className="text-slate-400 text-right">Ações</TableHead>
               </TableRow>
-            ) : filteredSoftwares?.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4} className="text-center py-10 text-slate-500">
-                  Nenhum software encontrado.
-                </TableCell>
-              </TableRow>
-            ) : (
-              filteredSoftwares?.map((software) => (
-                <TableRow key={software.id} className="border-slate-800 hover:bg-slate-900/40 transition-colors">
-                  <TableCell>
-                    <div className="flex items-center gap-3">
-                      {software.image_url ? (
-                        <img src={software.image_url} className="h-10 w-10 rounded object-cover border border-slate-700" alt="" />
-                      ) : (
-                        <div className="h-10 w-10 rounded bg-slate-800 flex items-center justify-center">
-                          <Monitor className="h-5 w-5 text-slate-500" />
-                        </div>
-                      )}
-                      <div>
-                        <div className="font-medium text-white">{software.name}</div>
-                        <div className="text-xs text-slate-500">{software.version || "v1.0"}</div>
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-slate-300">
-                    {software.software_categories?.name || "Sem categoria"}
-                  </TableCell>
-                  <TableCell className="text-white">
-                    {software.price === 0 ? (
-                      <span className="text-emerald-400 font-medium">Grátis</span>
-                    ) : (
-                      `R$ ${software.price?.toFixed(2)}`
-                    )}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white" onClick={() => handleEdit(software)}>
-                        <Pencil className="h-4 w-4" />
-                      </Button>
-                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-400" onClick={() => {
-                        if (confirm("Tem certeza que deseja remover este software?")) {
-                          deleteMutation.mutate(software.id);
-                        }
-                      }}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-10">
+                    <Loader2 className="h-6 w-6 animate-spin mx-auto text-cyan-500" />
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </div>
+              ) : filteredSoftwares?.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={4} className="text-center py-10 text-slate-500">
+                    Nenhum software encontrado.
+                  </TableCell>
+                </TableRow>
+              ) : (
+                filteredSoftwares?.map((software) => (
+                  <TableRow key={software.id} className="border-slate-800 hover:bg-slate-900/40 transition-colors">
+                    <TableCell>
+                      <div className="flex items-center gap-3">
+                        {software.image_url ? (
+                          <img src={software.image_url} className="h-10 w-10 rounded object-cover border border-slate-700" alt="" />
+                        ) : (
+                          <div className="h-10 w-10 rounded bg-slate-800 flex items-center justify-center">
+                            <Monitor className="h-5 w-5 text-slate-500" />
+                          </div>
+                        )}
+                        <div>
+                          <div className="font-medium text-white">{software.name}</div>
+                          <div className="text-xs text-slate-500">{software.version || "v1.0"}</div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-slate-300">
+                      {software.software_categories?.name || "Sem categoria"}
+                    </TableCell>
+                    <TableCell className="text-white">
+                      {software.price === 0 ? (
+                        <span className="text-emerald-400 font-medium">Grátis</span>
+                      ) : (
+                        `R$ ${software.price?.toFixed(2)}`
+                      )}
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white" onClick={() => handleEdit(software)}>
+                          <Pencil className="h-4 w-4" />
+                        </Button>
+                        <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-400" onClick={() => {
+                          if (confirm("Tem certeza que deseja remover este software?")) {
+                            deleteMutation.mutate(software.id);
+                          }
+                        }}>
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {isLoading ? (
+            <div className="col-span-full flex justify-center py-20">
+              <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
+            </div>
+          ) : filteredSoftwares?.length === 0 ? (
+            <div className="col-span-full text-center py-20 text-slate-500 bg-[#0d1b33] rounded-xl border border-slate-800">
+              Nenhum software encontrado.
+            </div>
+          ) : (
+            filteredSoftwares?.map((software) => (
+              <div key={software.id} className="bg-[#0d1b33] rounded-xl border border-slate-800 overflow-hidden group hover:border-cyan-500/50 transition-all flex flex-col">
+                <div className="aspect-video relative bg-slate-900 overflow-hidden">
+                  {software.image_url ? (
+                    <img src={software.image_url} alt={software.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <Monitor className="h-12 w-12 text-slate-800" />
+                    </div>
+                  )}
+                  <div className="absolute top-2 right-2 flex gap-1">
+                    <Button 
+                      size="icon" 
+                      variant="secondary" 
+                      className="h-8 w-8 bg-black/50 hover:bg-black/70 border-none text-white"
+                      onClick={() => handleEdit(software)}
+                    >
+                      <Pencil className="h-4 w-4" />
+                    </Button>
+                    <Button 
+                      size="icon" 
+                      variant="destructive" 
+                      className="h-8 w-8 bg-red-500/50 hover:bg-red-500 border-none text-white"
+                      onClick={() => {
+                        if (confirm("Remover este software?")) {
+                          deleteMutation.mutate(software.id);
+                        }
+                      }}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <div className="p-4 flex-1 flex flex-col">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-bold text-white line-clamp-1">{software.name}</h3>
+                    <div className="text-xs font-bold text-cyan-400">
+                      {software.price === 0 ? "GRÁTIS" : `R$ ${software.price.toFixed(2)}`}
+                    </div>
+                  </div>
+                  <div className="text-xs text-slate-500 mb-2">{software.software_categories?.name}</div>
+                  <p className="text-xs text-slate-400 line-clamp-2 flex-1">{software.description}</p>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      )}
     </div>
   );
 }
