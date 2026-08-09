@@ -83,7 +83,9 @@ function AuthPage() {
                 <Label htmlFor="email">E-mail</Label>
                 <Input 
                   id="email" 
+                  name="email"
                   type="email" 
+                  autoComplete="username"
                   placeholder="exemplo@gmail.com" 
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -95,6 +97,8 @@ function AuthPage() {
                 <Input 
                   id="password" 
                   type="password" 
+                  autoComplete={isSignUp ? "new-password" : "current-password"}
+                  name="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required 
