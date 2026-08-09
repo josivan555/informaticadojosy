@@ -14,6 +14,7 @@ import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
 import { User, LogOut } from "lucide-react";
+import { StorageImage } from "@/components/StorageImage";
 
 
 
