@@ -23,7 +23,6 @@ const softwaresQueryOptions = {
     const { data, error } = await supabase
       .from("softwares")
       .select("*")
-      .eq("status", "published")
       .order("created_at", { ascending: false });
     if (error) throw error;
     return data || [];
