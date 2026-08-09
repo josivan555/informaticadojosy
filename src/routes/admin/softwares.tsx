@@ -120,7 +120,7 @@ function AdminSoftwares() {
 
   const mutation = useMutation({
     mutationFn: async (values: SoftwareFormValues) => {
-      // Convert price string to number if it comes as string
+      // Ensure values are properly typed for Supabase
       const priceValue = typeof values.price === 'string' ? parseFloat(values.price) : values.price;
       
       const cleanedValues = {
@@ -140,7 +140,6 @@ function AdminSoftwares() {
 
       console.log("Saving software with values:", cleanedValues);
 
-      let result;
       if (editingId) {
         const { data, error } = await supabase
           .from("softwares")
@@ -150,9 +149,9 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase update error:", error);
-          throw new Error(error.message);
+          throw error;
         }
-        result = data;
+        return data;
       } else {
         const { data, error } = await supabase
           .from("softwares")
@@ -161,11 +160,10 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase insert error:", error);
-          throw new Error(error.message);
+          throw error;
         }
-        result = data;
+        return data;
       }
-      return result;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-softwares"] });
@@ -189,7 +187,8 @@ function AdminSoftwares() {
     },
     onError: (error: any) => {
       console.error("Mutation error detail:", error);
-      toast.error(`Erro ao salvar software: ${error.message || 'Erro desconhecido'}. Verifique se todos os campos obrigatórios (*) estão preenchidos corretamente.`);
+      const message = error.message || error.details || "Erro desconhecido";
+      toast.error(`Erro ao salvar software: ${message}. Verifique sua conexão e tente novamente.`);
     },
   });
 
@@ -306,7 +305,12 @@ function AdminSoftwares() {
                       <FormItem>
                         <FormLabel className="text-white">Nome <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
-                          <Input {...field} value={field.value || ""} className="bg-slate-900 border-slate-700 text-white" />
+                          <Input 
+                            {...field} 
+                            value={field.value || ""} 
+                            className="bg-slate-900 border-slate-700 text-white" 
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -480,16 +484,21 @@ function AdminSoftwares() {
                   </Button>
                   <Button 
                     type="button" 
-                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white" 
+                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold" 
                     disabled={mutation.isPending}
-                    onClick={async () => {
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      console.log("Submit button clicked");
                       const isValid = await form.trigger();
                       if (!isValid) {
-                        console.log("Form invalid:", form.formState.errors);
-                        toast.error("Por favor, preencha os campos obrigatórios (*)");
+                        const errors = form.formState.errors;
+                        console.log("Validation errors:", errors);
+                        toast.error("Por favor, preencha o Nome e a Categoria.");
                         return;
                       }
-                      mutation.mutate(form.getValues());
+                      const values = form.getValues();
+                      console.log("Form values to submit:", values);
+                      mutation.mutate(values);
                     }}
                   >
                     {mutation.isPending ? (
