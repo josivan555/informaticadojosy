@@ -323,12 +323,10 @@ function AdminSoftwares() {
                 Adicionar Software
               </Button>
             </DialogTrigger>
-          </div>
-        </div>
-      </div>
-            <DialogHeader>
-              <DialogTitle>{editingId ? "Editar Software" : "Novo Software"}</DialogTitle>
-            </DialogHeader>
+            <DialogContent className="max-w-2xl bg-[#0d1b33] border-slate-800 text-white max-h-[90vh] overflow-y-auto" onPointerDownOutside={(e) => e.preventDefault()}>
+              <DialogHeader>
+                <DialogTitle>{editingId ? "Editar Software" : "Novo Software"}</DialogTitle>
+              </DialogHeader>
             <Form {...form}>
               <form onSubmit={(e) => { e.preventDefault(); }} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
