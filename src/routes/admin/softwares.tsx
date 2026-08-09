@@ -138,7 +138,9 @@ function AdminSoftwares() {
         file_url: values.file_url || null,
       };
 
-      console.log("Saving software with values:", cleanedValues);
+      // Log for diagnostics
+      console.log("Saving software with values:", values);
+      console.log("Cleaned values for Supabase:", cleanedValues);
 
       if (editingId) {
         const { data, error } = await supabase
@@ -160,6 +162,9 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase insert error:", error);
+          if (error.code === '42501') {
+            throw new Error("Permissão negada. Verifique se você é um administrador e se as políticas do banco de dados estão corretas.");
+          }
           throw error;
         }
         return data;
