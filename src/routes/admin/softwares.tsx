@@ -307,6 +307,17 @@ function AdminSoftwares() {
                   <FormField control={form.control} name="external_download_url" render={({ field }) => (
                     <FormItem><FormLabel>Link Externo</FormLabel><FormControl><Input {...field} value={field.value || ""} className="bg-slate-900 border-slate-700" /></FormControl><FormMessage /></FormItem>
                   )} />
+                  <FormField control={form.control} name="status" render={({ field }) => (
+                    <FormItem><FormLabel>Status</FormLabel>
+                      <Select onValueChange={field.onChange} value={field.value || "active"}>
+                        <FormControl><SelectTrigger className="bg-slate-900 border-slate-700"><SelectValue placeholder="Status" /></SelectTrigger></FormControl>
+                        <SelectContent className="bg-slate-900 border-slate-700 text-white">
+                          <SelectItem value="active">Rascunho</SelectItem>
+                          <SelectItem value="published">Publicado</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </FormItem>
+                  )} />
                   <DialogFooter className="pt-4 flex gap-2">
                     <Button type="button" variant="outline" className="flex-1 bg-transparent border-slate-700 text-white hover:bg-slate-800" onClick={() => setIsDialogOpen(false)}>Cancelar</Button>
                     <Button type="button" className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold" disabled={mutation.isPending} onClick={async () => { if (await form.trigger()) mutation.mutate(form.getValues()); else toast.error("Preencha os campos obrigatórios."); }}>
