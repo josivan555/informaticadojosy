@@ -43,6 +43,7 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { generateSoftwareDescription } from "@/lib/ai.functions";
+import { StorageImage } from "@/components/StorageImage";
 
 const softwareSchema = z.object({
   name: z.string().min(2, "Nome é obrigatório"),
@@ -302,14 +303,15 @@ function AdminSoftwares() {
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <FormLabel>Capa</FormLabel>
+                      <label className="text-sm font-medium leading-none">Capa</label>
                       <div className="flex flex-col gap-2">
                         {form.watch("image_url") && (
                           <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-slate-700 bg-slate-900">
-                            <img 
-                              src={form.watch("image_url")!} 
-                              className="w-full h-full object-cover" 
-                              alt="Preview" 
+                            <StorageImage
+                              value={form.watch("image_url")}
+                              className="w-full h-full object-cover"
+                              alt="Preview"
+                              fallback={<div className="w-full h-full flex items-center justify-center"><Monitor className="h-8 w-8 text-slate-600" /></div>}
                             />
                             <Button
                               type="button"
@@ -331,7 +333,7 @@ function AdminSoftwares() {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <FormLabel>Arquivo</FormLabel>
+                      <label className="text-sm font-medium leading-none">Arquivo</label>
                       <Input 
                         type="file" 
                         className="bg-slate-900 border-slate-700" 
