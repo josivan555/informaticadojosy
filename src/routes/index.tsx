@@ -224,25 +224,31 @@ function Index() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {softwares?.map((sw: any) => (
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
-                  {sw.image_url ? (
-                    <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center p-0">
+                  <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center p-0">
+                    {sw.image_url ? (
                       <img 
                         src={sw.image_url} 
                         alt={sw.name} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        onError={(e) => {
+                          console.error("Erro ao carregar imagem:", sw.image_url);
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.parentElement!.innerHTML = '<div class="flex items-center justify-center w-full h-full"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/20"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0a2 2 0 0 1 2 2v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-1a2 2 0 0 1 2-2"/></svg></div>';
+                        }}
                       />
-                    </div>
-                  ) : (
-                    <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center">
+                    ) : (
                       <Laptop className="h-12 w-12 text-primary/20" />
-                    </div>
-                  )}
+                    )}
+                  </div>
                   <CardHeader className="pt-4">
                     <div className="flex justify-between items-start mb-2">
                       <div className="p-2 bg-primary/10 rounded-lg shrink-0">
                         <Laptop className="h-5 w-5 text-primary" />
                       </div>
-                      <Badge variant="outline" className="ml-2 truncate">{sw.category}</Badge>
+                      <Badge variant="outline" className="ml-2 truncate">{sw.category || "Software"}</Badge>
+                      {sw.status !== 'published' && (
+                        <Badge variant="secondary" className="ml-2 bg-yellow-500/20 text-yellow-500 border-yellow-500/30">Rascunho</Badge>
+                      )}
                     </div>
                     <CardTitle className="text-xl line-clamp-1">{sw.name}</CardTitle>
                     <CardDescription className="line-clamp-2 min-h-[3rem]">{sw.description}</CardDescription>
