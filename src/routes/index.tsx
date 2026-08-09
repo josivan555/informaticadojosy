@@ -14,6 +14,7 @@ import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
 import { User, LogOut } from "lucide-react";
+import { StorageImage } from "@/components/StorageImage";
 
 
 
@@ -227,24 +228,16 @@ function Index() {
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
                   <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="block">
                     <div className="w-full aspect-video overflow-hidden bg-slate-900 flex items-center justify-center p-0 relative">
-                      {sw.image_url ? (
-                        <img 
-                          src={sw.image_url} 
-                          alt={sw.name} 
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="eager"
-                          decoding="sync"
-                          onError={(e) => {
-                            const target = e.currentTarget;
-                            target.classList.add('hidden');
-                            const fallback = target.nextElementSibling;
-                            if (fallback) fallback.classList.remove('hidden');
-                          }}
-                        />
-                      ) : null}
-                      <div className={`flex items-center justify-center w-full h-full bg-slate-800 ${sw.image_url ? 'hidden' : ''}`}>
-                        <Laptop className="h-12 w-12 text-primary/20" />
-                      </div>
+                      <StorageImage
+                        value={sw.image_url}
+                        alt={sw.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        fallback={
+                          <div className="flex items-center justify-center w-full h-full bg-slate-800">
+                            <Laptop className="h-12 w-12 text-primary/20" />
+                          </div>
+                        }
+                      />
                     </div>
                   </Link>
                   <CardHeader className="pt-4">

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star } from "lucide-react";
 import { toast } from "sonner";
 import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
+import { StorageImage } from "@/components/StorageImage";
 
 export const Route = createFileRoute("/softwares/$softwareId")({
   component: SoftwareDetails,
@@ -85,13 +86,16 @@ function SoftwareDetails() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="space-y-8">
             <div className="rounded-2xl overflow-hidden border border-primary/20 bg-slate-900 shadow-2xl">
-              {sw.image_url ? (
-                <img src={sw.image_url} alt={sw.name} className="w-full h-auto object-cover" />
-              ) : (
-                <div className="aspect-video flex items-center justify-center bg-slate-800">
-                  <Laptop className="h-20 w-20 text-primary/20" />
-                </div>
-              )}
+              <StorageImage
+                value={sw.image_url}
+                alt={sw.name}
+                className="w-full h-auto object-cover"
+                fallback={
+                  <div className="aspect-video flex items-center justify-center bg-slate-800">
+                    <Laptop className="h-20 w-20 text-primary/20" />
+                  </div>
+                }
+              />
             </div>
 
             {sw.video_url && (

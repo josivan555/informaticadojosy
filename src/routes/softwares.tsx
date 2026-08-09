@@ -10,6 +10,7 @@ import { Download, Laptop, Star, ShieldCheck, Zap, Loader2, ChevronLeft, Chevron
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getFreeSoftwareDownloadUrl, getPurchasedDownloadUrl } from "@/lib/downloads.functions";
+import { StorageImage } from "@/components/StorageImage";
 
 export const Route = createFileRoute("/softwares")({
   component: SoftwaresPage,
@@ -187,24 +188,16 @@ function SoftwaresPage() {
           {filteredSoftwares.map((sw: any) => (
             <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 flex flex-col bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
               <div className="w-full aspect-square overflow-hidden bg-slate-900 flex items-center justify-center p-4 relative">
-                {sw.image_url ? (
-                  <img 
-                    src={sw.image_url} 
-                    alt={sw.name} 
-                    className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
-                    loading="eager"
-                    decoding="sync"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      target.classList.add('hidden');
-                      const fallback = target.nextElementSibling;
-                      if (fallback) fallback.classList.remove('hidden');
-                    }}
-                  />
-                ) : null}
-                <div className={`flex items-center justify-center w-full h-full bg-slate-800 ${sw.image_url ? 'hidden' : ''}`}>
-                  <Laptop className="h-16 w-16 text-primary/20" />
-                </div>
+                <StorageImage
+                  value={sw.image_url}
+                  alt={sw.name}
+                  className="max-w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-500"
+                  fallback={
+                    <div className="flex items-center justify-center w-full h-full bg-slate-800">
+                      <Laptop className="h-16 w-16 text-primary/20" />
+                    </div>
+                  }
+                />
               </div>
               <CardHeader className="pt-4">
                 <div className="flex justify-between items-start mb-1">
