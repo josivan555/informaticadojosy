@@ -151,6 +151,9 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase update error:", error);
+          if (error.code === '42501' || error.message?.includes('permission')) {
+             throw new Error("Permissão negada. O banco detectou que você não tem permissão de administrador. Por favor, saia e entre novamente.");
+          }
           throw error;
         }
         return data;
@@ -162,8 +165,8 @@ function AdminSoftwares() {
         
         if (error) {
           console.error("Supabase insert error:", error);
-          if (error.code === '42501') {
-            throw new Error("Permissão negada. Verifique se você é um administrador e se as políticas do banco de dados estão corretas.");
+          if (error.code === '42501' || error.message?.includes('permission')) {
+            throw new Error("Permissão negada. O banco detectou que você não tem permissão de administrador. Por favor, saia e entre novamente.");
           }
           throw error;
         }

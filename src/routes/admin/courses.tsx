@@ -111,7 +111,8 @@ function AdminCourses() {
         file_url: values.file_url || null,
       };
 
-      console.log("Saving course with values:", cleanedValues);
+      console.log("Saving course with values:", values);
+      console.log("Cleaned values for Supabase:", cleanedValues);
 
       if (editingId) {
         const { data, error } = await supabase
@@ -122,6 +123,9 @@ function AdminCourses() {
         
         if (error) {
           console.error("Supabase update error (courses):", error);
+          if (error.code === '42501' || error.message?.includes('permission')) {
+             throw new Error("Permissão negada ao atualizar curso. Verifique seu status de administrador.");
+          }
           throw error;
         }
         return data;
@@ -133,7 +137,7 @@ function AdminCourses() {
         
         if (error) {
           console.error("Supabase insert error (courses):", error);
-          if (error.code === '42501') {
+          if (error.code === '42501' || error.message?.includes('permission')) {
             throw new Error("Permissão negada ao criar curso. Verifique seu status de administrador.");
           }
           throw error;
