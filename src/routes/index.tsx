@@ -226,7 +226,6 @@ function Index() {
               {softwares?.map((sw: any) => (
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
                   <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="block">
-                    <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center p-0">
                     <div className="w-full aspect-video overflow-hidden bg-[#0a192f] flex items-center justify-center p-0">
                       {sw.image_url ? (
                         <img 
