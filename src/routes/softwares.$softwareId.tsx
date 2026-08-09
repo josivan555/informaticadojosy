@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star } from "lucide-react";
 import { toast } from "sonner";
 import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
+import { StorageImage } from "@/components/StorageImage";
 
 export const Route = createFileRoute("/softwares/$softwareId")({
   component: SoftwareDetails,
