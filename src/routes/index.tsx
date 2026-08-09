@@ -285,14 +285,6 @@ function Index() {
                   </CardFooter>
                 </Card>
               ))}
-                    {sw.price > 0 && (
-                      <p className="text-[10px] text-center text-muted-foreground">
-                        *Requer login para processar o pagamento
-                      </p>
-                    )}
-                  </CardFooter>
-                </Card>
-              ))}
               {(!softwares || softwares.length === 0) && (
                 <div className="col-span-full text-center py-12 text-muted-foreground">
                   Nenhum software disponível no momento.
