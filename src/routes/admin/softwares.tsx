@@ -379,7 +379,7 @@ function AdminSoftwares() {
                   </div>
                 </div>
                 <div className="p-4 flex-1 flex flex-col">
-                  <div className="flex justify-between items-start mb-2"><h3 className="font-bold text-white line-clamp-1">{software.name}</h3><div className="text-xs font-bold text-cyan-400">{software.price === 0 ? "GRÁTIS" : `R$ ${software.price.toFixed(2)}`}</div></div>
+                  <div className="flex justify-between items-start mb-2"><h3 className="font-bold text-white line-clamp-1">{software.name}</h3><div className="text-xs font-bold text-cyan-400">{software.price === 0 || !software.price ? "GRÁTIS" : `R$ ${software.price.toFixed(2)}`}</div></div>
                   <div className="text-xs text-slate-500 mb-2">{software.software_categories?.name}</div>
                   <p className="text-xs text-slate-400 line-clamp-2 flex-1">{software.description}</p>
                 </div>
