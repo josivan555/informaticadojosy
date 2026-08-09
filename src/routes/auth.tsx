@@ -91,6 +91,7 @@ function AuthPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   required 
                 />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Senha</Label>
                 <Input 
