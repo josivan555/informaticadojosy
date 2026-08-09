@@ -484,16 +484,21 @@ function AdminSoftwares() {
                   </Button>
                   <Button 
                     type="button" 
-                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white" 
+                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white font-bold" 
                     disabled={mutation.isPending}
-                    onClick={async () => {
+                    onClick={async (e) => {
+                      e.preventDefault();
+                      console.log("Submit button clicked");
                       const isValid = await form.trigger();
                       if (!isValid) {
-                        console.log("Form invalid:", form.formState.errors);
-                        toast.error("Por favor, preencha os campos obrigatórios (*)");
+                        const errors = form.formState.errors;
+                        console.log("Validation errors:", errors);
+                        toast.error("Por favor, preencha o Nome e a Categoria.");
                         return;
                       }
-                      mutation.mutate(form.getValues());
+                      const values = form.getValues();
+                      console.log("Form values to submit:", values);
+                      mutation.mutate(values);
                     }}
                   >
                     {mutation.isPending ? (
