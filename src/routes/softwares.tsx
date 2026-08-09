@@ -10,6 +10,7 @@ import { Download, Laptop, Star, ShieldCheck, Zap, Loader2, ChevronLeft, Chevron
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getFreeSoftwareDownloadUrl, getPurchasedDownloadUrl } from "@/lib/downloads.functions";
+import { StorageImage } from "@/components/StorageImage";
 
 export const Route = createFileRoute("/softwares")({
   component: SoftwaresPage,
