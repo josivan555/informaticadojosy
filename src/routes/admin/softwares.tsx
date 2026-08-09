@@ -2,7 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Plus, Search, Pencil, Trash2, Sparkles, Loader2, Monitor } from "lucide-react";
+import { Plus, Search, Pencil, Trash2, Sparkles, Loader2, Monitor, LayoutGrid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -67,6 +67,7 @@ export const Route = createFileRoute("/admin/softwares")({
 
 function AdminSoftwares() {
   const [searchTerm, setSearchTerm] = useState("");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
@@ -283,24 +284,45 @@ function AdminSoftwares() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-3xl font-bold text-white">Softwares</h1>
           <p className="text-slate-400">Gerencie seu catálogo de programas.</p>
         </div>
-        <Dialog open={isDialogOpen} onOpenChange={(open) => {
-          setIsDialogOpen(open);
-          if (!open) {
-            setEditingId(null);
-            form.reset();
-          }
-        }}>
-          <DialogTrigger asChild>
-            <Button className="bg-cyan-600 hover:bg-cyan-700 gap-2">
-              <Plus className="h-4 w-4" />
-              Adicionar Software
+        <div className="flex items-center gap-3">
+          <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-800">
+            <Button
+              variant={viewMode === "list" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => setViewMode("list")}
+              className="h-8 w-8 p-0"
+              title="Visualização em Lista"
+            >
+              <List className="h-4 w-4" />
             </Button>
-          </DialogTrigger>
+            <Button
+              variant={viewMode === "grid" ? "secondary" : "ghost"}
+              size="sm"
+              onClick={() => setViewMode("grid")}
+              className="h-8 w-8 p-0"
+              title="Visualização em Grade"
+            >
+              <LayoutGrid className="h-4 w-4" />
+            </Button>
+          </div>
+          <Dialog open={isDialogOpen} onOpenChange={(open) => {
+            setIsDialogOpen(open);
+            if (!open) {
+              setEditingId(null);
+              form.reset();
+            }
+          }}>
+            <DialogTrigger asChild>
+              <Button className="bg-cyan-600 hover:bg-cyan-700 gap-2">
+                <Plus className="h-4 w-4" />
+                Adicionar Software
+              </Button>
+            </DialogTrigger>
           <DialogContent className="max-w-2xl bg-[#0d1b33] border-slate-800 text-white max-h-[90vh] overflow-y-auto" onPointerDownOutside={(e) => e.preventDefault()}>
             <DialogHeader>
               <DialogTitle>{editingId ? "Editar Software" : "Novo Software"}</DialogTitle>
