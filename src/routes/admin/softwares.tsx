@@ -301,8 +301,44 @@ function AdminSoftwares() {
                     )} />
                   </div>
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2"><label className="text-sm font-medium">Capa</label><Input type="file" accept="image/*" className="bg-slate-900 border-slate-700" onChange={(e) => handleFileUpload(e, "image_url")} /></div>
-                    <div className="space-y-2"><label className="text-sm font-medium">Arquivo</label><Input type="file" className="bg-slate-900 border-slate-700" onChange={(e) => handleFileUpload(e, "file_url")} /></div>
+                    <div className="space-y-2">
+                      <FormLabel>Capa</FormLabel>
+                      <div className="flex flex-col gap-2">
+                        {form.watch("image_url") && (
+                          <div className="relative w-full aspect-video rounded-lg overflow-hidden border border-slate-700 bg-slate-900">
+                            <img 
+                              src={form.watch("image_url")!} 
+                              className="w-full h-full object-cover" 
+                              alt="Preview" 
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="icon"
+                              className="absolute top-2 right-2 h-6 w-6"
+                              onClick={() => form.setValue("image_url", null)}
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        )}
+                        <Input 
+                          type="file" 
+                          accept="image/*" 
+                          className="bg-slate-900 border-slate-700" 
+                          onChange={(e) => handleFileUpload(e, "image_url")} 
+                        />
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <FormLabel>Arquivo</FormLabel>
+                      <Input 
+                        type="file" 
+                        className="bg-slate-900 border-slate-700" 
+                        onChange={(e) => handleFileUpload(e, "file_url")} 
+                      />
+                      {form.watch("file_url") && <p className="text-[10px] text-emerald-400">Arquivo carregado</p>}
+                    </div>
                   </div>
                   <FormField control={form.control} name="external_download_url" render={({ field }) => (
                     <FormItem><FormLabel>Link Externo</FormLabel><FormControl><Input {...field} value={field.value || ""} className="bg-slate-900 border-slate-700" /></FormControl><FormMessage /></FormItem>
