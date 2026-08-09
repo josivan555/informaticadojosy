@@ -391,11 +391,20 @@ function AdminCourses() {
                         }}
                       />
                       {form.watch("image_url") && (
-                        <div className="mt-2 relative group">
+                        <div className="mt-2 relative group w-full">
                           <img src={form.watch("image_url")!} alt="Preview" className="w-full h-32 object-cover rounded-md border border-slate-700" />
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-md">
                             <span className="text-[10px] text-white">Capa Carregada</span>
                           </div>
+                          <Button
+                            type="button"
+                            variant="destructive"
+                            size="icon"
+                            className="absolute top-1 right-1 h-5 w-5 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={() => form.setValue("image_url", null)}
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </Button>
                         </div>
                       )}
                     </div>
