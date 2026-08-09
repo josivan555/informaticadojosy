@@ -305,7 +305,12 @@ function AdminSoftwares() {
                       <FormItem>
                         <FormLabel className="text-white">Nome <span className="text-red-500">*</span></FormLabel>
                         <FormControl>
-                          <Input {...field} value={field.value || ""} className="bg-slate-900 border-slate-700 text-white" />
+                          <Input 
+                            {...field} 
+                            value={field.value || ""} 
+                            className="bg-slate-900 border-slate-700 text-white" 
+                            onChange={(e) => field.onChange(e.target.value)}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
