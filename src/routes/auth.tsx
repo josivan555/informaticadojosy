@@ -83,12 +83,9 @@ function AuthPage() {
                 <Label htmlFor="email">E-mail</Label>
                 <Input 
                   id="email" 
+                  name="email"
                   type="email" 
-                  placeholder="exemplo@gmail.com" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required 
-                />
+                  autoComplete="username"
               </div>
               <div className="space-y-2">
                 <Label htmlFor="password">Senha</Label>
