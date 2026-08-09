@@ -36,6 +36,7 @@ import * as z from "zod";
 import { toast } from "sonner";
 import { useServerFn } from "@tanstack/react-start";
 import { generateSoftwareDescription } from "@/lib/ai.functions";
+import { StorageImage } from "@/components/StorageImage";
 
 const courseSchema = z.object({
   title: z.string().min(2, "Título é obrigatório"),
@@ -392,7 +393,9 @@ function AdminCourses() {
                       />
                       {form.watch("image_url") && (
                         <div className="mt-2 relative group w-full">
-                          <img src={form.watch("image_url")!} alt="Preview" className="w-full h-32 object-cover rounded-md border border-slate-700" />
+                          <div className="w-full h-32 rounded-md border border-slate-700 overflow-hidden bg-slate-900">
+                            <StorageImage value={form.watch("image_url")} alt="Preview" className="w-full h-full object-cover" fallback={<div className="w-full h-full flex items-center justify-center"><BookOpen className="h-8 w-8 text-slate-600" /></div>} />
+                          </div>
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-md">
                             <span className="text-[10px] text-white">Capa Carregada</span>
                           </div>

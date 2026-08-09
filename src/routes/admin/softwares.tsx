@@ -395,7 +395,9 @@ function AdminSoftwares() {
                   <TableRow key={software.id} className="border-slate-800 hover:bg-slate-900/40 transition-colors">
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {software.image_url ? <img src={software.image_url} className="h-10 w-10 rounded object-cover border border-slate-700" alt="" /> : <div className="h-10 w-10 rounded bg-slate-800 flex items-center justify-center"><Monitor className="h-5 w-5 text-slate-500" /></div>}
+                        <div className="h-10 w-10 rounded overflow-hidden border border-slate-700 bg-slate-800 shrink-0">
+                          <StorageImage value={software.image_url} alt={software.name} className="h-full w-full object-cover" fallback={<div className="h-full w-full flex items-center justify-center"><Monitor className="h-5 w-5 text-slate-500" /></div>} />
+                        </div>
                         <div><div className="font-medium text-white">{software.name}</div><div className="text-xs text-slate-500">{software.version || "v1.0"}</div></div>
                       </div>
                     </TableCell>
@@ -421,7 +423,7 @@ function AdminSoftwares() {
             filteredSoftwares?.map((software) => (
               <div key={software.id} className="bg-[#0d1b33] rounded-xl border border-slate-800 overflow-hidden group hover:border-cyan-500/50 transition-all flex flex-col">
                 <div className="aspect-video relative bg-slate-900 overflow-hidden">
-                  {software.image_url ? <img src={software.image_url} alt={software.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" /> : <div className="w-full h-full flex items-center justify-center"><Monitor className="h-12 w-12 text-slate-800" /></div>}
+                  <StorageImage value={software.image_url} alt={software.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" fallback={<div className="w-full h-full flex items-center justify-center"><Monitor className="h-12 w-12 text-slate-800" /></div>} />
                   <div className="absolute top-2 right-2 flex gap-1">
                     <Button size="icon" variant="secondary" className="h-8 w-8 bg-black/50 hover:bg-black/70 border-none text-white" onClick={() => handleEdit(software)}><Pencil className="h-4 w-4" /></Button>
                     <Button size="icon" variant="destructive" className="h-8 w-8 bg-red-500/50 hover:bg-red-500 border-none text-white" onClick={() => { if (confirm("Remover?")) deleteMutation.mutate(software.id); }}><Trash2 className="h-4 w-4" /></Button>
