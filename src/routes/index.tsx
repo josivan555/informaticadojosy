@@ -226,35 +226,25 @@ function Index() {
               {softwares?.map((sw: any) => (
                 <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
                   <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="block">
-                    <div className="w-full aspect-video overflow-hidden bg-[#0a192f] flex items-center justify-center p-0">
+                    <div className="w-full aspect-video overflow-hidden bg-slate-900 flex items-center justify-center p-0 relative">
                       {sw.image_url ? (
                         <img 
                           src={sw.image_url} 
                           alt={sw.name} 
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                          decoding="async"
+                          loading="eager"
+                          decoding="sync"
                           onError={(e) => {
                             const target = e.currentTarget;
-                            const parent = target.parentElement;
-                            if (parent) {
-                              target.style.display = 'none';
-                              parent.classList.add('bg-slate-800');
-                              // Avoid duplicate icons
-                              if (!parent.querySelector('.fallback-icon')) {
-                                const iconContainer = document.createElement('div');
-                                iconContainer.className = 'fallback-icon flex items-center justify-center w-full h-full';
-                                iconContainer.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary/20"><path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"></path></svg>';
-                                parent.appendChild(iconContainer);
-                              }
-                            }
+                            target.classList.add('hidden');
+                            const fallback = target.nextElementSibling;
+                            if (fallback) fallback.classList.remove('hidden');
                           }}
                         />
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full bg-slate-800">
-                          <Laptop className="h-12 w-12 text-primary/20" />
-                        </div>
-                      )}
+                      ) : null}
+                      <div className={`flex items-center justify-center w-full h-full bg-slate-800 ${sw.image_url ? 'hidden' : ''}`}>
+                        <Laptop className="h-12 w-12 text-primary/20" />
+                      </div>
                     </div>
                   </Link>
                   <CardHeader className="pt-4">
