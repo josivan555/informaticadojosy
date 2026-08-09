@@ -224,16 +224,29 @@ function Index() {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {softwares?.map((sw: any) => (
-                <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200">
-                  <CardHeader>
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        <Laptop className="h-6 w-6 text-primary" />
-                      </div>
-                      <Badge variant="outline">{sw.category}</Badge>
+                <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
+                  {sw.image_url ? (
+                    <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center p-0">
+                      <img 
+                        src={sw.image_url} 
+                        alt={sw.name} 
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
                     </div>
-                    <CardTitle className="text-xl">{sw.name}</CardTitle>
-                    <CardDescription>{sw.description}</CardDescription>
+                  ) : (
+                    <div className="w-full aspect-video overflow-hidden bg-slate-900/50 flex items-center justify-center">
+                      <Laptop className="h-12 w-12 text-primary/20" />
+                    </div>
+                  )}
+                  <CardHeader className="pt-4">
+                    <div className="flex justify-between items-start mb-2">
+                      <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                        <Laptop className="h-5 w-5 text-primary" />
+                      </div>
+                      <Badge variant="outline" className="ml-2 truncate">{sw.category}</Badge>
+                    </div>
+                    <CardTitle className="text-xl line-clamp-1">{sw.name}</CardTitle>
+                    <CardDescription className="line-clamp-2 min-h-[3rem]">{sw.description}</CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
