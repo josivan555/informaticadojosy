@@ -268,6 +268,8 @@ function AdminSoftwares() {
         .from("softwares")
         .getPublicUrl(filePath);
 
+      console.log("URL Pública gerada:", publicUrl);
+
       form.setValue(field, publicUrl);
       toast.success("Arquivo enviado com sucesso!");
     } catch (error: any) {
