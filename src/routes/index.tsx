@@ -19,13 +19,14 @@ import { StorageImage } from "@/components/StorageImage";
 
 
 const softwaresQueryOptions = {
-  queryKey: ["softwares"],
+  queryKey: ["softwares", "featured"],
   queryFn: async () => {
     const { data, error } = await supabase
       .from("softwares")
       .select("*")
       .eq("status", "published")
-      .order("created_at", { ascending: false });
+      .order("created_at", { ascending: false })
+      .limit(6);
     if (error) throw error;
     return data || [];
   },
