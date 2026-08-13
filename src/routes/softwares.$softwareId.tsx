@@ -10,6 +10,38 @@ import { StorageImage } from "@/components/StorageImage";
 
 export const Route = createFileRoute("/softwares/$softwareId")({
   component: SoftwareDetails,
+  loader: async ({ params, context: { queryClient } }) => {
+    return queryClient.ensureQueryData({
+      queryKey: ["software", params.softwareId],
+      queryFn: async () => {
+        const { data, error } = await supabase
+          .from("softwares")
+          .select("*")
+          .eq("id", params.softwareId)
+          .single();
+        if (error) throw error;
+        return data;
+      },
+    });
+  },
+  head: ({ loaderData }) => {
+    const sw = loaderData;
+    if (!sw) return {};
+    const title = `${sw.name} - Informática do Josy`;
+    const description = sw.description?.substring(0, 160) || `Baixe o software ${sw.name} na Informática do Josy.`;
+    return {
+      title,
+      meta: [
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:title", content: title },
+        { name: "twitter:description", content: description },
+      ],
+    };
+  },
 });
 
 function SoftwareDetails() {
