@@ -27,14 +27,9 @@ async function signPath(path: string): Promise<string> {
 export const getFreeSoftwareDownloadUrl = createServerFn({ method: "POST" })
   .inputValidator((data) => z.object({ softwareId: z.string().uuid() }).parse(data))
   .handler(async ({ data }) => {
-    const { createClient } = await import("@supabase/supabase-js");
-    const supabasePublic = createClient(
-      process.env["SUPABASE_URL"]!,
-      process.env["SUPABASE_PUBLISHABLE_KEY"]!,
-      { auth: { storage: undefined, persistSession: false, autoRefreshToken: false } },
-    );
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const { data: sw, error } = await supabasePublic
+    const { data: sw, error } = await supabaseAdmin
       .from("softwares")
       .select("id, price, file_url, external_download_url, status")
       .eq("id", data.softwareId)
