@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { adminListCourses } from "@/lib/admin-content.functions";
 import { Plus, Search, Pencil, Trash2, Sparkles, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,12 +87,7 @@ function AdminCourses() {
   const { data: courses, isLoading } = useQuery({
     queryKey: ["admin-courses"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("courses")
-        .select("*")
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
+      return (await adminListCourses()) as any[];
     },
   });
 
@@ -119,8 +115,7 @@ function AdminCourses() {
         const { data, error } = await supabase
           .from("courses")
           .update(cleanedValues)
-          .eq("id", editingId)
-          .select();
+          .eq("id", editingId);
         
         if (error) {
           console.error("Supabase update error (courses):", error);
@@ -133,8 +128,7 @@ function AdminCourses() {
       } else {
         const { data, error } = await supabase
           .from("courses")
-          .insert([cleanedValues])
-          .select();
+          .insert([cleanedValues]);
         
         if (error) {
           console.error("Supabase insert error (courses):", error);

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { adminListSoftwares } from "@/lib/admin-content.functions";
 import { Plus, Search, Pencil, Trash2, Sparkles, Loader2, Monitor, LayoutGrid, List } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -96,15 +97,7 @@ function AdminSoftwares() {
   const { data: softwares, isLoading } = useQuery({
     queryKey: ["admin-softwares"],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("softwares")
-        .select(`
-          *,
-          software_categories(name)
-        `)
-        .order("created_at", { ascending: false });
-      if (error) throw error;
-      return data;
+      return (await adminListSoftwares()) as any[];
     },
   });
 
@@ -143,16 +136,14 @@ function AdminSoftwares() {
         const { data, error } = await supabase
           .from("softwares")
           .update(cleanedValues)
-          .eq("id", editingId)
-          .select();
+          .eq("id", editingId);
         
         if (error) throw error;
         return data;
       } else {
         const { data, error } = await supabase
           .from("softwares")
-          .insert([cleanedValues])
-          .select();
+          .insert([cleanedValues]);
         
         if (error) throw error;
         return data;
