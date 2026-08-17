@@ -21,7 +21,7 @@ function CoursesList() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("courses")
-        .select("*")
+        .select("id, title, description, price, pages, level, status, created_at, updated_at, image_url, video_url, has_purchase_link, has_download")
         .eq("status", "published")
         .order("created_at", { ascending: false });
       if (error) throw error;

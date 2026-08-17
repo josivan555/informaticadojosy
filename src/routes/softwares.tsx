@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getFreeSoftwareDownloadUrl, getPurchasedDownloadUrl } from "@/lib/downloads.functions";
 import { StorageImage } from "@/components/StorageImage";
+import { getPurchaseLinks } from "@/lib/purchase.functions";
 
 export const Route = createFileRoute("/softwares")({
   component: SoftwaresPage,
@@ -33,7 +34,7 @@ function SoftwaresPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("softwares")
-        .select("*, software_categories(*)")
+        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download, software_categories(*)")
         .eq("status", "published")
         .order("created_at", { ascending: false });
       if (error) throw error;
@@ -77,13 +78,26 @@ function SoftwaresPage() {
     }
 
     if (sw.price > 0) {
-      if (!sw.paddle_price_id && !sw.mercadopago_link) {
+      if (!sw.has_purchase_link) {
         toast.error("Método de pagamento não configurado para este software");
         return;
       }
 
-      if (sw.mercadopago_link) {
-        window.open(sw.mercadopago_link, '_blank');
+      if (!session) {
+        toast.error("Você precisa estar logado para comprar");
+        return;
+      }
+
+      let links: { mercadopago_link: string | null; paddle_price_id: string | null };
+      try {
+        links = await getPurchaseLinks({ data: { kind: "software", itemId: sw.id } });
+      } catch {
+        toast.error("Não foi possível iniciar a compra agora");
+        return;
+      }
+
+      if (links.mercadopago_link) {
+        window.open(links.mercadopago_link, '_blank');
         return;
       }
 
@@ -92,7 +106,7 @@ function SoftwaresPage() {
         setIsCheckoutLoading(sw.id);
         // @ts-ignore
         window.Paddle.Checkout.open({
-          items: [{ priceId: sw.paddle_price_id, quantity: 1 }],
+          items: [{ priceId: links.paddle_price_id, quantity: 1 }],
           settings: { displayMode: 'overlay', theme: 'light', locale: 'pt' },
           eventCallback: async (data: any) => {
             if (data.name === 'checkout.completed') {

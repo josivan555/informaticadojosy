@@ -23,7 +23,7 @@ const softwaresQueryOptions = {
   queryFn: async () => {
     const { data, error } = await supabase
       .from("softwares")
-      .select("*")
+      .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download")
       .eq("status", "published")
       .order("created_at", { ascending: false })
       .limit(6);
@@ -37,7 +37,7 @@ const coursesQueryOptions = {
   queryFn: async () => {
     const { data, error } = await supabase
       .from("courses")
-      .select("*")
+      .select("id, title, description, price, pages, level, status, created_at, updated_at, image_url, video_url, has_purchase_link, has_download")
       .eq("status", "published")
       .order("created_at", { ascending: false });
     if (error) throw error;
@@ -345,12 +345,12 @@ function Index() {
                         <Button 
                           className="rounded-full px-6"
                           onClick={() => handleBuyCourse(course)}
-                          disabled={(!course.paddle_price_id && !course.mercadopago_link) || isCheckoutLoading === course.id}
+                          disabled={!course.has_purchase_link || isCheckoutLoading === course.id}
                         >
                           {isCheckoutLoading === course.id ? (
                             <Loader2 className="h-4 w-4 animate-spin" />
                           ) : (
-                            (course.paddle_price_id || course.mercadopago_link) ? 'Comprar Agora' : 'Em breve'
+                            course.has_purchase_link ? 'Comprar Agora' : 'Em breve'
                           )}
                         </Button>
                       </div>

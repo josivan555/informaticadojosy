@@ -71,6 +71,8 @@ export type Database = {
           description: string | null
           external_download_url: string | null
           file_url: string | null
+          has_download: boolean | null
+          has_purchase_link: boolean | null
           id: string
           image_url: string | null
           level: string | null
@@ -89,6 +91,8 @@ export type Database = {
           description?: string | null
           external_download_url?: string | null
           file_url?: string | null
+          has_download?: boolean | null
+          has_purchase_link?: boolean | null
           id?: string
           image_url?: string | null
           level?: string | null
@@ -107,6 +111,8 @@ export type Database = {
           description?: string | null
           external_download_url?: string | null
           file_url?: string | null
+          has_download?: boolean | null
+          has_purchase_link?: boolean | null
           id?: string
           image_url?: string | null
           level?: string | null
@@ -187,6 +193,8 @@ export type Database = {
           downloads: number | null
           external_download_url: string | null
           file_url: string | null
+          has_download: boolean | null
+          has_purchase_link: boolean | null
           id: string
           image_url: string | null
           mercadopago_link: string | null
@@ -208,6 +216,8 @@ export type Database = {
           downloads?: number | null
           external_download_url?: string | null
           file_url?: string | null
+          has_download?: boolean | null
+          has_purchase_link?: boolean | null
           id?: string
           image_url?: string | null
           mercadopago_link?: string | null
@@ -229,6 +239,8 @@ export type Database = {
           downloads?: number | null
           external_download_url?: string | null
           file_url?: string | null
+          has_download?: boolean | null
+          has_purchase_link?: boolean | null
           id?: string
           image_url?: string | null
           mercadopago_link?: string | null
@@ -275,13 +287,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      has_role: {
-        Args: {
-          _role: Database["public"]["Enums"]["app_role"]
-          _user_id: string
-        }
-        Returns: boolean
-      }
+      [_ in never]: never
     }
     Enums: {
       app_role: "admin" | "user"

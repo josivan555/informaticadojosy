@@ -16,7 +16,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("softwares")
-          .select("*")
+          .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download")
           .eq("id", params.softwareId)
           .single();
         if (error) throw error;
@@ -52,7 +52,7 @@ function SoftwareDetails() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("softwares")
-        .select("*")
+        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download")
         .eq("id", softwareId)
         .single();
       if (error) throw error;
@@ -85,20 +85,16 @@ function SoftwareDetails() {
       return;
     }
 
-    const downloadUrl = sw.external_download_url || sw.file_url;
-    if (downloadUrl) {
-      if (sw.external_download_url) {
-        window.open(sw.external_download_url, '_blank');
-      } else {
-        try {
-          const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
-          window.open(url, '_blank');
-        } catch {
-          toast.error("Link de download não disponível");
-        }
-      }
-    } else {
+    if (!sw.has_download) {
       toast.error("Em breve: download ainda não disponível");
+      return;
+    }
+
+    try {
+      const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+      window.open(url, '_blank');
+    } catch {
+      toast.error("Link de download não disponível");
     }
   };
 

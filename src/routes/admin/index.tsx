@@ -13,8 +13,8 @@ function AdminDashboard() {
     queryKey: ['admin-stats'],
     queryFn: async () => {
       const [softwares, courses, downloads] = await Promise.all([
-        supabase.from('softwares').select('*', { count: 'exact', head: true }),
-        supabase.from('courses').select('*', { count: 'exact', head: true }),
+        supabase.from('softwares').select('id', { count: 'exact', head: true }),
+        supabase.from('courses').select('id', { count: 'exact', head: true }),
         supabase.from('download_history').select('*', { count: 'exact', head: true }),
       ]);
       
