@@ -85,20 +85,16 @@ function SoftwareDetails() {
       return;
     }
 
-    const downloadUrl = sw.external_download_url || sw.file_url;
-    if (downloadUrl) {
-      if (sw.external_download_url) {
-        window.open(sw.external_download_url, '_blank');
-      } else {
-        try {
-          const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
-          window.open(url, '_blank');
-        } catch {
-          toast.error("Link de download não disponível");
-        }
-      }
-    } else {
+    if (!sw.has_download) {
       toast.error("Em breve: download ainda não disponível");
+      return;
+    }
+
+    try {
+      const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+      window.open(url, '_blank');
+    } catch {
+      toast.error("Link de download não disponível");
     }
   };
 
