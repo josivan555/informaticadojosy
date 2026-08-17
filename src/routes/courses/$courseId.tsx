@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, ChevronLeft, Download, ShieldCheck, Star, Zap, Loader2, ArrowRight, Play } from "lucide-react";
 import { getPurchasedDownloadUrl } from "@/lib/downloads.functions";
+import { getPurchaseLinks } from "@/lib/purchase.functions";
 
 export const Route = createFileRoute("/courses/$courseId")({
   component: CourseDetails,
@@ -98,12 +99,20 @@ function CourseDetails() {
       return;
     }
 
-    if (!course.paddle_price_id && !course.mercadopago_link) {
+    if (!course.has_purchase_link) {
       toast.error("Método de pagamento não configurado");
       return;
     }
 
-    if (course.mercadopago_link) {
+    let links: { mercadopago_link: string | null; paddle_price_id: string | null };
+    try {
+      links = await getPurchaseLinks({ data: { kind: "course", itemId: course.id } });
+    } catch {
+      toast.error("Não foi possível iniciar a compra agora");
+      return;
+    }
+
+    if (links.mercadopago_link) {
       // Create a pending session before redirecting
       // In a real flow, you'd use Mercado Pago API to create a preference and get an ID
       // Here we'll use a placeholder or the link itself as reference
@@ -114,7 +123,7 @@ function CourseDetails() {
         status: 'pending'
       });
       
-      window.open(course.mercadopago_link, '_blank');
+      window.open(links.mercadopago_link, '_blank');
       toast.info("Redirecionando para o Mercado Pago...");
       return;
     }
@@ -128,7 +137,7 @@ function CourseDetails() {
     setIsCheckoutLoading(true);
     // @ts-ignore
     window.Paddle.Checkout.open({
-      items: [{ priceId: course.paddle_price_id, quantity: 1 }],
+      items: [{ priceId: links.paddle_price_id, quantity: 1 }],
       settings: {
         displayMode: 'overlay',
         theme: 'light',
