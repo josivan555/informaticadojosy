@@ -16,7 +16,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("softwares")
-          .select("*")
+          .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download")
           .eq("id", params.softwareId)
           .single();
         if (error) throw error;
@@ -52,7 +52,7 @@ function SoftwareDetails() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("softwares")
-        .select("*")
+        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download")
         .eq("id", softwareId)
         .single();
       if (error) throw error;

@@ -18,7 +18,7 @@ export const Route = createFileRoute("/courses/$courseId")({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("courses")
-          .select("*")
+          .select("id, title, description, price, pages, level, status, created_at, updated_at, image_url, video_url, has_purchase_link, has_download")
           .eq("id", courseId)
           .single();
         if (error) throw error;
@@ -46,7 +46,7 @@ function CourseDetails() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("courses")
-        .select("*")
+        .select("id, title, description, price, pages, level, status, created_at, updated_at, image_url, video_url, has_purchase_link, has_download")
         .eq("id", params.courseId)
         .single();
       if (error) throw error;

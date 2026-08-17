@@ -33,7 +33,7 @@ function SoftwaresPage() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("softwares")
-        .select("*, software_categories(*)")
+        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download, software_categories(*)")
         .eq("status", "published")
         .order("created_at", { ascending: false });
       if (error) throw error;
