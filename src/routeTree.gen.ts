@@ -21,6 +21,7 @@ import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
 import { Route as AuthConfirmRouteImport } from './routes/auth.confirm'
 import { Route as CoursesIndexRouteImport } from './routes/courses/index'
 import { Route as CoursesCourseIdRouteImport } from './routes/courses/$courseId'
+import { Route as SoftwaresIndexRouteImport } from './routes/softwares.index'
 import { Route as SoftwaresSoftwareIdRouteImport } from './routes/softwares.$softwareId'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago-webhook'
 
@@ -84,6 +85,11 @@ const CoursesCourseIdRoute = CoursesCourseIdRouteImport.update({
   path: '/courses/$courseId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SoftwaresIndexRoute = SoftwaresIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SoftwaresRoute,
+} as any)
 const SoftwaresSoftwareIdRoute = SoftwaresSoftwareIdRouteImport.update({
   id: '/$softwareId',
   path: '/$softwareId',
@@ -110,12 +116,12 @@ export interface FileRoutesByFullPath {
   '/softwares/$softwareId': typeof SoftwaresSoftwareIdRoute
   '/admin/': typeof AdminIndexRoute
   '/courses/': typeof CoursesIndexRoute
+  '/softwares/': typeof SoftwaresIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
-  '/softwares': typeof SoftwaresRouteWithChildren
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
@@ -125,6 +131,7 @@ export interface FileRoutesByTo {
   '/softwares/$softwareId': typeof SoftwaresSoftwareIdRoute
   '/admin': typeof AdminIndexRoute
   '/courses': typeof CoursesIndexRoute
+  '/softwares': typeof SoftwaresIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRoutesById {
@@ -142,6 +149,7 @@ export interface FileRoutesById {
   '/softwares/$softwareId': typeof SoftwaresSoftwareIdRoute
   '/admin/': typeof AdminIndexRoute
   '/courses/': typeof CoursesIndexRoute
+  '/softwares/': typeof SoftwaresIndexRoute
   '/api/public/mercadopago-webhook': typeof ApiPublicMercadopagoWebhookRoute
 }
 export interface FileRouteTypes {
@@ -160,12 +168,12 @@ export interface FileRouteTypes {
     | '/softwares/$softwareId'
     | '/admin/'
     | '/courses/'
+    | '/softwares/'
     | '/api/public/mercadopago-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
-    | '/softwares'
     | '/admin/courses'
     | '/admin/downloads'
     | '/admin/software-categories'
@@ -175,6 +183,7 @@ export interface FileRouteTypes {
     | '/softwares/$softwareId'
     | '/admin'
     | '/courses'
+    | '/softwares'
     | '/api/public/mercadopago-webhook'
   id:
     | '__root__'
@@ -191,6 +200,7 @@ export interface FileRouteTypes {
     | '/softwares/$softwareId'
     | '/admin/'
     | '/courses/'
+    | '/softwares/'
     | '/api/public/mercadopago-webhook'
   fileRoutesById: FileRoutesById
 }
@@ -290,6 +300,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoursesCourseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/softwares/': {
+      id: '/softwares/'
+      path: '/'
+      fullPath: '/softwares/'
+      preLoaderRoute: typeof SoftwaresIndexRouteImport
+      parentRoute: typeof SoftwaresRoute
+    }
     '/softwares/$softwareId': {
       id: '/softwares/$softwareId'
       path: '/$softwareId'
@@ -337,10 +354,12 @@ const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
 
 interface SoftwaresRouteChildren {
   SoftwaresSoftwareIdRoute: typeof SoftwaresSoftwareIdRoute
+  SoftwaresIndexRoute: typeof SoftwaresIndexRoute
 }
 
 const SoftwaresRouteChildren: SoftwaresRouteChildren = {
   SoftwaresSoftwareIdRoute: SoftwaresSoftwareIdRoute,
+  SoftwaresIndexRoute: SoftwaresIndexRoute,
 }
 
 const SoftwaresRouteWithChildren = SoftwaresRoute._addFileChildren(
