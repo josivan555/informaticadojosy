@@ -9,6 +9,7 @@ import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import logoAsset from "@/assets/logo.png.asset.json";
 
 export const Route = createFileRoute("/admin")({
+  ssr: false,
   beforeLoad: async ({ location }) => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
