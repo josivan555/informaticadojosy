@@ -2,12 +2,11 @@ import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star } from "lucide-react";
+import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
 import { StorageImage } from "@/components/StorageImage";
-import { SoftwaresSidebar } from "@/components/SoftwaresSidebar";
+import { StoreShell } from "@/components/store/StoreShell";
 
 const allSoftwaresQueryOptions = {
   queryKey: ["softwares-menu"],
@@ -80,137 +79,188 @@ function SoftwareDetails() {
 
   if (!sw) {
     return (
-      <div className="min-h-screen bg-[#0a192f] flex flex-col items-center justify-center text-white p-4">
-        <h1 className="text-2xl font-bold mb-4">Software não encontrado</h1>
-        <Button asChild>
-          <Link to="/">Voltar para Home</Link>
-        </Button>
-      </div>
+      <StoreShell active="softwares">
+        <div className="flex flex-col items-center justify-center py-24 text-center">
+          <h1 className="mb-4 text-2xl font-bold text-foreground">Software não encontrado</h1>
+          <Button asChild>
+            <Link to="/">Voltar para o início</Link>
+          </Button>
+        </div>
+      </StoreShell>
     );
   }
 
+  const isFree = !sw.price || sw.price <= 0;
+  const otherSoftwares = (allSoftwares || []).filter((s) => s.id !== sw.id).slice(0, 8);
+
   const handleDownload = async () => {
-    if (sw.price && sw.price > 0) {
+    if (!isFree) {
       toast.info("Este software é Premium. Entre em contato ou use o link de compra.");
       return;
     }
-
     if (!sw.has_download) {
       toast.error("Em breve: download ainda não disponível");
       return;
     }
-
     try {
       const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
-      window.open(url, '_blank');
+      window.open(url, "_blank");
     } catch {
       toast.error("Link de download não disponível");
     }
   };
 
   return (
-    <div className="min-h-screen bg-[#0a192f] text-slate-200 pb-20">
-      <header className="border-b border-primary/10 bg-[#0a192f]/90 backdrop-blur sticky top-0 z-50">
-        <div className="container mx-auto h-16 flex items-center px-4">
-          <Button
-            variant="ghost"
-            onClick={() => router.history.back()}
-            className="text-slate-400 hover:text-white"
-          >
-            <ChevronLeft className="mr-2 h-4 w-4" /> Voltar
-          </Button>
-        </div>
-      </header>
+    <StoreShell active="softwares">
+      {/* Trilha de navegação + voltar */}
+      <div className="mb-6 flex items-center justify-between">
+        <nav className="flex items-center gap-1 text-sm text-muted-foreground">
+          <Link to="/" className="hover:text-foreground hover:underline">Início</Link>
+          <ChevronRight className="h-3.5 w-3.5" />
+          <Link to="/softwares" className="hover:text-foreground hover:underline">Programas</Link>
+          <ChevronRight className="h-3.5 w-3.5" />
+          <span className="truncate font-medium text-foreground">{sw.name}</span>
+        </nav>
+        <Button variant="ghost" size="sm" onClick={() => router.history.back()} className="text-muted-foreground">
+          <ChevronLeft className="mr-1 h-4 w-4" /> Voltar
+        </Button>
+      </div>
 
-      <main className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-          {/* Main content */}
-          <div className="lg:col-span-3 space-y-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-              <div className="space-y-8">
-                <div className="max-w-md mx-auto md:mx-0 rounded-2xl overflow-hidden border border-primary/20 bg-slate-900 shadow-2xl p-4">
+      {/* Cabeçalho do aplicativo, estilo Microsoft Store */}
+      <section className="flex flex-col gap-6 md:flex-row md:items-start">
+        <div className="h-32 w-32 shrink-0 overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          <StorageImage
+            value={sw.image_url}
+            alt={sw.name}
+            className="h-full w-full object-cover"
+            fallback={
+              <div className="flex h-full w-full items-center justify-center bg-secondary">
+                <Laptop className="h-12 w-12 text-muted-foreground/40" />
+              </div>
+            }
+          />
+        </div>
+
+        <div className="min-w-0 flex-1">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">{sw.name}</h1>
+          <p className="mt-1 text-sm text-primary">Informática do Josy</p>
+
+          <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <span>{sw.category || "Utilitário"}</span>
+            <span>•</span>
+            <span>Versão {sw.version || "1.0"}</span>
+            <span>•</span>
+            <span>{sw.size || "N/A"}</span>
+            <span>•</span>
+            <span>{sw.downloads || 0} downloads</span>
+          </div>
+
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="text-lg font-semibold text-foreground">
+              {isFree ? "Gratuito" : `R$ ${sw.price!.toFixed(2)}`}
+            </div>
+            <Button size="lg" className="rounded-md px-10 font-semibold" onClick={handleDownload}>
+              <Download className="mr-2 h-5 w-5" />
+              {isFree ? "Obter" : "Comprar"}
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* Descrição */}
+      <section className="mt-10 border-t border-border pt-8">
+        <h2 className="text-xl font-semibold text-foreground">Descrição</h2>
+        <p className="mt-4 max-w-3xl whitespace-pre-line leading-relaxed text-muted-foreground">
+          {sw.description}
+        </p>
+      </section>
+
+      {/* Vídeo de demonstração */}
+      {sw.video_url && (
+        <section className="mt-10">
+          <h2 className="flex items-center gap-2 text-xl font-semibold text-foreground">
+            <Zap className="h-5 w-5 text-primary" /> Demonstração em vídeo
+          </h2>
+          <div className="mt-4 aspect-video max-w-3xl overflow-hidden rounded-xl border border-border bg-black shadow-sm">
+            <iframe
+              src={sw.video_url.replace("watch?v=", "embed/")}
+              className="h-full w-full"
+              allowFullScreen
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Capa em tamanho maior */}
+      {sw.image_url && (
+        <section className="mt-10">
+          <h2 className="text-xl font-semibold text-foreground">Captura de tela</h2>
+          <div className="mt-4 max-w-xl overflow-hidden rounded-xl border border-border bg-card p-3 shadow-sm">
+            <StorageImage
+              value={sw.image_url}
+              alt={`Capa do ${sw.name}`}
+              className="h-auto max-h-[420px] w-full rounded-lg object-contain"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Destaques */}
+      <section className="mt-10 grid max-w-3xl grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <Star className="mb-2 h-5 w-5 text-yellow-500" />
+          <div className="font-semibold text-foreground">Alta performance</div>
+          <div className="mt-1 text-sm text-muted-foreground">Otimizado para sistemas modernos.</div>
+        </div>
+        <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+          <ShieldCheck className="mb-2 h-5 w-5 text-primary" />
+          <div className="font-semibold text-foreground">100% seguro</div>
+          <div className="mt-1 text-sm text-muted-foreground">Verificado contra ameaças.</div>
+        </div>
+      </section>
+
+      {/* Mais programas */}
+      {otherSoftwares.length > 0 && (
+        <section className="mt-12 border-t border-border pt-8">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-xl font-semibold text-foreground">Mais programas</h2>
+            <Link to="/softwares" className="text-sm font-medium text-primary hover:underline">
+              Ver todos
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            {otherSoftwares.map((s) => (
+              <Link
+                key={s.id}
+                to="/softwares/$softwareId"
+                params={{ softwareId: s.id }}
+                className="group rounded-xl border border-border bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
+              >
+                <div className="mx-auto h-20 w-20 overflow-hidden rounded-xl border border-border bg-secondary">
                   <StorageImage
-                    value={sw.image_url}
-                    alt={sw.name}
-                    className="w-full h-auto max-h-[520px] object-contain rounded-xl"
+                    value={s.image_url}
+                    alt={s.name}
+                    className="h-full w-full object-cover"
                     fallback={
-                      <div className="aspect-video flex items-center justify-center bg-slate-800">
-                        <Laptop className="h-20 w-20 text-primary/20" />
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Laptop className="h-8 w-8 text-muted-foreground/40" />
                       </div>
                     }
                   />
                 </div>
-
-                {sw.video_url && (
-                  <div className="space-y-4">
-                    <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                      <Zap className="h-5 w-5 text-primary" /> Demonstração em Vídeo
-                    </h2>
-                    <div className="aspect-video rounded-xl overflow-hidden border border-slate-800 bg-black">
-                      <iframe
-                        src={sw.video_url.replace("watch?v=", "embed/")}
-                        className="w-full h-full"
-                        allowFullScreen
-                      />
-                    </div>
+                <div className="mt-3 text-center">
+                  <div className="truncate text-sm font-semibold text-foreground group-hover:text-primary">
+                    {s.name}
                   </div>
-                )}
-              </div>
-
-              <div className="space-y-6">
-                <div className="space-y-2">
-                  <Badge variant="secondary" className="bg-primary/20 text-primary border-primary/30 uppercase tracking-wider text-[10px]">
-                    {sw.category || "Utilitário"}
-                  </Badge>
-                  <h1 className="text-4xl font-bold text-white tracking-tight">{sw.name}</h1>
-                  <div className="flex items-center gap-4 text-sm text-slate-400">
-                    <span>Versão {sw.version || "1.0"}</span>
-                    <span>•</span>
-                    <span>{sw.size || "N/A"}</span>
-                    <span>•</span>
-                    <span>{sw.downloads || 0} downloads</span>
+                  <div className="mt-0.5 text-xs text-muted-foreground">
+                    {s.price && s.price > 0 ? `R$ ${s.price.toFixed(2)}` : "Gratuito"}
                   </div>
                 </div>
-
-                <div className="p-6 rounded-2xl bg-[#112240] border border-slate-800 space-y-4">
-                  <div className="text-2xl font-bold text-white">
-                    {sw.price && sw.price > 0 ? `R$ ${sw.price.toFixed(2)}` : "Gratuito"}
-                  </div>
-                  <Button className="w-full h-12 text-lg font-bold" onClick={handleDownload}>
-                    <Download className="mr-2 h-5 w-5" /> 
-                    {sw.price && sw.price > 0 ? "Comprar Agora" : "Baixar Agora"}
-                  </Button>
-                </div>
-
-                <div className="space-y-4">
-                  <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                    <ShieldCheck className="h-5 w-5 text-emerald-400" /> Sobre o Programa
-                  </h2>
-                  <p className="text-slate-400 leading-relaxed text-lg">
-                    {sw.description}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 pt-4">
-                  <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50">
-                    <Star className="h-5 w-5 text-yellow-500 mb-2" />
-                    <div className="font-bold text-white">Alta Performance</div>
-                    <div className="text-xs text-slate-500">Otimizado para sistemas modernos.</div>
-                  </div>
-                  <div className="p-4 rounded-xl border border-slate-800 bg-slate-900/50">
-                    <ShieldCheck className="h-5 w-5 text-primary mb-2" />
-                    <div className="font-bold text-white">100% Seguro</div>
-                    <div className="text-xs text-slate-500">Verificado contra ameaças.</div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </Link>
+            ))}
           </div>
-
-          {/* Right-side menu */}
-          <SoftwaresSidebar softwares={allSoftwares || []} activeId={sw.id} />
-        </div>
-      </main>
-    </div>
+        </section>
+      )}
+    </StoreShell>
   );
 }
