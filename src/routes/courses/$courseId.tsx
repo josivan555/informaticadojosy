@@ -8,7 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen, ChevronLeft, Download, ShieldCheck, Star, Zap, Loader2, ArrowRight, Play } from "lucide-react";
 import { getPurchasedDownloadUrl } from "@/lib/downloads.functions";
-import { getPurchaseLinks } from "@/lib/purchase.functions";
+import { useServerFn } from "@tanstack/react-start";
+import { createCourseCheckout, getCoursePurchaseStatus } from "@/lib/mercadopago.functions";
 
 export const Route = createFileRoute("/courses/$courseId")({
   component: CourseDetails,
