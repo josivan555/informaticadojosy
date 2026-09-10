@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -46,6 +46,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
 
 function SoftwareDetails() {
   const { softwareId } = Route.useParams();
+  const router = useRouter();
 
   const { data: sw } = useSuspenseQuery({
     queryKey: ["software", softwareId],
@@ -94,10 +95,12 @@ function SoftwareDetails() {
     <div className="min-h-screen bg-[#0a192f] text-slate-200 pb-20">
       <header className="border-b border-primary/10 bg-[#0a192f]/90 backdrop-blur sticky top-0 z-50">
         <div className="container mx-auto h-16 flex items-center px-4">
-          <Button variant="ghost" asChild className="text-slate-400 hover:text-white">
-            <Link to="/">
-              <ChevronLeft className="mr-2 h-4 w-4" /> Voltar
-            </Link>
+          <Button
+            variant="ghost"
+            onClick={() => router.history.back()}
+            className="text-slate-400 hover:text-white"
+          >
+            <ChevronLeft className="mr-2 h-4 w-4" /> Voltar
           </Button>
         </div>
       </header>
