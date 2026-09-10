@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +47,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
 function SoftwareDetails() {
   const { softwareId } = Route.useParams();
 
-  const { data: sw, isLoading } = useQuery({
+  const { data: sw } = useSuspenseQuery({
     queryKey: ["software", softwareId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -59,14 +59,6 @@ function SoftwareDetails() {
       return data;
     },
   });
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
 
   if (!sw) {
     return (
@@ -113,11 +105,11 @@ function SoftwareDetails() {
       <main className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="space-y-8">
-            <div className="max-w-xs mx-auto lg:mx-0 rounded-2xl overflow-hidden border border-primary/20 bg-slate-900 shadow-2xl p-4">
+            <div className="max-w-sm mx-auto lg:mx-0 rounded-2xl overflow-hidden border border-primary/20 bg-slate-900 shadow-2xl p-4">
               <StorageImage
                 value={sw.image_url}
                 alt={sw.name}
-                className="w-full h-auto max-h-[240px] object-contain rounded-xl"
+                className="w-full h-auto max-h-[300px] object-contain rounded-xl"
                 fallback={
                   <div className="aspect-video flex items-center justify-center bg-slate-800">
                     <Laptop className="h-20 w-20 text-primary/20" />
