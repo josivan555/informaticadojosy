@@ -49,9 +49,9 @@ function AdminLayout() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-[#0a192f] text-slate-200">
-        <Sidebar className="border-r border-slate-800 bg-[#0d1b33] fixed h-screen">
-          <SidebarHeader className="p-4 border-b border-slate-800">
+      <div className="store-theme flex min-h-screen w-full bg-background text-foreground">
+        <Sidebar className="store-theme border-r border-border bg-card fixed h-screen">
+          <SidebarHeader className="p-4 border-b border-border">
             <div className="flex flex-row items-center gap-3">
               <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded" />
               <AdminProfile />
@@ -60,7 +60,7 @@ function AdminLayout() {
           <SidebarContent>
             <SidebarGroup>
               <SidebarGroupLabel>
-                <span className="text-slate-400">Administração</span>
+                <span className="text-muted-foreground">Administração</span>
               </SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
@@ -107,8 +107,8 @@ function AdminLayout() {
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
-            <div className="mt-auto p-4 border-t border-slate-800 flex flex-col gap-2">
-              <Button variant="outline" className="w-full justify-start gap-2 border-slate-700 hover:bg-slate-800 text-slate-300" asChild>
+            <div className="mt-auto p-4 border-t border-border flex flex-col gap-2">
+              <Button variant="outline" className="w-full justify-start gap-2 border-border hover:bg-secondary text-muted-foreground" asChild>
                 <Link to="/">
                   <Home className="h-4 w-4" />
                   <span>Ir para Página Inicial</span>
@@ -117,7 +117,7 @@ function AdminLayout() {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton onClick={handleSignOut}>
-                    <div className="flex items-center gap-2 text-slate-300">
+                    <div className="flex items-center gap-2 text-muted-foreground">
                       <LogOut className="h-4 w-4" />
                       <span>Sair</span>
                     </div>
@@ -150,17 +150,17 @@ function AdminProfile() {
 
   return (
     <div className="flex items-center gap-3">
-      <Avatar className="h-9 w-9 border border-slate-700">
+      <Avatar className="h-9 w-9 border border-border">
         <AvatarImage src={profileUrl} alt="Admin" className="object-cover" />
-        <AvatarFallback className="bg-slate-800">
+        <AvatarFallback className="bg-secondary">
           <User className="h-5 w-5" />
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col overflow-hidden text-sm">
-        <span className="font-semibold truncate text-white">
+        <span className="font-semibold truncate text-foreground">
           {isAdmin ? "Josy Informática" : "Administrador"}
         </span>
-        <span className="text-xs text-slate-400 truncate">{userEmail}</span>
+        <span className="text-xs text-muted-foreground truncate">{userEmail}</span>
       </div>
     </div>
   );
