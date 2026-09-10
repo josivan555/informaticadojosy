@@ -3,6 +3,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { adminListCourses } from "@/lib/admin-content.functions";
+import { compressImage } from "@/lib/compress-image";
 import { Plus, Search, Pencil, Trash2, Sparkles, Loader2, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
