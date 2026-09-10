@@ -3,11 +3,10 @@ import { Download, BookOpen, ChevronRight, Laptop, Star, ShieldCheck, Zap, Loade
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useState, useEffect } from "react";
 import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
 import heroBannerAsset from "@/assets/main-hero-banner.png.asset.json";
 import logoAsset from "@/assets/logo.png.asset.json";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
@@ -15,8 +14,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
 import { User, LogOut } from "lucide-react";
 import { StorageImage } from "@/components/StorageImage";
+import { SoftwaresSidebar } from "@/components/SoftwaresSidebar";
 
-
+const allSoftwaresQueryOptions = {
+  queryKey: ["softwares-menu"],
+  queryFn: async () => {
+    const { data, error } = await supabase
+      .from("softwares")
+      .select("id, name, category, category_id, price, image_url")
+      .eq("status", "published")
+      .order("created_at", { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+};
 
 const softwaresQueryOptions = {
   queryKey: ["softwares", "featured"],
@@ -47,6 +58,9 @@ const coursesQueryOptions = {
 
 export const Route = createFileRoute("/")({
   component: Index,
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(allSoftwaresQueryOptions);
+  },
   head: () => ({
     meta: [
       { title: "Informática do Josy - Download de Programas e Cursos em PDF" },
@@ -60,6 +74,7 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { data: softwares } = useQuery(softwaresQueryOptions);
   const { data: courses } = useQuery(coursesQueryOptions);
+  const { data: allSoftwares } = useSuspenseQuery(allSoftwaresQueryOptions);
   const [isCheckoutLoading, setIsCheckoutLoading] = useState<string | null>(null);
   const navigate = useNavigate();
   
@@ -210,162 +225,167 @@ function Index() {
           <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-blue-600/10 blur-[120px] rounded-full pointer-events-none opacity-30" />
         </section>
 
-
-        {/* Software Section */}
-        <section id="softwares" className="py-20 bg-[#0f2244]/30">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tight">Softwares para PC</h2>
-                <p className="text-muted-foreground">Utilitários e ferramentas prontas para baixar.</p>
-              </div>
-              <Button variant="link" className="p-0" asChild>
-                <Link to="/softwares">Ver todos softwares</Link>
-              </Button>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {softwares?.map((sw: any) => (
-                <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
-                  <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="block">
-                    <div className="w-full aspect-video overflow-hidden bg-slate-900 flex items-center justify-center p-0 relative">
-                      <StorageImage
-                        value={sw.image_url}
-                        alt={sw.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        fallback={
-                          <div className="flex items-center justify-center w-full h-full bg-slate-800">
-                            <Laptop className="h-12 w-12 text-primary/20" />
-                          </div>
-                        }
-                      />
-                    </div>
-                  </Link>
-                  <CardHeader className="pt-4">
-                    <div className="flex justify-between items-start mb-2">
-                      <div className="p-2 bg-primary/10 rounded-lg shrink-0">
-                        <Laptop className="h-5 w-5 text-primary" />
-                      </div>
-                      <Badge variant="outline" className="ml-2 truncate">{sw.category || "Software"}</Badge>
-                      {/* Removido o badge de Rascunho para usuários finais */}
-                    </div>
-                    <CardTitle className="text-xl line-clamp-1">
-                      <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="hover:text-primary transition-colors">
-                        {sw.name}
-                      </Link>
-                    </CardTitle>
-                    <CardDescription className="line-clamp-2 min-h-[3rem]">{sw.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                      <span>Versão {sw.version}</span>
-                      <span>•</span>
-                      <span>{sw.size}</span>
-                    </div>
-                  </CardContent>
-                  <CardFooter className="flex flex-col gap-2">
-                    <Button 
-                      className="w-full group-hover:bg-primary transition-colors"
-                      asChild
-                    >
-                      <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }}>
-                        <ArrowRight className="mr-2 h-4 w-4" /> 
-                        Ver Detalhes
-                      </Link>
-                    </Button>
-                    {sw.price > 0 && (
-                      <p className="text-[10px] text-center text-muted-foreground">
-                        Premium (R$ {sw.price.toFixed(2)})
-                      </p>
-                    )}
-                  </CardFooter>
-                </Card>
-              ))}
-              {(!softwares || softwares.length === 0) && (
-                <div className="col-span-full text-center py-12 text-muted-foreground">
-                  Nenhum software disponível no momento.
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* Courses Section */}
-        <section id="cursos" className="py-20">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tight">Cursos em PDF (Pix e Cartão)</h2>
-                <p className="text-muted-foreground">Aprenda novas habilidades com material didático focado, pague com Pix ou Cartão via Mercado Pago.</p>
-              </div>
-              <Button variant="link" className="p-0" asChild>
-                <Link to="/courses">Ver todos cursos</Link>
-              </Button>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {courses?.map((course: any) => (
-                <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border border-slate-800 bg-[#112240] hover:border-primary/50 transition-colors">
-                  <div className="flex-shrink-0 w-full lg:w-48 h-64 bg-muted rounded-xl flex items-center justify-center relative overflow-hidden group">
-                    {course.image_url ? (
-                      <img 
-                        src={course.image_url} 
-                        alt={course.title} 
-                        className="w-full h-full object-cover transition-transform group-hover:scale-105"
-                      />
-                    ) : (
-                      <BookOpen className="h-12 w-12 text-muted-foreground" />
-                    )}
-                    <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <Badge className="scale-110">PDF Premium</Badge>
-                    </div>
+        {/* Content + right sidebar */}
+        <div className="container mx-auto px-4 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+            <div className="lg:col-span-3 space-y-20">
+              {/* Software Section */}
+              <section id="softwares" className="py-8 bg-[#0f2244]/30 rounded-3xl px-4 sm:px-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-bold tracking-tight">Softwares para PC</h2>
+                    <p className="text-muted-foreground">Utilitários e ferramentas prontas para baixar.</p>
                   </div>
-                  <div className="flex flex-col justify-between py-2">
-                    <div className="space-y-3">
-                      <Badge variant="secondary">{course.level}</Badge>
-                      <h3 className="text-2xl font-bold">{course.title}</h3>
-                      <p className="text-muted-foreground">{course.description}</p>
-                      <div className="flex items-center gap-4 text-sm">
-                        <span className="font-semibold text-primary">{course.pages} páginas</span>
-                        <span className="text-muted-foreground">Formato PDF Digital</span>
-                      </div>
-                    </div>
-                    <div className="mt-6 flex items-center justify-between">
-                      <span className="text-3xl font-bold">R$ {course.price?.toFixed(2)}</span>
-                      <div className="flex gap-2">
+                  <Button variant="link" className="p-0" asChild>
+                    <Link to="/softwares">Ver todos softwares</Link>
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {softwares?.map((sw: any) => (
+                    <Card key={sw.id} className="group hover:shadow-lg transition-all duration-300 bg-[#112240] border-slate-800 hover:border-primary/50 text-slate-200 overflow-hidden">
+                      <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="block">
+                        <div className="w-full aspect-video overflow-hidden bg-slate-900 flex items-center justify-center p-0 relative">
+                          <StorageImage
+                            value={sw.image_url}
+                            alt={sw.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            fallback={
+                              <div className="flex items-center justify-center w-full h-full bg-slate-800">
+                                <Laptop className="h-12 w-12 text-primary/20" />
+                              </div>
+                            }
+                          />
+                        </div>
+                      </Link>
+                      <CardHeader className="pt-4">
+                        <div className="flex justify-between items-start mb-2">
+                          <div className="p-2 bg-primary/10 rounded-lg shrink-0">
+                            <Laptop className="h-5 w-5 text-primary" />
+                          </div>
+                          <Badge variant="outline" className="ml-2 truncate">{sw.category || "Software"}</Badge>
+                          {/* Removido o badge de Rascunho para usuários finais */}
+                        </div>
+                        <CardTitle className="text-xl line-clamp-1">
+                          <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }} className="hover:text-primary transition-colors">
+                            {sw.name}
+                          </Link>
+                        </CardTitle>
+                        <CardDescription className="line-clamp-2 min-h-[3rem]">{sw.description}</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                          <span>Versão {sw.version}</span>
+                          <span>•</span>
+                          <span>{sw.size}</span>
+                        </div>
+                      </CardContent>
+                      <CardFooter className="flex flex-col gap-2">
                         <Button 
-                          variant="outline"
-                          className="rounded-full px-4"
+                          className="w-full group-hover:bg-primary transition-colors"
                           asChild
                         >
-                          <Link to="/courses/$courseId" params={{ courseId: course.id }}>
-                            Detalhes
+                          <Link to="/softwares/$softwareId" params={{ softwareId: sw.id }}>
+                            <ArrowRight className="mr-2 h-4 w-4" /> 
+                            Ver Detalhes
                           </Link>
                         </Button>
-                        <Button 
-                          className="rounded-full px-6"
-                          onClick={() => handleBuyCourse(course)}
-                          disabled={!course.has_purchase_link || isCheckoutLoading === course.id}
-                        >
-                          {isCheckoutLoading === course.id ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            course.has_purchase_link ? 'Comprar Agora' : 'Em breve'
-                          )}
-                        </Button>
+                        {sw.price > 0 && (
+                          <p className="text-[10px] text-center text-muted-foreground">
+                            Premium (R$ {sw.price.toFixed(2)})
+                          </p>
+                        )}
+                      </CardFooter>
+                    </Card>
+                  ))}
+                  {(!softwares || softwares.length === 0) && (
+                    <div className="col-span-full text-center py-12 text-muted-foreground">
+                      Nenhum software disponível no momento.
+                    </div>
+                  )}
+                </div>
+              </section>
+
+              {/* Courses Section */}
+              <section id="cursos" className="py-8">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+                  <div className="space-y-2">
+                    <h2 className="text-3xl font-bold tracking-tight">Cursos em PDF (Pix e Cartão)</h2>
+                    <p className="text-muted-foreground">Aprenda novas habilidades com material didático focado, pague com Pix ou Cartão via Mercado Pago.</p>
+                  </div>
+                  <Button variant="link" className="p-0" asChild>
+                    <Link to="/courses">Ver todos cursos</Link>
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {courses?.map((course: any) => (
+                    <div key={course.id} className="flex flex-col lg:flex-row gap-6 p-6 rounded-2xl border border-slate-800 bg-[#112240] hover:border-primary/50 transition-colors">
+                      <div className="flex-shrink-0 w-full lg:w-48 h-64 bg-muted rounded-xl flex items-center justify-center relative overflow-hidden group">
+                        {course.image_url ? (
+                          <img 
+                            src={course.image_url} 
+                            alt={course.title} 
+                            className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                          />
+                        ) : (
+                          <BookOpen className="h-12 w-12 text-muted-foreground" />
+                        )}
+                        <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Badge className="scale-110">PDF Premium</Badge>
+                        </div>
+                      </div>
+                      <div className="flex flex-col justify-between py-2">
+                        <div className="space-y-3">
+                          <Badge variant="secondary">{course.level}</Badge>
+                          <h3 className="text-2xl font-bold">{course.title}</h3>
+                          <p className="text-muted-foreground">{course.description}</p>
+                          <div className="flex items-center gap-4 text-sm">
+                            <span className="font-semibold text-primary">{course.pages} páginas</span>
+                            <span className="text-muted-foreground">Formato PDF Digital</span>
+                          </div>
+                        </div>
+                        <div className="mt-6 flex items-center justify-between">
+                          <span className="text-3xl font-bold">R$ {course.price?.toFixed(2)}</span>
+                          <div className="flex gap-2">
+                            <Button 
+                              variant="outline"
+                              className="rounded-full px-4"
+                              asChild
+                            >
+                              <Link to="/courses/$courseId" params={{ courseId: course.id }}>
+                                Detalhes
+                              </Link>
+                            </Button>
+                            <Button 
+                              className="rounded-full px-6"
+                              onClick={() => handleBuyCourse(course)}
+                              disabled={!course.has_purchase_link || isCheckoutLoading === course.id}
+                            >
+                              {isCheckoutLoading === course.id ? (
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                              ) : (
+                                course.has_purchase_link ? 'Comprar Agora' : 'Em breve'
+                              )}
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
+                  {(!courses || courses.length === 0) && (
+                    <div className="col-span-full text-center py-12 text-muted-foreground">
+                      Nenhum curso disponível no momento.
+                    </div>
+                  )}
                 </div>
-              ))}
-              {(!courses || courses.length === 0) && (
-                <div className="col-span-full text-center py-12 text-muted-foreground">
-                  Nenhum curso disponível no momento.
-                </div>
-              )}
+              </section>
             </div>
+
+            {/* Right-side menu on home page */}
+            <SoftwaresSidebar softwares={allSoftwares || []} />
           </div>
-        </section>
+        </div>
 
         {/* Footer */}
         <footer className="border-t border-slate-800 py-12 bg-[#0a192f]">
