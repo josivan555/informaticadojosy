@@ -57,7 +57,7 @@ export const adminListCategories = createServerFn({ method: "POST" })
 
 export const adminSaveCategory = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((data: { id?: string; name: string; description?: string | null }) => data)
+  .inputValidator((data: { id?: string | undefined; name: string; description?: string | null }) => data)
   .handler(async ({ context, data }) => {
     const admin = await requireAdmin(context.userId);
     const slug = data.name

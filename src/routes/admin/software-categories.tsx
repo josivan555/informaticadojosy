@@ -36,7 +36,7 @@ function AdminSoftwareCategories() {
   });
 
   const saveMutation = useMutation({
-    mutationFn: (input: { id?: string; name: string; description?: string | null }) =>
+    mutationFn: (input: { id?: string | undefined; name: string; description?: string | null }) =>
       saveFn({ data: input }),
     onSuccess: () => {
       toast.success("Categoria salva!");
