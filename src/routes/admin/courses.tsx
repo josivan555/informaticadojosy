@@ -330,19 +330,12 @@ function AdminCourses() {
                       </FormItem>
                     )}
                   />
-                  <FormField
-                    control={form.control}
-                    name="mercadopago_link"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Link Mercado Pago</FormLabel>
-                        <FormControl>
-                          <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-background border-border" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-foreground leading-none">Pagamento</label>
+                    <div className="rounded-md border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+                      Cobrança automática pelo Mercado Pago com o preço acima. O PDF é liberado sozinho após o pagamento aprovado.
+                    </div>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
