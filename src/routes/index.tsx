@@ -91,6 +91,7 @@ function Index() {
   const term = search.trim().toLowerCase();
   const list = (softwares || []).filter((sw: any) => !term || sw.name?.toLowerCase().includes(term));
   const freeList = list.filter((sw: any) => !sw.price || sw.price === 0);
+  const paidList = list.filter((sw: any) => sw.price > 0);
   const courseList = (courses || []).filter((c: any) => !term || c.title?.toLowerCase().includes(term));
 
   return (
@@ -139,29 +140,26 @@ function Index() {
         </div>
       </section>
 
-      {/* Todos os programas em destaque */}
-      <section className="mb-10">
-        <SectionHeader title="Programas em destaque" subtitle="Os mais recentes do catálogo" to="/softwares" />
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          {list.slice(0, 10).map((sw: any) => (
-            <StoreCard
-              key={sw.id}
-              to="/softwares/$softwareId"
-              params={{ softwareId: sw.id }}
-              image={sw.image_url}
-              title={sw.name}
-              subtitle={sw.category || "Programa"}
-              price={sw.price}
-              meta={sw.version ? `v${sw.version}` : null}
-            />
-          ))}
-          {list.length === 0 && (
-            <p className="col-span-full py-8 text-center text-sm text-muted-foreground">
-              Nenhum programa encontrado.
-            </p>
-          )}
-        </div>
-      </section>
+      {/* Programas premium */}
+      {paidList.length > 0 && (
+        <section className="mb-10">
+          <SectionHeader title="Programas premium" subtitle="Ferramentas pagas do catálogo" to="/softwares" />
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {paidList.slice(0, 10).map((sw: any) => (
+              <StoreCard
+                key={sw.id}
+                to="/softwares/$softwareId"
+                params={{ softwareId: sw.id }}
+                image={sw.image_url}
+                title={sw.name}
+                subtitle={sw.category || "Programa"}
+                price={sw.price}
+                meta={sw.version ? `v${sw.version}` : null}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Cursos */}
       <section className="mb-10">
