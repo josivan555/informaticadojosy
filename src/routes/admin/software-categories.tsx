@@ -7,8 +7,8 @@ export const Route = createFileRoute('/admin/software-categories')({
 function AdminSoftwareCategories() {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-white">Categorias de Softwares</h1>
-      <p className="text-slate-400">Página de gerenciamento de categorias em construção.</p>
+      <h1 className="text-3xl font-bold text-foreground">Categorias de Softwares</h1>
+      <p className="text-muted-foreground">Página de gerenciamento de categorias em construção.</p>
     </div>
   );
 }

@@ -249,8 +249,8 @@ function AdminCourses() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold text-white">Cursos</h1>
-          <p className="text-slate-400">Gerencie seus cursos em PDF e vídeos.</p>
+          <h1 className="text-3xl font-bold text-foreground">Cursos</h1>
+          <p className="text-muted-foreground">Gerencie seus cursos em PDF e vídeos.</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={(open) => {
           setIsDialogOpen(open);
@@ -265,7 +265,7 @@ function AdminCourses() {
               Adicionar Curso
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl bg-[#0d1b33] border-slate-800 text-white max-h-[90vh] overflow-y-auto" onPointerDownOutside={(e) => e.preventDefault()}>
+          <DialogContent className="max-w-2xl bg-card border-border text-foreground max-h-[90vh] overflow-y-auto" onPointerDownOutside={(e) => e.preventDefault()}>
             <DialogHeader>
               <DialogTitle>{editingId ? "Editar Curso" : "Novo Curso"}</DialogTitle>
             </DialogHeader>
@@ -278,7 +278,7 @@ function AdminCourses() {
                     <FormItem>
                       <FormLabel>Título</FormLabel>
                       <FormControl>
-                        <Input {...field} value={field.value || ""} className="bg-slate-900 border-slate-700" />
+                        <Input {...field} value={field.value || ""} className="bg-background border-border" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -309,7 +309,7 @@ function AdminCourses() {
                         </Button>
                       </div>
                       <FormControl>
-                        <Textarea {...field} value={field.value || ""} className="bg-slate-900 border-slate-700 min-h-[100px]" />
+                        <Textarea {...field} value={field.value || ""} className="bg-background border-border min-h-[100px]" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -324,7 +324,7 @@ function AdminCourses() {
                       <FormItem>
                         <FormLabel>Preço</FormLabel>
                         <FormControl>
-                          <Input type="number" step="0.01" {...field} className="bg-slate-900 border-slate-700" />
+                          <Input type="number" step="0.01" {...field} className="bg-background border-border" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -337,7 +337,7 @@ function AdminCourses() {
                       <FormItem>
                         <FormLabel>Link Mercado Pago</FormLabel>
                         <FormControl>
-                          <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-slate-900 border-slate-700" />
+                          <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-background border-border" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -353,7 +353,7 @@ function AdminCourses() {
                       <FormItem>
                         <FormLabel>URL do Vídeo (Youtube/Vimeo)</FormLabel>
                         <FormControl>
-                          <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-slate-900 border-slate-700" />
+                          <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-background border-border" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -366,7 +366,7 @@ function AdminCourses() {
                       <FormItem>
                         <FormLabel>Nível</FormLabel>
                         <FormControl>
-                          <Input {...field} value={field.value || ""} placeholder="Básico / Intermediário" className="bg-slate-900 border-slate-700" />
+                          <Input {...field} value={field.value || ""} placeholder="Básico / Intermediário" className="bg-background border-border" />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -376,12 +376,12 @@ function AdminCourses() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Capa do Curso</label>
+                    <label className="text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Capa do Curso</label>
                     <div className="flex gap-2">
                       <Input
                         type="file"
                         accept="image/*"
-                        className="bg-slate-900 border-slate-700 cursor-pointer"
+                        className="bg-background border-border cursor-pointer"
                         onChange={(e) => {
                           const file = e.target.files?.[0];
                           if (file) handleFileUpload(e, "image_url");
@@ -389,11 +389,11 @@ function AdminCourses() {
                       />
                       {form.watch("image_url") && (
                         <div className="mt-2 relative group w-full">
-                          <div className="w-full h-32 rounded-md border border-slate-700 overflow-hidden bg-slate-900">
-                            <StorageImage value={form.watch("image_url")} alt="Preview" className="w-full h-full object-cover" fallback={<div className="w-full h-full flex items-center justify-center"><BookOpen className="h-8 w-8 text-slate-600" /></div>} />
+                          <div className="w-full h-32 rounded-md border border-border overflow-hidden bg-background">
+                            <StorageImage value={form.watch("image_url")} alt="Preview" className="w-full h-full object-cover" fallback={<div className="w-full h-full flex items-center justify-center"><BookOpen className="h-8 w-8 text-muted-foreground" /></div>} />
                           </div>
                           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-md">
-                            <span className="text-[10px] text-white">Capa Carregada</span>
+                            <span className="text-[10px] text-foreground">Capa Carregada</span>
                           </div>
                           <Button
                             type="button"
@@ -409,12 +409,12 @@ function AdminCourses() {
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Arquivo PDF</label>
+                    <label className="text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Arquivo PDF</label>
                     <div className="flex gap-2">
                       <Input
                         type="file"
                         accept=".pdf"
-                        className="bg-slate-900 border-slate-700"
+                        className="bg-background border-border"
                         onChange={(e) => handleFileUpload(e, "file_url")}
                       />
                     </div>
@@ -428,7 +428,7 @@ function AdminCourses() {
                     <FormItem>
                       <FormLabel>Link de Download Externo (Opcional - caso já esteja em um servidor)</FormLabel>
                       <FormControl>
-                        <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-slate-900 border-slate-700" />
+                        <Input {...field} value={field.value || ""} placeholder="https://..." className="bg-background border-border" />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -437,12 +437,12 @@ function AdminCourses() {
 
                 <div className="grid grid-cols-1 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Upload de Vídeo (Opcional)</label>
+                    <label className="text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Upload de Vídeo (Opcional)</label>
                     <div className="flex gap-2">
                       <Input
                         type="file"
                         accept="video/*"
-                        className="bg-slate-900 border-slate-700"
+                        className="bg-background border-border"
                         onChange={(e) => handleFileUpload(e, "video_url")} 
                       />
                     </div>
@@ -453,14 +453,14 @@ function AdminCourses() {
                   <Button 
                     type="button" 
                     variant="outline" 
-                    className="flex-1 bg-transparent border-slate-700 text-white hover:bg-slate-800"
+                    className="flex-1 bg-transparent border-border text-foreground hover:bg-secondary"
                     onClick={() => setIsDialogOpen(false)}
                   >
                     Cancelar
                   </Button>
                   <Button 
                     type="button" 
-                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-white" 
+                    className="flex-1 bg-cyan-600 hover:bg-cyan-700 text-foreground" 
                     disabled={mutation.isPending}
                     onClick={async () => {
                       const isValid = await form.trigger();
@@ -487,24 +487,24 @@ function AdminCourses() {
       </div>
 
 
-      <div className="flex items-center bg-[#0d1b33] px-4 py-2 rounded-lg border border-slate-800">
-        <Search className="h-4 w-4 text-slate-400 mr-2" />
+      <div className="flex items-center bg-card px-4 py-2 rounded-lg border border-border">
+        <Search className="h-4 w-4 text-muted-foreground mr-2" />
         <Input
           placeholder="Buscar cursos..."
-          className="bg-transparent border-none focus-visible:ring-0 text-white placeholder:text-slate-500"
+          className="bg-transparent border-none focus-visible:ring-0 text-foreground placeholder:text-muted-foreground"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
       </div>
 
-      <div className="bg-[#0d1b33] rounded-xl border border-slate-800 overflow-hidden">
+      <div className="bg-card rounded-xl border border-border overflow-hidden">
         <Table>
-          <TableHeader className="bg-slate-900/50">
-            <TableRow className="border-slate-800 hover:bg-transparent">
-              <TableHead className="text-slate-400">Curso</TableHead>
-              <TableHead className="text-slate-400">Nível</TableHead>
-              <TableHead className="text-slate-400">Preço</TableHead>
-              <TableHead className="text-slate-400 text-right">Ações</TableHead>
+          <TableHeader className="bg-muted/50">
+            <TableRow className="border-border hover:bg-transparent">
+              <TableHead className="text-muted-foreground">Curso</TableHead>
+              <TableHead className="text-muted-foreground">Nível</TableHead>
+              <TableHead className="text-muted-foreground">Preço</TableHead>
+              <TableHead className="text-muted-foreground text-right">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -516,40 +516,40 @@ function AdminCourses() {
               </TableRow>
             ) : filteredCourses?.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-10 text-slate-500">
+                <TableCell colSpan={4} className="text-center py-10 text-muted-foreground">
                   Nenhum curso encontrado.
                 </TableCell>
               </TableRow>
             ) : (
               filteredCourses?.map((course) => (
-                <TableRow key={course.id} className="border-slate-800 hover:bg-slate-900/40 transition-colors">
+                <TableRow key={course.id} className="border-border hover:bg-muted/40 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-3">
                       {course.image_url ? (
-                        <img src={course.image_url} className="h-10 w-10 rounded object-cover border border-slate-700" alt="" />
+                        <img src={course.image_url} className="h-10 w-10 rounded object-cover border border-border" alt="" />
                       ) : (
-                        <div className="h-10 w-10 rounded bg-slate-800 flex items-center justify-center">
-                          <BookOpen className="h-5 w-5 text-slate-500" />
+                        <div className="h-10 w-10 rounded bg-secondary flex items-center justify-center">
+                          <BookOpen className="h-5 w-5 text-muted-foreground" />
                         </div>
                       )}
                       <div>
-                        <div className="font-medium text-white">{course.title}</div>
-                        <div className="text-xs text-slate-500">{course.pages || 0} páginas</div>
+                        <div className="font-medium text-foreground">{course.title}</div>
+                        <div className="text-xs text-muted-foreground">{course.pages || 0} páginas</div>
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="text-slate-300">
+                  <TableCell className="text-muted-foreground">
                     {course.level || "Básico"}
                   </TableCell>
-                  <TableCell className="text-white">
+                  <TableCell className="text-foreground">
                     R$ {course.price?.toFixed(2)}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-2">
-                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white" onClick={() => handleEdit(course)}>
+                      <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => handleEdit(course)}>
                         <Pencil className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-400" onClick={() => {
+                      <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-red-400" onClick={() => {
                         if (confirm("Tem certeza que deseja remover este curso?")) {
                           deleteMutation.mutate(course.id);
                         }
