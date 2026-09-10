@@ -46,6 +46,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
 
 function SoftwareDetails() {
   const { softwareId } = Route.useParams();
+  const router = useRouter();
 
   const { data: sw } = useSuspenseQuery({
     queryKey: ["software", softwareId],
