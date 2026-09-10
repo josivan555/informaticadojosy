@@ -105,11 +105,11 @@ function SoftwareDetails() {
       <main className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           <div className="space-y-8">
-            <div className="max-w-xs mx-auto lg:mx-0 rounded-2xl overflow-hidden border border-primary/20 bg-slate-900 shadow-2xl p-4">
+            <div className="max-w-sm mx-auto lg:mx-0 rounded-2xl overflow-hidden border border-primary/20 bg-slate-900 shadow-2xl p-4">
               <StorageImage
                 value={sw.image_url}
                 alt={sw.name}
-                className="w-full h-auto max-h-[240px] object-contain rounded-xl"
+                className="w-full h-auto max-h-[300px] object-contain rounded-xl"
                 fallback={
                   <div className="aspect-video flex items-center justify-center bg-slate-800">
                     <Laptop className="h-20 w-20 text-primary/20" />
