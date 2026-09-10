@@ -268,7 +268,7 @@ function AdminSoftwares() {
                       <FormItem><FormLabel>Categoria *</FormLabel>
                         <Select onValueChange={field.onChange} value={field.value || ""}>
                           <FormControl><SelectTrigger className="bg-background border-border"><SelectValue placeholder="Selecione" /></SelectTrigger></FormControl>
-                          <SelectContent className="bg-background border-border text-foreground">
+                          <SelectContent className="store-theme bg-background border-border text-foreground">
                             {categories?.map((cat) => (<SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>))}
                           </SelectContent>
                         </Select>
@@ -342,7 +342,7 @@ function AdminSoftwares() {
                     <FormItem><FormLabel>Status</FormLabel>
                       <Select onValueChange={field.onChange} value={field.value || "active"}>
                         <FormControl><SelectTrigger className="bg-background border-border"><SelectValue placeholder="Status" /></SelectTrigger></FormControl>
-                        <SelectContent className="bg-background border-border text-foreground">
+                        <SelectContent className="store-theme bg-background border-border text-foreground">
                           <SelectItem value="active">Rascunho</SelectItem>
                           <SelectItem value="published">Publicado</SelectItem>
                         </SelectContent>
