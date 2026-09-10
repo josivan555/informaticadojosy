@@ -119,3 +119,27 @@
     color: var(--color-foreground);
   }
 }
+
+/* Microsoft Store inspired light theme, scoped to the store pages */
+.store-theme {
+  --radius: 0.5rem;
+  --background: oklch(0.96 0.002 250);
+  --foreground: oklch(0.22 0.01 250);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.01 250);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.01 250);
+  --primary: oklch(0.52 0.16 253);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.93 0.004 250);
+  --secondary-foreground: oklch(0.25 0.01 250);
+  --muted: oklch(0.93 0.004 250);
+  --muted-foreground: oklch(0.5 0.01 250);
+  --accent: oklch(0.92 0.02 253);
+  --accent-foreground: oklch(0.3 0.05 253);
+  --border: oklch(0.88 0.004 250);
+  --input: oklch(0.88 0.004 250);
+  --ring: oklch(0.52 0.16 253);
+  background-color: var(--background);
+  color: var(--foreground);
+}
