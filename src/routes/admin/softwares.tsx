@@ -254,7 +254,7 @@ function AdminSoftwares() {
                 <Plus className="h-4 w-4" /> Adicionar Software
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl bg-card border-border text-foreground max-h-[90vh] overflow-y-auto">
+            <DialogContent className="store-theme max-w-2xl bg-card border-border text-foreground max-h-[90vh] overflow-y-auto">
               <DialogHeader>
                 <DialogTitle>{editingId ? "Editar Software" : "Novo Software"}</DialogTitle>
               </DialogHeader>

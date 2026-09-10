@@ -265,7 +265,7 @@ function AdminCourses() {
               Adicionar Curso
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-2xl bg-card border-border text-foreground max-h-[90vh] overflow-y-auto" onPointerDownOutside={(e) => e.preventDefault()}>
+          <DialogContent className="store-theme max-w-2xl bg-card border-border text-foreground max-h-[90vh] overflow-y-auto" onPointerDownOutside={(e) => e.preventDefault()}>
             <DialogHeader>
               <DialogTitle>{editingId ? "Editar Curso" : "Novo Curso"}</DialogTitle>
             </DialogHeader>
