@@ -47,7 +47,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
 function SoftwareDetails() {
   const { softwareId } = Route.useParams();
 
-  const { data: sw, isLoading } = useQuery({
+  const { data: sw } = useSuspenseQuery({
     queryKey: ["software", softwareId],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -59,14 +59,6 @@ function SoftwareDetails() {
       return data;
     },
   });
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-[#0a192f] flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
 
   if (!sw) {
     return (
