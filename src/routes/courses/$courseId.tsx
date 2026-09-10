@@ -57,111 +57,55 @@ function CourseDetails() {
 
   const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
   const [hasPurchased, setHasPurchased] = useState(false);
+  const createCheckout = useServerFn(createCourseCheckout);
+  const purchaseStatus = useServerFn(getCoursePurchaseStatus);
 
   useEffect(() => {
+    let active = true;
     const checkPurchaseStatus = async () => {
       const { data: { session: authSession } } = await supabase.auth.getSession();
       if (!authSession) return;
-
-      const { data: purchase } = await supabase
-        .from('checkout_sessions')
-        .select('*')
-        .eq('course_id', params.courseId)
-        .eq('user_id', authSession.user.id)
-        .eq('status', 'completed')
-        .maybeSingle();
-
-      if (purchase) {
-        setHasPurchased(true);
+      try {
+        const { purchased } = await purchaseStatus({ data: { courseId: params.courseId } });
+        if (active && purchased) setHasPurchased(true);
+      } catch {
+        // ignora
       }
     };
 
     checkPurchaseStatus();
-  }, [params.courseId]);
-
-  useEffect(() => {
-    // @ts-ignore
-    if (window.Paddle) {
-      // @ts-ignore
-      window.Paddle.Setup({ 
-        seller: 12345, // Usuário deve alterar
-        environment: 'sandbox' 
-      });
-    }
-  }, []);
+    // revalida quando o usuário volta do Mercado Pago
+    const onFocus = () => checkPurchaseStatus();
+    window.addEventListener("focus", onFocus);
+    return () => {
+      active = false;
+      window.removeEventListener("focus", onFocus);
+    };
+  }, [params.courseId, purchaseStatus]);
 
   const handleBuy = async () => {
     const { data: { session: authSession } } = await supabase.auth.getSession();
-    
+
     if (!authSession) {
       toast.error("Você precisa estar logado para comprar");
       window.location.href = "/auth";
       return;
     }
 
-    if (!course.has_purchase_link) {
-      toast.error("Método de pagamento não configurado");
-      return;
-    }
-
-    let links: { mercadopago_link: string | null; paddle_price_id: string | null };
-    try {
-      links = await getPurchaseLinks({ data: { kind: "course", itemId: course.id } });
-    } catch {
-      toast.error("Não foi possível iniciar a compra agora");
-      return;
-    }
-
-    if (links.mercadopago_link) {
-      // Create a pending session before redirecting
-      // In a real flow, you'd use Mercado Pago API to create a preference and get an ID
-      // Here we'll use a placeholder or the link itself as reference
-      await supabase.from('checkout_sessions').insert({
-        user_id: authSession.user.id,
-        course_id: course.id,
-        payment_method: 'mercadopago',
-        status: 'pending'
-      });
-      
-      window.open(links.mercadopago_link, '_blank');
-      toast.info("Redirecionando para o Mercado Pago...");
-      return;
-    }
-
-    // @ts-ignore
-    if (!window.Paddle) {
-      toast.error("Sistema de pagamentos não carregado");
+    if (!course.price || course.price <= 0) {
+      toast.error("Este curso é gratuito");
       return;
     }
 
     setIsCheckoutLoading(true);
-    // @ts-ignore
-    window.Paddle.Checkout.open({
-      items: [{ priceId: links.paddle_price_id, quantity: 1 }],
-      settings: {
-        displayMode: 'overlay',
-        theme: 'light',
-        locale: 'pt'
-      },
-      eventCallback: async (data: any) => {
-        if (data.name === 'checkout.completed') {
-          // Update local session
-          await supabase.from('checkout_sessions').insert({
-            user_id: authSession.user.id,
-            course_id: course.id,
-            external_checkout_id: data.data.checkout.id,
-            payment_method: 'paddle',
-            status: 'completed'
-          });
-          
-          setHasPurchased(true);
-          toast.success("Compra confirmada!");
-        }
-        if (data.name === 'checkout.closed') {
-          setIsCheckoutLoading(false);
-        }
-      }
-    });
+    try {
+      const { checkoutUrl } = await createCheckout({ data: { courseId: course.id } });
+      toast.info("Redirecionando para o Mercado Pago...");
+      window.location.href = checkoutUrl;
+    } catch {
+      toast.error("Não foi possível iniciar a compra agora");
+      setIsCheckoutLoading(false);
+    }
   };
 
   const handleDownload = async () => {
