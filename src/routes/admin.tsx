@@ -49,8 +49,8 @@ function AdminLayout() {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background text-muted-foreground">
-        <Sidebar className="border-r border-border bg-card fixed h-screen">
+      <div className="store-theme flex min-h-screen w-full bg-background text-foreground">
+        <Sidebar className="store-theme border-r border-border bg-card fixed h-screen">
           <SidebarHeader className="p-4 border-b border-border">
             <div className="flex flex-row items-center gap-3">
               <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded" />
