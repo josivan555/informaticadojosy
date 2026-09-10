@@ -200,6 +200,11 @@ function SoftwareDetails() {
               value={sw.image_url}
               alt={`Capa do ${sw.name}`}
               className="h-auto max-h-[420px] w-full rounded-lg object-contain"
+              fallback={
+                <div className="flex aspect-video items-center justify-center bg-secondary">
+                  <Laptop className="h-12 w-12 text-muted-foreground/40" />
+                </div>
+              }
             />
           </div>
         </section>
