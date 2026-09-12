@@ -1,7 +1,7 @@
 import { createFileRoute, Link, redirect, Outlet, useLocation } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { SidebarProvider, Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader } from "@/components/ui/sidebar";
-import { Laptop, BookOpen, LayoutDashboard, LogOut, Home, User, Tags, Download } from "lucide-react";
+import { Laptop, BookOpen, LayoutDashboard, LogOut, Home, User, Tags, Download, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
@@ -101,6 +101,14 @@ function AdminLayout() {
                       <Link to="/admin/downloads">
                         <Download className="h-4 w-4" />
                         <span>Downloads</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActive('/admin/sales') ? "bg-accent text-accent-foreground" : ""}>
+                      <Link to="/admin/sales">
+                        <TrendingUp className="h-4 w-4" />
+                        <span>Painel de vendas</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
