@@ -104,6 +104,14 @@ function AdminLayout() {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild className={isActive('/admin/sales') ? "bg-accent text-accent-foreground" : ""}>
+                      <Link to="/admin/sales">
+                        <TrendingUp className="h-4 w-4" />
+                        <span>Painel de vendas</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </SidebarGroup>
