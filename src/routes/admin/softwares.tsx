@@ -60,7 +60,7 @@ const softwareSchema = z.object({
   file_url: z.string().nullable(),
   external_download_url: z.string().nullable(),
   video_url: z.string().nullable(),
-  video_urls: z.array(z.string()).default([]),
+  video_urls: z.array(z.string()),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
