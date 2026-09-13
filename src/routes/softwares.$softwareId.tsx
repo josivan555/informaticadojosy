@@ -30,7 +30,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("softwares")
-          .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download")
+          .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, video_urls, has_purchase_link, has_download")
           .eq("id", params.softwareId)
           .single();
         if (error) throw error;
@@ -67,7 +67,7 @@ function SoftwareDetails() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("softwares")
-        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, has_purchase_link, has_download")
+        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, video_urls, has_purchase_link, has_download")
         .eq("id", softwareId)
         .single();
       if (error) throw error;
@@ -188,6 +188,26 @@ function SoftwareDetails() {
           {sw.description}
         </p>
       </section>
+
+      {/* Vídeos de demonstração */}
+      {(sw.video_urls?.length ?? 0) > 0 && (
+        <section className="mt-10">
+          <h2 className="flex items-center gap-2 text-xl font-semibold text-foreground">
+            <Zap className="h-5 w-5 text-primary" /> Vídeos
+          </h2>
+          <div className="mt-4 grid gap-6 md:grid-cols-2">
+            {sw.video_urls.map((url: string, i: number) => (
+              <div key={i} className="aspect-video overflow-hidden rounded-xl border border-border bg-black shadow-sm">
+                <iframe
+                  src={url.replace("watch?v=", "embed/").replace("youtu.be/", "www.youtube.com/embed/")}
+                  className="h-full w-full"
+                  allowFullScreen
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Vídeo de demonstração */}
       {sw.video_url && (
