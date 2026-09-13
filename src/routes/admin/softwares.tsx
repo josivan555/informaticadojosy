@@ -60,6 +60,7 @@ const softwareSchema = z.object({
   file_url: z.string().nullable(),
   external_download_url: z.string().nullable(),
   video_url: z.string().nullable(),
+  video_urls: z.array(z.string()).default([]),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
@@ -92,6 +93,7 @@ function AdminSoftwares() {
       file_url: null,
       external_download_url: null,
       video_url: null,
+      video_urls: [],
     },
   });
 
@@ -126,6 +128,7 @@ function AdminSoftwares() {
         mercadopago_link: values.mercadopago_link || null,
         external_download_url: values.external_download_url || null,
         video_url: values.video_url || null,
+        video_urls: (values.video_urls || []).map((v) => v.trim()).filter(Boolean),
         category_id: values.category_id || null,
         price: isNaN(priceValue) ? 0 : priceValue,
         status: values.status || 'active',
@@ -188,6 +191,7 @@ function AdminSoftwares() {
       file_url: software.file_url || null,
       external_download_url: software.external_download_url || null,
       video_url: software.video_url || null,
+      video_urls: Array.isArray(software.video_urls) ? software.video_urls : [],
     });
     setIsDialogOpen(true);
   };
@@ -250,7 +254,27 @@ function AdminSoftwares() {
           </div>
           <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) { setEditingId(null); form.reset(); } }}>
             <DialogTrigger asChild>
-              <Button className="bg-cyan-600 hover:bg-cyan-700 gap-2">
+              <Button
+                className="bg-cyan-600 hover:bg-cyan-700 gap-2"
+                onClick={() => {
+                  setEditingId(null);
+                  form.reset({
+                    name: "",
+                    description: null,
+                    price: 0,
+                    status: "active",
+                    version: null,
+                    size: null,
+                    mercadopago_link: null,
+                    category_id: "",
+                    image_url: null,
+                    file_url: null,
+                    external_download_url: null,
+                    video_url: null,
+                    video_urls: [],
+                  });
+                }}
+              >
                 <Plus className="h-4 w-4" /> Adicionar Software
               </Button>
             </DialogTrigger>
@@ -337,6 +361,53 @@ function AdminSoftwares() {
                   </div>
                   <FormField control={form.control} name="external_download_url" render={({ field }) => (
                     <FormItem><FormLabel>Link Externo</FormLabel><FormControl><Input {...field} value={field.value || ""} className="bg-background border-border" /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="video_urls" render={({ field }) => (
+                    <FormItem>
+                      <div className="flex items-center justify-between">
+                        <FormLabel>Vídeos do YouTube</FormLabel>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          className="h-7 gap-1 text-cyan-600"
+                          onClick={() => field.onChange([...(field.value || []), ""])}
+                        >
+                          <Plus className="h-3 w-3" /> Adicionar vídeo
+                        </Button>
+                      </div>
+                      <div className="space-y-2">
+                        {(field.value || []).length === 0 && (
+                          <p className="text-xs text-muted-foreground">
+                            Nenhum vídeo. Clique em "Adicionar vídeo" e cole o link do YouTube.
+                          </p>
+                        )}
+                        {(field.value || []).map((url, index) => (
+                          <div key={index} className="flex gap-2">
+                            <Input
+                              value={url}
+                              placeholder="https://www.youtube.com/watch?v=..."
+                              className="bg-background border-border"
+                              onChange={(e) => {
+                                const next = [...(field.value || [])];
+                                next[index] = e.target.value;
+                                field.onChange(next);
+                              }}
+                            />
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="text-muted-foreground hover:text-red-500"
+                              onClick={() => field.onChange((field.value || []).filter((_, i) => i !== index))}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
                   )} />
                   <FormField control={form.control} name="status" render={({ field }) => (
                     <FormItem><FormLabel>Status</FormLabel>
