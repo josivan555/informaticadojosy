@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, Zap, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { StorageImage } from "@/components/StorageImage";
 
 export const Route = createFileRoute("/courses/")({
   component: CoursesList,
@@ -61,17 +62,16 @@ function CoursesList() {
                 className="group flex flex-col bg-[#112240] border border-slate-800 rounded-2xl overflow-hidden hover:border-primary/50 transition-all"
               >
                 <div className="aspect-[3/4] bg-muted relative overflow-hidden">
-                  {course.image_url ? (
-                    <img 
-                      src={course.image_url} 
-                      alt={course.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <BookOpen className="h-16 w-16 text-muted-foreground/30" />
-                    </div>
-                  )}
+                  <StorageImage
+                    value={course.image_url}
+                    alt={course.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    fallback={
+                      <div className="w-full h-full flex items-center justify-center">
+                        <BookOpen className="h-16 w-16 text-muted-foreground/30" />
+                      </div>
+                    }
+                  />
                   <div className="absolute top-4 left-4">
                     <Badge>{course.level}</Badge>
                   </div>
