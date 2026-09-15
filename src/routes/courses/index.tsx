@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { BookOpen, Zap, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { StorageImage } from "@/components/StorageImage";
 
 export const Route = createFileRoute("/courses/")({
   component: CoursesList,
