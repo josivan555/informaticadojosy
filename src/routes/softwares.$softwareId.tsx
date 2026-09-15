@@ -80,6 +80,33 @@ function SoftwareDetails() {
 
   const { data: allSoftwares } = useSuspenseQuery(allSoftwaresQueryOptions);
 
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const createCheckout = useServerFn(createSoftwareCheckout);
+  const purchaseStatus = useServerFn(getSoftwarePurchaseStatus);
+
+  useEffect(() => {
+    let active = true;
+    const check = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      try {
+        const { purchased } = await purchaseStatus({ data: { softwareId } });
+        if (active && purchased) setHasPurchased(true);
+      } catch {
+        // ignora
+      }
+    };
+    check();
+    const onFocus = () => check();
+    window.addEventListener("focus", onFocus);
+    return () => {
+      active = false;
+      window.removeEventListener("focus", onFocus);
+    };
+  }, [softwareId, purchaseStatus]);
+
+
   if (!sw) {
     return (
       <StoreShell active="softwares">
