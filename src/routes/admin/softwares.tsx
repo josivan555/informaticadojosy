@@ -314,9 +314,12 @@ function AdminSoftwares() {
                     <FormField control={form.control} name="price" render={({ field }) => (
                       <FormItem><FormLabel>Preço</FormLabel><FormControl><Input type="number" step="0.01" {...field} value={field.value ?? 0} className="bg-background border-border" /></FormControl><FormMessage /></FormItem>
                     )} />
-                    <FormField control={form.control} name="mercadopago_link" render={({ field }) => (
-                      <FormItem><FormLabel>Link MP</FormLabel><FormControl><Input {...field} value={field.value || ""} className="bg-background border-border" /></FormControl><FormMessage /></FormItem>
-                    )} />
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium leading-none">Pagamento</label>
+                      <p className="text-xs text-muted-foreground">
+                        Cobrança automática pelo Mercado Pago (Pix ou cartão) com base no preço acima. Não precisa de link.
+                      </p>
+                    </div>
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
