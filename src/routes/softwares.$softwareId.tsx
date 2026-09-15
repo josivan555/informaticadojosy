@@ -163,20 +163,22 @@ function SoftwareDetails() {
               <Download className="mr-2 h-5 w-5" />
               {isFree ? "Obter" : "Comprar"}
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="rounded-md px-6 font-semibold"
-              asChild
-            >
-              <a
-                href="https://cheerful-making-zone.lovable.app/planos?plano=1000"
-                target="_blank"
-                rel="noopener noreferrer"
+            {sw.name.trim().toLowerCase() === "bingo show master" && (
+              <Button
+                size="lg"
+                variant="outline"
+                className="rounded-md px-6 font-semibold"
+                asChild
               >
-                Comprar licença
-              </a>
-            </Button>
+                <a
+                  href="https://cheerful-making-zone.lovable.app/planos?plano=1000"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Comprar licença
+                </a>
+              </Button>
+            )}
           </div>
         </div>
       </section>
