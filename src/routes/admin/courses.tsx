@@ -518,13 +518,18 @@ function AdminCourses() {
                 <TableRow key={course.id} className="border-border hover:bg-muted/40 transition-colors">
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      {course.image_url ? (
-                        <img src={course.image_url} className="h-10 w-10 rounded object-cover border border-border" alt="" />
-                      ) : (
-                        <div className="h-10 w-10 rounded bg-secondary flex items-center justify-center">
-                          <BookOpen className="h-5 w-5 text-muted-foreground" />
-                        </div>
-                      )}
+                      <div className="h-10 w-10 overflow-hidden rounded border border-border bg-secondary">
+                        <StorageImage
+                          value={course.image_url}
+                          alt=""
+                          className="h-full w-full object-cover"
+                          fallback={
+                            <div className="h-full w-full flex items-center justify-center">
+                              <BookOpen className="h-5 w-5 text-muted-foreground" />
+                            </div>
+                          }
+                        />
+                      </div>
                       <div>
                         <div className="font-medium text-foreground">{course.title}</div>
                         <div className="text-xs text-muted-foreground">{course.pages || 0} páginas</div>
