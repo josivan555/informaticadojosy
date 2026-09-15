@@ -205,10 +205,26 @@ function SoftwareDetails() {
             <div className="text-lg font-semibold text-foreground">
               {isFree ? "Gratuito" : `R$ ${sw.price!.toFixed(2)}`}
             </div>
-            <Button size="lg" className="rounded-md px-10 font-semibold" onClick={handleDownload}>
-              <Download className="mr-2 h-5 w-5" />
-              {isFree ? "Obter" : "Comprar"}
-            </Button>
+            {isFree || hasPurchased ? (
+              <Button size="lg" className="rounded-md px-10 font-semibold" onClick={handleDownload}>
+                <Download className="mr-2 h-5 w-5" />
+                {isFree ? "Obter" : "Baixar agora"}
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                className="rounded-md px-10 font-semibold"
+                onClick={handleBuy}
+                disabled={isCheckoutLoading}
+              >
+                {isCheckoutLoading ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                ) : (
+                  <Download className="mr-2 h-5 w-5" />
+                )}
+                Comprar com Pix ou cartão
+              </Button>
+            )}
             {sw.name.trim().toLowerCase() === "bingo show master" && (
               <Button
                 size="lg"
