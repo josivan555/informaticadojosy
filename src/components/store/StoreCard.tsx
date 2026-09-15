@@ -35,7 +35,7 @@ export function StoreCard({ to, params, image, title, subtitle, price, meta }: S
       <h3 className="line-clamp-2 text-sm font-semibold leading-snug text-card-foreground">{title}</h3>
       {subtitle && <p className="mt-0.5 line-clamp-1 text-xs text-muted-foreground">{subtitle}</p>}
       <div className="mt-auto pt-2 text-sm font-medium text-card-foreground">
-        {price && price > 0 ? `R$ ${price.toFixed(2)}` : "Grátis"}
+        {price && price > 0 ? "Pago" : "Grátis"}
         {meta && <span className="ml-2 text-xs font-normal text-muted-foreground">{meta}</span>}
       </div>
     </Link>

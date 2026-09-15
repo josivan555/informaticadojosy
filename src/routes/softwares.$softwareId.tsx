@@ -203,7 +203,7 @@ function SoftwareDetails() {
 
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <div className="text-lg font-semibold text-foreground">
-              {isFree ? "Gratuito" : `R$ ${sw.price!.toFixed(2)}`}
+              {isFree ? "Gratuito" : "Pago"}
             </div>
             {isFree || hasPurchased ? (
               <Button size="lg" className="rounded-md px-10 font-semibold" onClick={handleDownload}>
@@ -356,7 +356,7 @@ function SoftwareDetails() {
                     {s.name}
                   </div>
                   <div className="mt-0.5 text-xs text-muted-foreground">
-                    {s.price && s.price > 0 ? `R$ ${s.price.toFixed(2)}` : "Gratuito"}
+                    {s.price && s.price > 0 ? "Pago" : "Gratuito"}
                   </div>
                 </div>
               </Link>

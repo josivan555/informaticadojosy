@@ -199,7 +199,7 @@ function Index() {
               <span className="flex-1 truncate text-sm font-medium text-card-foreground">{sw.name}</span>
               <span className="hidden text-xs text-muted-foreground sm:inline">{sw.category || "Programa"}</span>
               <span className="text-sm text-card-foreground">
-                {sw.price > 0 ? `R$ ${sw.price.toFixed(2)}` : "Grátis"}
+                {sw.price > 0 ? "Pago" : "Grátis"}
               </span>
               <ChevronRight className="h-4 w-4 text-muted-foreground" />
             </Link>
