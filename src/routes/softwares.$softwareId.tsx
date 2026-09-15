@@ -233,7 +233,7 @@ function SoftwareDetails() {
                 asChild
               >
                 <a
-                  href="https://cheerful-making-zone.lovable.app/planos?plano=1000"
+                  href="https://cheerful-making-zone.lovable.app/planos"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
