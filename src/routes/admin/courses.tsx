@@ -401,15 +401,33 @@ function AdminCourses() {
                       )}
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Arquivo PDF</label>
-                    <div className="flex gap-2">
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground leading-none">Arquivo PDF</label>
                       <Input
                         type="file"
                         accept=".pdf"
                         className="bg-background border-border"
                         onChange={(e) => handleFileUpload(e, "file_url")}
                       />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium text-foreground leading-none">
+                        Adicionar arquivo (ZIP, RAR ou outro)
+                      </label>
+                      <Input
+                        type="file"
+                        className="bg-background border-border"
+                        onChange={(e) => handleFileUpload(e, "file_url")}
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Use para enviar vários PDFs de uma vez em um arquivo compactado.
+                      </p>
+                      {form.watch("file_url") && (
+                        <p className="text-xs text-foreground break-all">
+                          Arquivo enviado: {String(form.watch("file_url")).split("/").pop()}
+                        </p>
+                      )}
                     </div>
                   </div>
                 </div>
