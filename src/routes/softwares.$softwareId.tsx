@@ -225,7 +225,7 @@ function SoftwareDetails() {
                 Comprar com Pix ou cartão
               </Button>
             )}
-            {sw.name.trim().toLowerCase() === "bingo show master" && (
+            {sw.name.trim().toLowerCase().startsWith("bingo show master") && (
               <Button
                 size="lg"
                 variant="outline"
