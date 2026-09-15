@@ -1,10 +1,13 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star, ChevronRight } from "lucide-react";
+import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
+import { getFreeSoftwareDownloadUrl, getPurchasedDownloadUrl } from "@/lib/downloads.functions";
+import { createSoftwareCheckout, getSoftwarePurchaseStatus } from "@/lib/mercadopago.functions";
 import { StorageImage } from "@/components/StorageImage";
 import { StoreShell } from "@/components/store/StoreShell";
 
@@ -77,6 +80,33 @@ function SoftwareDetails() {
 
   const { data: allSoftwares } = useSuspenseQuery(allSoftwaresQueryOptions);
 
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [hasPurchased, setHasPurchased] = useState(false);
+  const createCheckout = useServerFn(createSoftwareCheckout);
+  const purchaseStatus = useServerFn(getSoftwarePurchaseStatus);
+
+  useEffect(() => {
+    let active = true;
+    const check = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+      try {
+        const { purchased } = await purchaseStatus({ data: { softwareId } });
+        if (active && purchased) setHasPurchased(true);
+      } catch {
+        // ignora
+      }
+    };
+    check();
+    const onFocus = () => check();
+    window.addEventListener("focus", onFocus);
+    return () => {
+      active = false;
+      window.removeEventListener("focus", onFocus);
+    };
+  }, [softwareId, purchaseStatus]);
+
+
   if (!sw) {
     return (
       <StoreShell active="softwares">
@@ -94,19 +124,35 @@ function SoftwareDetails() {
   const otherSoftwares = (allSoftwares || []).filter((s) => s.id !== sw.id).slice(0, 8);
 
   const handleDownload = async () => {
-    if (!isFree) {
-      toast.info("Este software é Premium. Entre em contato ou use o link de compra.");
-      return;
-    }
     if (!sw.has_download) {
       toast.error("Em breve: download ainda não disponível");
       return;
     }
     try {
-      const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+      const { url } = isFree
+        ? await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } })
+        : await getPurchasedDownloadUrl({ data: { kind: "software", itemId: sw.id } });
       window.open(url, "_blank");
     } catch {
       toast.error("Link de download não disponível");
+    }
+  };
+
+  const handleBuy = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Você precisa estar logado para comprar");
+      window.location.href = "/auth";
+      return;
+    }
+    setIsCheckoutLoading(true);
+    try {
+      const { checkoutUrl } = await createCheckout({ data: { softwareId: sw.id } });
+      toast.info("Redirecionando para o Mercado Pago...");
+      window.location.href = checkoutUrl;
+    } catch {
+      toast.error("Não foi possível iniciar a compra agora");
+      setIsCheckoutLoading(false);
     }
   };
 
@@ -159,10 +205,26 @@ function SoftwareDetails() {
             <div className="text-lg font-semibold text-foreground">
               {isFree ? "Gratuito" : `R$ ${sw.price!.toFixed(2)}`}
             </div>
-            <Button size="lg" className="rounded-md px-10 font-semibold" onClick={handleDownload}>
-              <Download className="mr-2 h-5 w-5" />
-              {isFree ? "Obter" : "Comprar"}
-            </Button>
+            {isFree || hasPurchased ? (
+              <Button size="lg" className="rounded-md px-10 font-semibold" onClick={handleDownload}>
+                <Download className="mr-2 h-5 w-5" />
+                {isFree ? "Obter" : "Baixar agora"}
+              </Button>
+            ) : (
+              <Button
+                size="lg"
+                className="rounded-md px-10 font-semibold"
+                onClick={handleBuy}
+                disabled={isCheckoutLoading}
+              >
+                {isCheckoutLoading ? (
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                ) : (
+                  <Download className="mr-2 h-5 w-5" />
+                )}
+                Comprar com Pix ou cartão
+              </Button>
+            )}
             {sw.name.trim().toLowerCase() === "bingo show master" && (
               <Button
                 size="lg"
