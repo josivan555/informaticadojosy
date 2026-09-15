@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-const SITE_URL = "https://informaticadojosy.lovable.app";
+const SITE_URL = "https://informaticadojosy.com.br";
 
 /**
  * Cria automaticamente uma preferência de pagamento no Mercado Pago
