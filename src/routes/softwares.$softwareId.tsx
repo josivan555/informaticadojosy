@@ -1,10 +1,13 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star, ChevronRight } from "lucide-react";
+import { Download, Laptop, ChevronLeft, ShieldCheck, Zap, Star, ChevronRight, Loader2 } from "lucide-react";
 import { toast } from "sonner";
-import { getFreeSoftwareDownloadUrl } from "@/lib/downloads.functions";
+import { getFreeSoftwareDownloadUrl, getPurchasedDownloadUrl } from "@/lib/downloads.functions";
+import { createSoftwareCheckout, getSoftwarePurchaseStatus } from "@/lib/mercadopago.functions";
 import { StorageImage } from "@/components/StorageImage";
 import { StoreShell } from "@/components/store/StoreShell";
 
