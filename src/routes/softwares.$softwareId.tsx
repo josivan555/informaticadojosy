@@ -124,19 +124,35 @@ function SoftwareDetails() {
   const otherSoftwares = (allSoftwares || []).filter((s) => s.id !== sw.id).slice(0, 8);
 
   const handleDownload = async () => {
-    if (!isFree) {
-      toast.info("Este software é Premium. Entre em contato ou use o link de compra.");
-      return;
-    }
     if (!sw.has_download) {
       toast.error("Em breve: download ainda não disponível");
       return;
     }
     try {
-      const { url } = await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } });
+      const { url } = isFree
+        ? await getFreeSoftwareDownloadUrl({ data: { softwareId: sw.id } })
+        : await getPurchasedDownloadUrl({ data: { kind: "software", itemId: sw.id } });
       window.open(url, "_blank");
     } catch {
       toast.error("Link de download não disponível");
+    }
+  };
+
+  const handleBuy = async () => {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast.error("Você precisa estar logado para comprar");
+      window.location.href = "/auth";
+      return;
+    }
+    setIsCheckoutLoading(true);
+    try {
+      const { checkoutUrl } = await createCheckout({ data: { softwareId: sw.id } });
+      toast.info("Redirecionando para o Mercado Pago...");
+      window.location.href = checkoutUrl;
+    } catch {
+      toast.error("Não foi possível iniciar a compra agora");
+      setIsCheckoutLoading(false);
     }
   };
 
