@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { BookOpen, Zap, ChevronLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { StorageImage } from "@/components/StorageImage";
+import { useState } from "react";
+import { BookOpen, Search } from "lucide-react";
+import { StoreShell } from "@/components/store/StoreShell";
+import { StoreCard } from "@/components/store/StoreCard";
 
 export const Route = createFileRoute("/courses/")({
   component: CoursesList,
@@ -12,11 +12,16 @@ export const Route = createFileRoute("/courses/")({
     meta: [
       { title: "Todos os Cursos - Informática do Josy" },
       { name: "description", content: "Explore nossa lista completa de cursos em PDF." },
+      { property: "og:title", content: "Cursos em PDF - Informática do Josy" },
+      { property: "og:description", content: "Cursos práticos em PDF para aprender informática no seu ritmo." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
 });
 
 function CoursesList() {
+  const [searchTerm, setSearchTerm] = useState("");
   const { data: courses, isLoading } = useQuery({
     queryKey: ["all-courses"],
     queryFn: async () => {
@@ -30,75 +35,69 @@ function CoursesList() {
     },
   });
 
+  const filteredCourses = (courses || []).filter((course: any) => {
+    const term = searchTerm.trim().toLowerCase();
+    return !term || course.title.toLowerCase().includes(term) || course.description?.toLowerCase().includes(term);
+  });
+
   return (
-    <div className="min-h-screen bg-[#0a192f] text-slate-200">
-      <header className="border-b border-primary/10 bg-[#0a192f]/95 backdrop-blur sticky top-0 z-50">
-        <div className="container mx-auto h-16 flex items-center justify-between px-4">
-          <Link to="/" className="flex items-center gap-2 font-bold text-xl text-white">
-            <Zap className="h-5 w-5 text-primary" fill="currentColor" />
-            <span>INFORMÁTICA <span className="text-primary">do Josy</span></span>
-          </Link>
+    <StoreShell
+      active="courses"
+      search={searchTerm}
+      onSearchChange={setSearchTerm}
+      searchPlaceholder="Pesquisar cursos"
+    >
+      <div className="mb-6">
+        <h1 className="text-2xl font-semibold text-foreground">Cursos em PDF</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Escolha um curso e aprenda no seu ritmo.
+        </p>
+      </div>
 
-          <Button variant="ghost" size="sm" asChild>
-            <Link to="/">
-              <ChevronLeft className="mr-2 h-4 w-4" /> Voltar
-            </Link>
-          </Button>
-        </div>
-      </header>
+      <div className="mb-6 flex items-center justify-between border-b border-border pb-3">
+        <span className="text-sm font-medium text-foreground">Todos os cursos</span>
+        <span className="text-sm text-muted-foreground">
+          {filteredCourses.length} {filteredCourses.length === 1 ? "curso" : "cursos"}
+        </span>
+      </div>
 
-      <main className="container mx-auto py-12 px-4">
-        <h1 className="text-4xl font-bold mb-8 text-white">Nossos Cursos</h1>
-        
+      <section aria-label="Lista de cursos">
         {isLoading ? (
-          <div className="text-center py-20">Carregando cursos...</div>
+          <div className="py-20 text-center text-sm text-muted-foreground">Carregando cursos...</div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {courses?.map((course: any) => (
-              <Link 
-                key={course.id} 
-                to="/courses/$courseId" 
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+            {filteredCourses.map((course: any) => (
+              <StoreCard
+                key={course.id}
+                to="/courses/$courseId"
                 params={{ courseId: course.id }}
-                className="group flex flex-col bg-[#112240] border border-slate-800 rounded-2xl overflow-hidden hover:border-primary/50 transition-all"
-              >
-                <div className="aspect-[3/4] bg-muted relative overflow-hidden">
-                  <StorageImage
-                    value={course.image_url}
-                    alt={course.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                    fallback={
-                      <div className="w-full h-full flex items-center justify-center">
-                        <BookOpen className="h-16 w-16 text-muted-foreground/30" />
-                      </div>
-                    }
-                  />
-                  <div className="absolute top-4 left-4">
-                    <Badge>{course.level}</Badge>
-                  </div>
-                </div>
-                <div className="p-6 space-y-3">
-                  <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors line-clamp-2">
-                    {course.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground line-clamp-3">
-                    {course.description}
-                  </p>
-                  <div className="pt-4 flex items-center justify-between">
-                    <span className="text-2xl font-bold text-white">R$ {course.price?.toFixed(2)}</span>
-                    <Button size="sm">Ver Detalhes</Button>
-                  </div>
-                </div>
-              </Link>
+                image={course.image_url}
+                title={course.title}
+                subtitle={course.level || "Curso em PDF"}
+                price={course.price}
+                meta={course.pages ? `${course.pages} páginas` : null}
+              />
             ))}
           </div>
         )}
 
-        {!isLoading && courses?.length === 0 && (
-          <div className="text-center py-20 text-muted-foreground">
-            Nenhum curso disponível no momento.
+        {!isLoading && filteredCourses.length === 0 && (
+          <div className="rounded-lg border border-dashed border-border py-20 text-center">
+            {searchTerm ? (
+              <>
+                <Search className="mx-auto mb-3 h-10 w-10 text-muted-foreground/40" />
+                <h2 className="font-medium text-foreground">Nenhum curso encontrado</h2>
+                <p className="text-sm text-muted-foreground">Tente pesquisar outro nome.</p>
+              </>
+            ) : (
+              <>
+                <BookOpen className="mx-auto mb-3 h-10 w-10 text-muted-foreground/40" />
+                <h2 className="font-medium text-foreground">Nenhum curso disponível no momento</h2>
+              </>
+            )}
           </div>
         )}
-      </main>
-    </div>
+      </section>
+    </StoreShell>
   );
 }
