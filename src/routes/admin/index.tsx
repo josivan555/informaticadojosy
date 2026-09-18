@@ -19,7 +19,7 @@ function AdminDashboard() {
         supabase.from('courses').select('id', { count: 'exact', head: true }),
         supabase.from('download_history').select('*', { count: 'exact', head: true }),
       ]);
-      
+
       return {
         softwares: softwares.count || 0,
         courses: courses.count || 0,
@@ -27,6 +27,12 @@ function AdminDashboard() {
         sales: 0,
       };
     },
+  });
+
+  const fetchVisitStats = useServerFn(adminVisitStats);
+  const { data: visits } = useQuery({
+    queryKey: ['admin-visit-stats'],
+    queryFn: () => fetchVisitStats({ data: undefined as never }),
   });
 
   return (
