@@ -1,10 +1,13 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useLocation } from "@tanstack/react-router";
 import { Home, LayoutGrid, BookOpen, Search, User, LogOut, Download } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { recordVisit } from "@/lib/visits.functions";
 import logoAsset from "@/assets/logo.png.asset.json";
 import profileAdminAsset from "@/assets/profile-admin.png.asset.json";
 import type { ReactNode } from "react";
@@ -33,6 +36,17 @@ export function StoreShell({
       return session;
     },
   });
+
+  // Registra a visita (uma vez por página por sessão do navegador)
+  const location = useLocation();
+  const trackVisit = useServerFn(recordVisit);
+  useEffect(() => {
+    const path = location.pathname;
+    const key = `visit:${path}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    trackVisit({ data: { path } }).catch(() => {});
+  }, [location.pathname, trackVisit]);
 
   const isAdmin = session?.user?.email === ADMIN_EMAIL;
 

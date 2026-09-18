@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
+import { useServerFn } from '@tanstack/react-start';
 import { supabase } from '@/integrations/supabase/client';
-import { Laptop, BookOpen, Download, TrendingUp, Plus } from 'lucide-react';
+import { adminVisitStats } from '@/lib/visits.functions';
+import { Laptop, BookOpen, Download, TrendingUp, Plus, Eye } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute('/admin/')({
@@ -17,7 +19,7 @@ function AdminDashboard() {
         supabase.from('courses').select('id', { count: 'exact', head: true }),
         supabase.from('download_history').select('*', { count: 'exact', head: true }),
       ]);
-      
+
       return {
         softwares: softwares.count || 0,
         courses: courses.count || 0,
@@ -25,6 +27,12 @@ function AdminDashboard() {
         sales: 0,
       };
     },
+  });
+
+  const fetchVisitStats = useServerFn(adminVisitStats);
+  const { data: visits } = useQuery({
+    queryKey: ['admin-visit-stats'],
+    queryFn: () => fetchVisitStats(),
   });
 
   return (
@@ -50,7 +58,21 @@ function AdminDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+        <div className="bg-card p-6 rounded-xl border border-border">
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-cyan-500/10 rounded-lg">
+              <Eye className="h-6 w-6 text-cyan-500" />
+            </div>
+            <div>
+              <h3 className="text-muted-foreground text-sm font-medium">Visitas no site</h3>
+              <p className="text-2xl font-bold text-foreground mt-1">{visits?.total || 0}</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Hoje: {visits?.today || 0} · 7 dias: {visits?.week || 0} · 30 dias: {visits?.month || 0}
+              </p>
+            </div>
+          </div>
+        </div>
         <div className="bg-card p-6 rounded-xl border border-border">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-blue-500/10 rounded-lg">
