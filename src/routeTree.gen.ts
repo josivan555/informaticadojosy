@@ -12,10 +12,12 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as SoftwaresRouteImport } from './routes/softwares'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
 import { Route as AdminDownloadsRouteImport } from './routes/admin/downloads'
+import { Route as AdminMessagesRouteImport } from './routes/admin/messages'
 import { Route as AdminSalesRouteImport } from './routes/admin/sales'
 import { Route as AdminSoftwareCategoriesRouteImport } from './routes/admin/software-categories'
 import { Route as AdminSoftwaresRouteImport } from './routes/admin/softwares'
@@ -41,6 +43,11 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SoftwaresRoute = SoftwaresRouteImport.update({
   id: '/softwares',
   path: '/softwares',
@@ -59,6 +66,11 @@ const AdminCoursesRoute = AdminCoursesRouteImport.update({
 const AdminDownloadsRoute = AdminDownloadsRouteImport.update({
   id: '/downloads',
   path: '/downloads',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminMessagesRoute = AdminMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
   getParentRoute: () => AdminRoute,
 } as any)
 const AdminSalesRoute = AdminSalesRouteImport.update({
@@ -112,9 +124,11 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/contato': typeof ContatoRoute
   '/softwares': typeof SoftwaresRouteWithChildren
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/admin/sales': typeof AdminSalesRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -129,8 +143,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/contato': typeof ContatoRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/admin/sales': typeof AdminSalesRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -147,9 +163,11 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/contato': typeof ContatoRoute
   '/softwares': typeof SoftwaresRouteWithChildren
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
+  '/admin/messages': typeof AdminMessagesRoute
   '/admin/sales': typeof AdminSalesRoute
   '/admin/software-categories': typeof AdminSoftwareCategoriesRoute
   '/admin/softwares': typeof AdminSoftwaresRoute
@@ -167,9 +185,11 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/contato'
     | '/softwares'
     | '/admin/courses'
     | '/admin/downloads'
+    | '/admin/messages'
     | '/admin/sales'
     | '/admin/software-categories'
     | '/admin/softwares'
@@ -184,8 +204,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/contato'
     | '/admin/courses'
     | '/admin/downloads'
+    | '/admin/messages'
     | '/admin/sales'
     | '/admin/software-categories'
     | '/admin/softwares'
@@ -201,9 +223,11 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/contato'
     | '/softwares'
     | '/admin/courses'
     | '/admin/downloads'
+    | '/admin/messages'
     | '/admin/sales'
     | '/admin/software-categories'
     | '/admin/softwares'
@@ -220,6 +244,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  ContatoRoute: typeof ContatoRoute
   SoftwaresRoute: typeof SoftwaresRouteWithChildren
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
@@ -249,6 +274,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/softwares': {
       id: '/softwares'
       path: '/softwares'
@@ -275,6 +307,13 @@ declare module '@tanstack/react-router' {
       path: '/downloads'
       fullPath: '/admin/downloads'
       preLoaderRoute: typeof AdminDownloadsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/messages': {
+      id: '/admin/messages'
+      path: '/messages'
+      fullPath: '/admin/messages'
+      preLoaderRoute: typeof AdminMessagesRouteImport
       parentRoute: typeof AdminRoute
     }
     '/admin/sales': {
@@ -346,6 +385,7 @@ declare module '@tanstack/react-router' {
 interface AdminRouteChildren {
   AdminCoursesRoute: typeof AdminCoursesRoute
   AdminDownloadsRoute: typeof AdminDownloadsRoute
+  AdminMessagesRoute: typeof AdminMessagesRoute
   AdminSalesRoute: typeof AdminSalesRoute
   AdminSoftwareCategoriesRoute: typeof AdminSoftwareCategoriesRoute
   AdminSoftwaresRoute: typeof AdminSoftwaresRoute
@@ -355,6 +395,7 @@ interface AdminRouteChildren {
 const AdminRouteChildren: AdminRouteChildren = {
   AdminCoursesRoute: AdminCoursesRoute,
   AdminDownloadsRoute: AdminDownloadsRoute,
+  AdminMessagesRoute: AdminMessagesRoute,
   AdminSalesRoute: AdminSalesRoute,
   AdminSoftwareCategoriesRoute: AdminSoftwareCategoriesRoute,
   AdminSoftwaresRoute: AdminSoftwaresRoute,
@@ -391,6 +432,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  ContatoRoute: ContatoRoute,
   SoftwaresRoute: SoftwaresRouteWithChildren,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   CoursesIndexRoute: CoursesIndexRoute,

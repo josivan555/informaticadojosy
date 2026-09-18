@@ -114,8 +114,10 @@
     border-color: var(--color-border);
   }
 
+  html,
   body {
-    background-color: var(--color-background);
+    /* Fundo claro por padrão para não piscar azul durante a navegação */
+    background-color: oklch(0.96 0.002 250);
     color: var(--color-foreground);
   }
 }
