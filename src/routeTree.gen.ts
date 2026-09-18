@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as SoftwaresRouteImport } from './routes/softwares'
 import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as AdminCoursesRouteImport } from './routes/admin/courses'
@@ -39,6 +40,11 @@ const AdminRoute = AdminRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContatoRoute = ContatoRouteImport.update({
+  id: '/contato',
+  path: '/contato',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SoftwaresRoute = SoftwaresRouteImport.update({
@@ -112,6 +118,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/contato': typeof ContatoRoute
   '/softwares': typeof SoftwaresRouteWithChildren
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRouteWithChildren
+  '/contato': typeof ContatoRoute
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
   '/admin/sales': typeof AdminSalesRoute
@@ -147,6 +155,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteWithChildren
   '/auth': typeof AuthRouteWithChildren
+  '/contato': typeof ContatoRoute
   '/softwares': typeof SoftwaresRouteWithChildren
   '/admin/courses': typeof AdminCoursesRoute
   '/admin/downloads': typeof AdminDownloadsRoute
@@ -167,6 +176,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/contato'
     | '/softwares'
     | '/admin/courses'
     | '/admin/downloads'
@@ -184,6 +194,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/auth'
+    | '/contato'
     | '/admin/courses'
     | '/admin/downloads'
     | '/admin/sales'
@@ -201,6 +212,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/auth'
+    | '/contato'
     | '/softwares'
     | '/admin/courses'
     | '/admin/downloads'
@@ -220,6 +232,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRouteWithChildren
   AuthRoute: typeof AuthRouteWithChildren
+  ContatoRoute: typeof ContatoRoute
   SoftwaresRoute: typeof SoftwaresRouteWithChildren
   CoursesCourseIdRoute: typeof CoursesCourseIdRoute
   CoursesIndexRoute: typeof CoursesIndexRoute
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contato': {
+      id: '/contato'
+      path: '/contato'
+      fullPath: '/contato'
+      preLoaderRoute: typeof ContatoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/softwares': {
@@ -391,6 +411,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRouteWithChildren,
   AuthRoute: AuthRouteWithChildren,
+  ContatoRoute: ContatoRoute,
   SoftwaresRoute: SoftwaresRouteWithChildren,
   CoursesCourseIdRoute: CoursesCourseIdRoute,
   CoursesIndexRoute: CoursesIndexRoute,
