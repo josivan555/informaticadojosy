@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router";
-import { Home, LayoutGrid, BookOpen, Search, User, LogOut, Download } from "lucide-react";
+import { Home, LayoutGrid, BookOpen, Search, User, LogOut, Download, Mail } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -14,7 +14,7 @@ import type { ReactNode } from "react";
 
 interface StoreShellProps {
   children: ReactNode;
-  active?: "home" | "softwares" | "courses";
+  active?: "home" | "softwares" | "courses" | "contact";
   search?: string;
   onSearchChange?: (value: string) => void;
   searchPlaceholder?: string;
@@ -59,6 +59,7 @@ export function StoreShell({
     { key: "home", label: "Início", icon: Home, to: "/" },
     { key: "softwares", label: "Programas", icon: LayoutGrid, to: "/softwares" },
     { key: "courses", label: "Cursos", icon: BookOpen, to: "/courses" },
+    { key: "contact", label: "Contato", icon: Mail, to: "/contato" },
   ] as const;
 
   return (
@@ -120,6 +121,7 @@ export function StoreShell({
               <Link
                 key={item.key}
                 to={item.to}
+                preload="intent"
                 className={`relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm transition-colors ${
                   isActive ? "bg-accent font-semibold text-accent-foreground" : "text-foreground hover:bg-secondary"
                 }`}
