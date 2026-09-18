@@ -157,6 +157,24 @@ export type Database = {
           },
         ]
       }
+      site_visits: {
+        Row: {
+          id: string
+          path: string
+          visited_at: string
+        }
+        Insert: {
+          id?: string
+          path?: string
+          visited_at?: string
+        }
+        Update: {
+          id?: string
+          path?: string
+          visited_at?: string
+        }
+        Relationships: []
+      }
       software_categories: {
         Row: {
           created_at: string | null
