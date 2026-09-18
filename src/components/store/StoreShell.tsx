@@ -37,6 +37,17 @@ export function StoreShell({
     },
   });
 
+  // Registra a visita (uma vez por página por sessão do navegador)
+  const location = useLocation();
+  const trackVisit = useServerFn(recordVisit);
+  useEffect(() => {
+    const path = location.pathname;
+    const key = `visit:${path}`;
+    if (sessionStorage.getItem(key)) return;
+    sessionStorage.setItem(key, "1");
+    trackVisit({ data: { path } }).catch(() => {});
+  }, [location.pathname, trackVisit]);
+
   const isAdmin = session?.user?.email === ADMIN_EMAIL;
 
   const handleSignOut = async () => {
