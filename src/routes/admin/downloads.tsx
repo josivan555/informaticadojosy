@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { Download } from "lucide-react";
+import { useState } from "react";
+import { Download, Laptop, Medal } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { adminListDownloads } from "@/lib/admin-content.functions";
 
@@ -10,20 +12,100 @@ export const Route = createFileRoute("/admin/downloads")({
 });
 
 function AdminDownloads() {
+  const [period, setPeriod] = useState<"7d" | "30d" | "90d" | "all">("30d");
   const listFn = useServerFn(adminListDownloads);
-  const { data: rows = [], isLoading } = useQuery({
-    queryKey: ["admin-downloads"],
-    queryFn: () => listFn({ data: undefined }),
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin-downloads", period],
+    queryFn: () => listFn({ data: { period } }),
   });
+
+  const periods = [
+    { value: "7d", label: "7 dias" },
+    { value: "30d", label: "30 dias" },
+    { value: "90d", label: "90 dias" },
+    { value: "all", label: "Todo o período" },
+  ] as const;
+  const rows = data?.history ?? [];
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-foreground">Histórico de Downloads</h1>
-        <p className="text-muted-foreground">Últimos downloads feitos pelos usuários.</p>
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+        <div className="min-w-0">
+          <h1 className="text-2xl font-bold text-foreground sm:text-3xl">Métricas de Downloads</h1>
+          <p className="text-muted-foreground">Desempenho e histórico dos programas baixados.</p>
+        </div>
+        <div className="flex flex-wrap justify-end gap-2" aria-label="Filtrar período">
+          {periods.map((item) => (
+            <Button
+              key={item.value}
+              type="button"
+              size="sm"
+              variant={period === item.value ? "default" : "outline"}
+              onClick={() => setPeriod(item.value)}
+            >
+              {item.label}
+            </Button>
+          ))}
+        </div>
       </div>
 
-      <div className="overflow-hidden rounded-xl border border-border bg-card">
+      <div className="grid gap-4 sm:grid-cols-3">
+        <div className="rounded-lg border border-border bg-card p-5">
+          <div className="flex items-center gap-3">
+            <div className="rounded-md bg-primary/10 p-2 text-primary"><Download className="h-5 w-5" /></div>
+            <div><p className="text-sm text-muted-foreground">Downloads</p><p className="text-2xl font-bold text-foreground">{isLoading ? "—" : data?.total ?? 0}</p></div>
+          </div>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-5">
+          <div className="flex items-center gap-3">
+            <div className="rounded-md bg-primary/10 p-2 text-primary"><Laptop className="h-5 w-5" /></div>
+            <div><p className="text-sm text-muted-foreground">Programas baixados</p><p className="text-2xl font-bold text-foreground">{isLoading ? "—" : data?.programs ?? 0}</p></div>
+          </div>
+        </div>
+        <div className="rounded-lg border border-border bg-card p-5">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="shrink-0 rounded-md bg-primary/10 p-2 text-primary"><Medal className="h-5 w-5" /></div>
+            <div className="min-w-0"><p className="text-sm text-muted-foreground">Mais baixado</p><p className="truncate text-lg font-bold text-foreground">{isLoading ? "—" : data?.topProgram?.name ?? "Nenhum"}</p></div>
+          </div>
+        </div>
+      </div>
+
+      <section className="rounded-lg border border-border bg-card p-5">
+        <div className="mb-5">
+          <h2 className="text-lg font-semibold text-foreground">Programas mais baixados</h2>
+          <p className="text-sm text-muted-foreground">Classificação no período selecionado.</p>
+        </div>
+        {isLoading ? (
+          <div className="py-8 text-center text-sm text-muted-foreground">Carregando classificação...</div>
+        ) : !data?.ranking.length ? (
+          <div className="py-8 text-center text-sm text-muted-foreground">Nenhum download neste período.</div>
+        ) : (
+          <div className="space-y-4">
+            {data.ranking.map((item, index) => (
+              <div key={item.software_id} className="grid grid-cols-[2rem_minmax(0,1fr)_auto] items-center gap-3">
+                <span className="text-center text-sm font-semibold text-muted-foreground">{index + 1}º</span>
+                <div className="min-w-0">
+                  <div className="mb-1.5 flex min-w-0 items-center justify-between gap-3">
+                    <span className="truncate text-sm font-medium text-foreground">{item.name}</span>
+                    <span className="shrink-0 text-xs text-muted-foreground">{item.percentage}%</span>
+                  </div>
+                  <div className="h-2 overflow-hidden rounded-full bg-secondary">
+                    <div className="h-full rounded-full bg-primary" style={{ width: `${item.percentage}%` }} />
+                  </div>
+                </div>
+                <span className="min-w-16 text-right text-sm font-semibold text-foreground">{item.count} {item.count === 1 ? "download" : "downloads"}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <div>
+        <h2 className="text-xl font-semibold text-foreground">Histórico recente</h2>
+        <p className="text-sm text-muted-foreground">Até 200 registros do período selecionado.</p>
+      </div>
+
+      <div className="overflow-x-auto rounded-lg border border-border bg-card">
         <Table>
           <TableHeader className="bg-muted/50">
             <TableRow className="border-border hover:bg-transparent">
