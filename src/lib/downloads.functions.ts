@@ -23,6 +23,15 @@ async function signPath(path: string): Promise<string> {
   return data.signedUrl;
 }
 
+async function recordSoftwareDownload(softwareId: string, userId: string | null) {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { error } = await supabaseAdmin.from("download_history").insert({
+    software_id: softwareId,
+    user_id: userId,
+  });
+  if (error) console.error("Não foi possível registrar o download", error.message);
+}
+
 /** Free software downloads: no auth needed, but the file must be free. */
 export const getFreeSoftwareDownloadUrl = createServerFn({ method: "POST" })
   .inputValidator((data) => z.object({ softwareId: z.string().uuid() }).parse(data))
@@ -39,11 +48,16 @@ export const getFreeSoftwareDownloadUrl = createServerFn({ method: "POST" })
     if (error || !sw) throw new Error("Software não encontrado");
     if ((sw.price ?? 0) > 0) throw new Error("Este software requer compra");
 
-    if ((sw as any).external_download_url) return { url: (sw as any).external_download_url as string };
+    if ((sw as any).external_download_url) {
+      await recordSoftwareDownload(sw.id, null);
+      return { url: (sw as any).external_download_url as string };
+    }
 
     const path = toStoragePath(sw.file_url);
     if (!path) throw new Error("Arquivo não disponível");
-    return { url: await signPath(path) };
+    const url = await signPath(path);
+    await recordSoftwareDownload(sw.id, null);
+    return { url };
   });
 
 /** Paid software / course downloads: requires a completed checkout session. */
@@ -80,10 +94,13 @@ export const getPurchasedDownloadUrl = createServerFn({ method: "POST" })
     if (!item) throw new Error("Item não encontrado");
 
     if ((item as any).external_download_url) {
+      if (data.kind === "software") await recordSoftwareDownload(data.itemId, context.userId);
       return { url: (item as any).external_download_url };
     }
 
     const path = toStoragePath((item as any)?.file_url);
     if (!path) throw new Error("Arquivo não disponível");
-    return { url: await signPath(path) };
+    const url = await signPath(path);
+    if (data.kind === "software") await recordSoftwareDownload(data.itemId, context.userId);
+    return { url };
   });

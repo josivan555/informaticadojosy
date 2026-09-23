@@ -47,17 +47,27 @@ function AdminLayout() {
     return location.pathname.startsWith(path);
   };
 
+  const mobileItems = [
+    { label: "Painel", to: "/admin", icon: LayoutDashboard },
+    { label: "Programas", to: "/admin/softwares", icon: Laptop },
+    { label: "Categorias", to: "/admin/software-categories", icon: Tags },
+    { label: "Cursos", to: "/admin/courses", icon: BookOpen },
+    { label: "Downloads", to: "/admin/downloads", icon: Download },
+    { label: "Mensagens", to: "/admin/messages", icon: Mail },
+    { label: "Vendas", to: "/admin/sales", icon: TrendingUp },
+  ] as const;
+
   return (
     <SidebarProvider>
-      <div className="store-theme flex min-h-screen w-full bg-background text-foreground">
-        <Sidebar className="store-theme border-r border-border bg-card fixed h-screen">
+      <div className="store-theme flex min-h-screen w-full flex-col bg-background text-foreground md:flex-row">
+        <Sidebar className="store-theme relative h-auto w-full border-r border-border bg-card md:fixed md:h-screen md:w-64">
           <SidebarHeader className="p-4 border-b border-border">
             <div className="flex flex-row items-center gap-3">
               <img src={logoAsset.url} alt="Logo" className="h-8 w-8 object-contain rounded" />
               <AdminProfile />
             </div>
           </SidebarHeader>
-          <SidebarContent>
+          <SidebarContent className="hidden md:flex">
             <SidebarGroup>
               <SidebarGroupLabel>
                 <span className="text-muted-foreground">Administração</span>
@@ -143,7 +153,26 @@ function AdminLayout() {
             </div>
           </SidebarContent>
         </Sidebar>
-        <main className="flex-1 p-8 overflow-auto ml-64">
+        <nav className="sticky top-0 z-40 flex w-full gap-1 overflow-x-auto border-y border-border bg-card px-3 py-2 md:hidden" aria-label="Administração">
+          {mobileItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <Button
+                key={item.to}
+                asChild
+                size="sm"
+                variant={isActive(item.to) ? "secondary" : "ghost"}
+                className="h-14 min-w-20 shrink-0 flex-col gap-1 px-2 text-xs"
+              >
+                <Link to={item.to}>
+                  <Icon className="h-4 w-4" />
+                  {item.label}
+                </Link>
+              </Button>
+            );
+          })}
+        </nav>
+        <main className="min-w-0 flex-1 overflow-auto p-4 sm:p-6 md:ml-64 md:p-8">
           <Outlet />
         </main>
       </div>
