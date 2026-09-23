@@ -9,6 +9,16 @@ import { adminListDownloads } from "@/lib/admin-content.functions";
 
 export const Route = createFileRoute("/admin/downloads")({
   component: AdminDownloads,
+  head: () => ({
+    meta: [
+      { title: "Métricas de Downloads - Informática do Josy" },
+      { name: "description", content: "Métricas administrativas de downloads dos programas." },
+      { property: "og:title", content: "Métricas de Downloads - Informática do Josy" },
+      { property: "og:description", content: "Métricas administrativas de downloads dos programas." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
 });
 
 function AdminDownloads() {
@@ -29,12 +39,12 @@ function AdminDownloads() {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div className="min-w-0">
           <h1 className="text-2xl font-bold text-foreground sm:text-3xl">Métricas de Downloads</h1>
           <p className="text-muted-foreground">Desempenho e histórico dos programas baixados.</p>
         </div>
-        <div className="flex flex-wrap justify-end gap-2" aria-label="Filtrar período">
+        <div className="flex flex-wrap gap-2 lg:justify-end" aria-label="Filtrar período">
           {periods.map((item) => (
             <Button
               key={item.value}
@@ -89,9 +99,12 @@ function AdminDownloads() {
                     <span className="truncate text-sm font-medium text-foreground">{item.name}</span>
                     <span className="shrink-0 text-xs text-muted-foreground">{item.percentage}%</span>
                   </div>
-                  <div className="h-2 overflow-hidden rounded-full bg-secondary">
-                    <div className="h-full rounded-full bg-primary" style={{ width: `${item.percentage}%` }} />
-                  </div>
+                  <progress
+                    value={item.percentage}
+                    max={100}
+                    aria-label={`${item.percentage}% dos downloads`}
+                    className="h-2 w-full overflow-hidden rounded-full accent-primary"
+                  />
                 </div>
                 <span className="min-w-16 text-right text-sm font-semibold text-foreground">{item.count} {item.count === 1 ? "download" : "downloads"}</span>
               </div>
