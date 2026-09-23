@@ -15,8 +15,8 @@ export const SidebarProvider = ({ children }: { children: React.ReactNode }) => 
   <div className="flex w-full">{children}</div>
 )
 
-export const SidebarContent = ({ children }: { children: React.ReactNode }) => (
-  <div className="flex h-full flex-col p-4">{children}</div>
+export const SidebarContent = ({ className, children }: { className?: string; children: React.ReactNode }) => (
+  <div className={cn("flex h-full flex-col p-4", className)}>{children}</div>
 )
 
 export const SidebarGroup = ({ children }: { children: React.ReactNode }) => (
