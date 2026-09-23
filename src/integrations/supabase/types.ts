@@ -166,19 +166,19 @@ export type Database = {
           downloaded_at: string | null
           id: string
           software_id: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           downloaded_at?: string | null
           id?: string
           software_id: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           downloaded_at?: string | null
           id?: string
           software_id?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
