@@ -129,15 +129,15 @@ function CourseDetails() {
   return (
     <StoreShell active="courses">
       {/* Trilha de navegação */}
-      <div className="mb-6 flex items-center justify-between">
-        <nav className="flex items-center gap-1 text-sm text-muted-foreground">
-          <Link to="/" className="hover:text-foreground hover:underline">Início</Link>
-          <ChevronRight className="h-3.5 w-3.5" />
-          <Link to="/courses" className="hover:text-foreground hover:underline">Cursos</Link>
-          <ChevronRight className="h-3.5 w-3.5" />
-          <span className="truncate font-medium text-foreground">{course.title}</span>
+      <div className="mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:gap-4">
+        <nav className="flex min-w-0 items-center gap-1 overflow-hidden text-sm text-muted-foreground">
+          <Link to="/" className="shrink-0 hover:text-foreground hover:underline">Início</Link>
+          <ChevronRight className="h-3.5 w-3.5 shrink-0" />
+          <Link to="/courses" className="shrink-0 hover:text-foreground hover:underline">Cursos</Link>
+          <ChevronRight className="hidden h-3.5 w-3.5 shrink-0 min-[380px]:block" />
+          <span className="hidden min-w-0 truncate font-medium text-foreground min-[380px]:block">{course.title}</span>
         </nav>
-        <Button variant="ghost" size="sm" onClick={() => router.history.back()} className="text-muted-foreground">
+        <Button variant="ghost" size="sm" onClick={() => router.history.back()} className="shrink-0 px-2 text-muted-foreground sm:px-3">
           <ChevronLeft className="mr-1 h-4 w-4" /> Voltar
         </Button>
       </div>
