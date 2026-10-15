@@ -248,6 +248,7 @@ export type Database = {
           has_purchase_link: boolean | null
           id: string
           image_url: string | null
+          license_url: string | null
           mercadopago_link: string | null
           name: string
           paddle_price_id: string | null
@@ -272,6 +273,7 @@ export type Database = {
           has_purchase_link?: boolean | null
           id?: string
           image_url?: string | null
+          license_url?: string | null
           mercadopago_link?: string | null
           name: string
           paddle_price_id?: string | null
@@ -296,6 +298,7 @@ export type Database = {
           has_purchase_link?: boolean | null
           id?: string
           image_url?: string | null
+          license_url?: string | null
           mercadopago_link?: string | null
           name?: string
           paddle_price_id?: string | null
