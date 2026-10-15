@@ -61,6 +61,7 @@ const softwareSchema = z.object({
   external_download_url: z.string().nullable(),
   video_url: z.string().nullable(),
   video_urls: z.array(z.string()),
+  license_url: z.string().nullable().optional(),
 });
 
 type SoftwareFormValues = z.infer<typeof softwareSchema>;
@@ -94,6 +95,7 @@ function AdminSoftwares() {
       external_download_url: null,
       video_url: null,
       video_urls: [],
+      license_url: null,
     },
   });
 
@@ -134,6 +136,7 @@ function AdminSoftwares() {
         status: values.status || 'active',
         image_url: values.image_url || null,
         file_url: values.file_url || null,
+        license_url: values.license_url?.trim() || null,
       };
 
       if (editingId) {
@@ -192,6 +195,7 @@ function AdminSoftwares() {
       external_download_url: software.external_download_url || null,
       video_url: software.video_url || null,
       video_urls: Array.isArray(software.video_urls) ? software.video_urls : [],
+      license_url: software.license_url || null,
     });
     setIsDialogOpen(true);
   };
@@ -272,6 +276,7 @@ function AdminSoftwares() {
                     external_download_url: null,
                     video_url: null,
                     video_urls: [],
+                    license_url: null,
                   });
                 }}
               >
@@ -364,6 +369,9 @@ function AdminSoftwares() {
                   </div>
                   <FormField control={form.control} name="external_download_url" render={({ field }) => (
                     <FormItem><FormLabel>Link Externo</FormLabel><FormControl><Input {...field} value={field.value || ""} className="bg-background border-border" /></FormControl><FormMessage /></FormItem>
+                  )} />
+                  <FormField control={form.control} name="license_url" render={({ field }) => (
+                    <FormItem><FormLabel>Link do botão "Comprar Licença"</FormLabel><FormControl><Input {...field} value={field.value || ""} placeholder="https://..." className="bg-background border-border" /></FormControl><p className="text-xs text-muted-foreground">Se preenchido, aparece o botão "Comprar Licença" na página do programa.</p><FormMessage /></FormItem>
                   )} />
                   <FormField control={form.control} name="video_urls" render={({ field }) => (
                     <FormItem>
