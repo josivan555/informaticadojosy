@@ -33,7 +33,7 @@ export const Route = createFileRoute("/softwares/$softwareId")({
       queryFn: async () => {
         const { data, error } = await supabase
           .from("softwares")
-          .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, video_urls, has_purchase_link, has_download")
+          .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, video_urls, has_purchase_link, has_download, license_url")
           .eq("id", params.softwareId)
           .single();
         if (error) throw error;
@@ -70,7 +70,7 @@ function SoftwareDetails() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("softwares")
-        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, video_urls, has_purchase_link, has_download")
+        .select("id, name, description, version, size, category, downloads, status, created_at, updated_at, price, category_id, image_url, video_url, video_urls, has_purchase_link, has_download, license_url")
         .eq("id", softwareId)
         .single();
       if (error) throw error;
@@ -225,7 +225,7 @@ function SoftwareDetails() {
                 Comprar com Pix ou cartão
               </Button>
             )}
-            {sw.name.trim().toLowerCase().startsWith("bingo show master") && (
+            {(sw.license_url || sw.name.trim().toLowerCase().startsWith("bingo show master")) && (
               <Button
                 size="lg"
                 variant="outline"
@@ -233,7 +233,7 @@ function SoftwareDetails() {
                 asChild
               >
                 <a
-                  href="https://cheerful-making-zone.lovable.app/planos"
+                  href={sw.license_url || "https://cheerful-making-zone.lovable.app/planos"}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
