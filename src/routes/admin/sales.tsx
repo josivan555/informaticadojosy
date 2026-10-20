@@ -10,7 +10,7 @@ export const Route = createFileRoute("/admin/sales")({
 const MAIN_SALES_PANEL_URL = "https://cheerful-making-zone.lovable.app/admin";
 
 // Endereço do painel de vendas do Bingo Show Master. Deixe vazio até o link ser informado.
-const BINGO_SHOW_MASTER_SALES_PANEL_URL = "";
+const BINGO_SHOW_MASTER_SALES_PANEL_URL = "https://bingoshowmaster.lovable.app/admin";
 
 function SalesPanelPage() {
   return (
